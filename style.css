@@ -1,9 +1,28 @@
-/*div {
+/*.row > div {
   border: 1px solid red !important;
 }*/
+* {
+  font-family: Open Sans,sans-serif;
+}
 a {
   cursor: pointer;
 }
+#panel {
+  height: 100vh;
+  background-color: #20033C;
+}
+
+#content {
+  display: flex;
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #451B6D;
+}
+
+#legend-container {
+  padding-right: 0px;
+}
+
 #time-keeper-form {
   /*border: 1px solid red !important;*/
 }
@@ -19,11 +38,43 @@ a {
   margin: 15px 0 15px 0;
 }
 
+/* Control Panel */
+#logo {
+  margin-top: 15px;
+  margin-bottom: 52px;
+}
+
+#logo span {
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 0px;
+  font-size: 28px;
+  font-family: Abel, sans-serif;
+  color: #FFFFFF;
+}
+
+.btn-panel {
+  background-color: #20033C;
+  color: #FFFFFF;
+  text-align: left;
+  border-bottom: 1px solid #451b6d;
+  border-radius: 0;
+  padding: 12px 12px;
+}
+
+.btn-panel:hover {
+  background-color: #451b6d;
+  color: #FFFFFF;
+}
+
+/* End Control Panel */
+
+/* Clock */
 #clock > div {
   margin-top: 1em;
 }
 
-/* Clock */
 #clock-bg {
   height:200px;
   width:200px;
@@ -185,6 +236,10 @@ a {
   background-color: #eeeeee;
 }
 
+.table-choice tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
 .table-choice td {
   padding-left: 15px;
 }
@@ -203,37 +258,54 @@ tr.clickable-row.active {
 
 /* Calendar */
 #calendar {
-  background-color: pink;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#month-name {
+  display: block;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  background: #a28db6;
 }
 
 .day {
-  border: 1px solid rgb(203,203,203);
+  border: 1px solid #877599;
   height: 130px;
-  width: 120px;
-  margin: 2px 1px 2px 1px;
-  background-color: white;
+  width: 14%;
+  background-color: #a28db6;
   overflow-y: auto;
+  padding: 0;
+  color: white;
+}
+
+.week {
+  display: flex;
+  justify-content: space-between;
 }
 
 .day-head {
-  border: 1px solid rgb(203,203,203);
-  margin: 8px 1px 0px 1px;
+  border: 1px solid #877599;
+  width: 14%;
   height: 30px;
-  width: 120px;
-  background-color: white;
+  padding: 0;
+  color: #20033C;
+}
+
+.day-head > span {
+  display: block;
+  padding: 4px 0 4px 0;
+  background-color: #a28db6;
 }
 
 .month {
-  border: 1px solid rgb(203,203,203);
-  margin: 8px 1px 0px 1px;
+  border: 1px solid #877599;
   height: 30px;
-  width: 853px;
-  background-color: white;
 }
 
 .event {
   font-size: 10px;
-  background-color: rgba(52, 194, 59, 0.7);
+  background-color: #761660;
   padding: 2px;
   margin-top: 2px;
 }
@@ -241,10 +313,12 @@ tr.clickable-row.active {
 .event-date {
   font-size: 10px;
   padding: 4px;
+  color: #20033C;
 }
 
 .disabled {
-  background-color: gray;
+  background-color: #7C6296;
+  border-color: #877599;
 }
 /* End Calendar */
 
