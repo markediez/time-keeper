@@ -35,27 +35,28 @@
   </head>
   <body>
     <div class="container-fluid">
-      <div id="header" class="row">
-        <div class="col-md-12 no-padding">
-          <h1>Time Keeper</h1>
-        </div>
-      </div>
+      <div class="row">
+        <div id="panel" class="col-md-2">
+          <?php
+            addPanel();
+          ?>
+        </div> <!-- End Panel -->
 
-      <div id="content" class="row">
-        <div id="clock" class="col-md-4">
-          <h2 class="col-md-12"><?= $title ?></h2>
-          <div id="clock-bg" class="col-md-6 col-md-offset-3">
-            <div id="clock-inner" class="flex">
-              <div id="clock-middle"></div>
-              <div id="clock-seconds"></div>
+        <div id="content" class="col-md-10">
+          <div id="clock" class="col-md-4">
+            <h2 class="col-md-12"><?= $title ?></h2>
+            <div id="clock-bg" class="col-md-6 col-md-offset-3">
+              <div id="clock-inner" class="flex">
+                <div id="clock-middle"></div>
+                <div id="clock-seconds"></div>
+              </div>
             </div>
-          </div>
-          <div class="col-md-12">
-            <a onclick="stopJob(<?=$_GET['log_id']?>);" class="btn btn-danger col-md-8 col-md-offset-2">Stop</a>
-          </div>
-        </div>
-      </div>
-
-    </div>
+            <div class="col-md-12">
+              <a onclick="stopJob(<?=$_GET['log_id']?>);" class="btn btn-danger col-md-8 col-md-offset-2">Stop</a>
+            </div>
+          </div> <!-- End Clock -->
+        </div> <!-- End Content -->
+      </div> <!--End Row-->
+    </div> <!-- End Container Fluid -->
   </body>
 </html>
