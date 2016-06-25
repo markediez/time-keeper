@@ -28,6 +28,7 @@ $db = new DBLite();
       <div id="panel" class="col-md-2">
         <span> Blah</span>
       </div>
+
       <div id="content" class="col-md-10">
         <div class="row">
           <div class="col-md-6" style="height:500px; background-color:blue;"></div>
@@ -37,6 +38,7 @@ $db = new DBLite();
           <div class="col-md-6" style="height:500px; background-color:yellow;"></div>
         </div>
       </div>
+      
     </div>
   </div>
 </body>
