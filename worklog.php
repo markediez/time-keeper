@@ -119,6 +119,20 @@ $db = new DBLite();
       </div> <!-- End Calendar -->
     </div> <!-- End Content -->
   </div> <!-- End Row -->
+
+  <div id="board" class="col-md-2 no-padding">
+    <!-- Fill by AJAX -->
+    <div class="col-md-12 no-padding">
+      <span class="col-md-8">DSSIT</span>
+      <span class="col-md-4">24.31</span>
+    </div>
+  </div>
 </div>
 </body>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  showTotals();
+});
+</script>
 </html>

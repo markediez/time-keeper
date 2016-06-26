@@ -42,6 +42,20 @@ a {
   animation: glow-out 0.3s;
 }
 
+.container-fluid {
+  position:relative;
+}
+
+/* ========= Legend ========= */
+#board {
+  position: absolute;
+  height: 25%;
+  background-color: #7c6292;
+  z-index: 1;
+  bottom: 1%;
+}
+/* ========= End Legend ========= */
+
 /* ========= Control Panel ========= */
 #logo {
   margin-top: 15px;
