@@ -38,7 +38,11 @@ a {
   margin: 15px 0 15px 0;
 }
 
-/* Control Panel */
+.blink {
+  animation: glow-out 0.3s;
+}
+
+/* ========= Control Panel ========= */
 #logo {
   margin-top: 15px;
   margin-bottom: 52px;
@@ -68,9 +72,9 @@ a {
   color: #FFFFFF;
 }
 
-/* End Control Panel */
+/* ========= End Control Panel ========= */
 
-/* Clock */
+/* ========= Clock ========= */
 #clock > div {
   margin-top: 1em;
 }
@@ -113,7 +117,7 @@ a {
   animation: rotation 5s linear infinite;
 }
 
-/* End Clock */
+/* ========= End Clock ========= */
 
 .flex {
   display: flex;
@@ -128,7 +132,7 @@ a {
   padding: 0;
 }
 
-/* Form */
+/* ========= Form ========= */
 .form-item {
   margin-top: 1em;
 }
@@ -224,10 +228,10 @@ a {
   border-color: #fff transparent;
   z-index: 2;
 }
-/* End Form */
+/* ========= End Form ========= */
 
 
-/* Table CSS */
+/* ========= Table CSS ========= */
 .table-choice {
   width: 100%;
 }
@@ -251,12 +255,9 @@ a {
 tr.clickable-row.active {
   background-color: #9bb8ff;
 }
-/* End Table */
-.blink {
-  animation: glow-out 0.3s;
-}
+/* ========= End Table ========= */
 
-/* Calendar */
+/* ========= Calendar ========= */
 #calendar {
   display: flex;
   flex-wrap: wrap;
@@ -320,16 +321,16 @@ tr.clickable-row.active {
   background-color: #7C6296;
   border-color: #877599;
 }
-/* End Calendar */
+/* ========= End Calendar ========= */
 
 
-/* Animations */
+/* ========= Animations ========= */
 @keyframes remove {
-    0%   {border: 1px solid rgba(255,0,0,1);}
-    25%  {border: 1px solid rgba(0,255,0,0.25);}
-    50%  {border: 1px solid rgba(0,255,0,0.5);}
-    75%  {border: 1px solid rgba(0,255,0,0.75);}
-    100% {border: 1px solid rgba(0,255,0,1);}
+  0%   {border: 1px solid rgba(255,0,0,1);}
+  25%  {border: 1px solid rgba(0,255,0,0.25);}
+  50%  {border: 1px solid rgba(0,255,0,0.5);}
+  75%  {border: 1px solid rgba(0,255,0,0.75);}
+  100% {border: 1px solid rgba(0,255,0,1);}
 }
 
 @keyframes example {
@@ -348,4 +349,4 @@ tr.clickable-row.active {
     transform: rotateZ(360deg);
   }
 }
-/* End Animations */
+/* ========= End Animations ========= */
