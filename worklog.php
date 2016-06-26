@@ -115,9 +115,10 @@ $db = new DBLite();
             echo '</div>';
           }
           ?>
-        </div> <!-- End Calendar -->
-      </div> <!-- End Content -->
-    </div>
+        </div> <!-- End Weeks -->
+      </div> <!-- End Calendar -->
+    </div> <!-- End Content -->
+  </div> <!-- End Row -->
 </div>
 </body>
 </html>
