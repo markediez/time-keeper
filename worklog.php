@@ -21,6 +21,7 @@ $db = new DBLite();
   $start_date = new DateTime('first day of this month');
   $end_date = new DateTime('last day of this month');
   $month = $start_date->format('F Y');
+  $jobs = array();
   ?>
 </head>
 <body>
@@ -64,7 +65,7 @@ $db = new DBLite();
           $end_date->setTime(0,0,0);
           $start_date = $start_date->format('Y-m-d H:i:s');
           $end_date = $end_date->format('Y-m-d H:i:s');
-          $query = "SELECT Jobs.id as job_id, Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time, WorkLog.end_time FROM WorkLog INNER JOIN Jobs ON WorkLog.job_id = Jobs.id WHERE Worklog.user_id = :uid AND Worklog.start_time BETWEEN :sd AND :ed ORDER BY WorkLog.start_time ASC";
+          $query = "SELECT Jobs.id as job_id, Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time, WorkLog.end_time, WorkLog.id as work_id FROM WorkLog INNER JOIN Jobs ON WorkLog.job_id = Jobs.id WHERE Worklog.user_id = :uid AND Worklog.start_time BETWEEN :sd AND :ed ORDER BY WorkLog.start_time ASC";
           $statement = $db->prepare($query);
           $statement->bindValue(':uid', $_SESSION['user_id']);
           $statement->bindValue(':sd', $start_date);
@@ -87,6 +88,7 @@ $db = new DBLite();
             $event = array();
             $event['job_title'] = $row['job_title'];
             $event['work_title'] = $row['work_title'];
+            $event['work_id'] = $row['work_id'];
             $event['duration'] = $duration;
             array_push($log[$day], $event);
             $total_duration[$row['job_id']] += $duration;
@@ -105,10 +107,16 @@ $db = new DBLite();
                 echo '<span class="event-date col-md-9 no-padding">' . ($day_num - $start_day) . '</span>';
               }
               for ($event = 0; $event < sizeof($log[$dom]); $event++) {
-                echo '<div class="event col-md-12 no-padding">';
-                echo '<span class="col-md-8 ">' . $log[$dom][$event]['job_title'] . '</span>';
-                echo '<span class="col-md-4 ">' . number_format((float)$log[$dom][$event]['duration'], 2) . '</span>';
+                echo '<div class="event col-md-12 no-padding" onclick="showEventDetails(this)" data-id="' . $log[$dom][$event]['work_id'] .'">';
+                echo '<a class="col-md-12 no-padding"><span class="col-md-8 ">' . $log[$dom][$event]['job_title'] . '</span>';
+                echo '<span class="col-md-4 ">' . number_format((float)$log[$dom][$event]['duration'], 2) . '</span></a>';
                 echo '</div>';
+
+                if (!isset($jobs[$log[$dom][$event]['job_title']])) {
+                  $jobs[$log[$dom][$event]['job_title']] = 0;
+                }
+
+                $jobs[$log[$dom][$event]['job_title']] += $log[$dom][$event]['duration'];
               }
               echo '</div>';
             }
@@ -122,17 +130,25 @@ $db = new DBLite();
 
   <div id="board" class="col-md-2 no-padding">
     <!-- Fill by AJAX -->
-    <div class="col-md-12 no-padding">
-      <span class="col-md-8">DSSIT</span>
-      <span class="col-md-4">24.31</span>
-    </div>
+    <?php
+    foreach($jobs as $key => $value) {
+      echo '<div class="board-post col-md-12 no-padding">';
+      echo '<span class="col-md-8">' . $key .'</span>';
+      echo '<span class="col-md-4">' . number_format($value, 2) .'</span>';
+      echo '</div>';
+    }
+    ?>
   </div>
 </div>
 </body>
 
 <script type="text/javascript">
 $(document).ready(function() {
-  showTotals();
+
 });
+
+function showEventDetails(element) {
+  console.log(element);
+}
 </script>
 </html>
