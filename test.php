@@ -35,10 +35,20 @@ $db = new DBLite();
           <div class="col-md-6" style="height:500px; background-color:gray;"></div>
 
           <div class="col-md-6" style="height:500px; background-color:orange;"></div>
-          <div class="col-md-6" style="height:500px; background-color:yellow;"></div>
+          <div class="col-md-6" style="height:500px; background-color:yellow;">
+            <h1>HELLO</h1>
+            <?php
+              $start_date = new DateTime("2016-06");
+              $start_date->modify("first day of this month");
+              $end_date = new DateTime("2016-06");
+              $end_date->modify("last day of this month");
+              echo "<h2>" . $start_date->format('Y-m-d H:i:s') . "</h1>";
+              echo $end_date->format('Y-m-d H:i:s');
+            ?>
+          </div>
         </div>
       </div>
-      
+
     </div>
   </div>
 </body>

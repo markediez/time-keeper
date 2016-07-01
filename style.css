@@ -13,7 +13,6 @@ a {
 }
 
 #content {
-  display: flex;
   height: 100vh;
   overflow-y: auto;
   background-color: #451B6D;
@@ -288,7 +287,11 @@ tr.clickable-row.active {
   display: block;
   padding-top: 4px;
   padding-bottom: 4px;
-  background: #a28db6;
+  background-color: #a28db6;
+}
+
+.month {
+  background-color: #a28db6;
 }
 
 .day {

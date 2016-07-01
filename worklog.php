@@ -18,8 +18,21 @@ $db = new DBLite();
   while($row = $res->fetchArray()) {
     $userJobs[$row['id']] = $row['title'];
   }
-  $start_date = new DateTime('first day of this month');
-  $end_date = new DateTime('last day of this month');
+
+  if(!isset($_GET['date'])) {
+    $_GET['date'] = date('Y-m');
+  }
+  $start_date = new DateTime($_GET['date']);
+  $end_date = new DateTime($_GET['date']);
+  $lastMonth = new DateTime($_GET['date']);
+  $nextMonth = new DateTime($_GET['date']);
+
+  $start_date->modify("first day of this month");
+  $end_date->modify("last day of this month");
+  $lastMonth->modify("-1 months");
+  $nextMonth->modify("+1 months");
+  $lastMonth = $lastMonth->format('Y-m');
+  $nextMonth = $nextMonth->format('Y-m');
   $month = $start_date->format('F Y');
   $jobs = array();
   ?>
@@ -33,11 +46,13 @@ $db = new DBLite();
         ?>
       </div>
 
-      <div id="content" class="col-md-10">
+      <div id="content" class="col-md-10 flex">
         <div id="calendar" class="col-md-12 no-padding">
           <!-- Month Title -->
           <div class="col-md-12 text-center month no-padding">
-            <span id="month-name"><?=$month?></span>
+            <a href="worklog.php?date=<?=$lastMonth?>" class="col-md-1 col-md-offset-4"><i class="fa fa-arrow-left fa-lg" aria-hidden="true"></i></a>
+            <span id="month-name" class="col-md-2"><?=$month?></span>
+            <a href="worklog.php?date=<?=$nextMonth?>" class="col-md-1"><i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i></a>
           </div>
 
           <!-- Day Title -->
