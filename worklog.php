@@ -75,7 +75,7 @@ $db = new DBLite();
           $total_duration = array();
           while($row = $res->fetchArray()) {
             $day = strtotime($row['start_time']);
-            $day = date('d', $day);
+            $day = date('j', $day);
 
             $sd = new DateTime($row['start_time']);
             $ed = new DateTime($row['end_time']);
@@ -93,7 +93,6 @@ $db = new DBLite();
             array_push($log[$day], $event);
             $total_duration[$row['job_id']] += $duration;
           }
-
 
           // Disabled days
 
