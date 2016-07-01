@@ -1,4 +1,4 @@
-dd<?php
+<?php
 include('server.php');
 include('db/development/database.php');
 $db = new DBLite();
