@@ -62,21 +62,21 @@ $db = new DBLite();
             $start_day++;
           }
           $start_date->setTime(0,0,0);
-          $end_date->setTime(0,0,0);
+          $end_date->setTime(23,59,59);
           $start_date = $start_date->format('Y-m-d H:i:s');
           $end_date = $end_date->format('Y-m-d H:i:s');
-          $query = "SELECT Jobs.id as job_id, Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time, WorkLog.end_time, WorkLog.id as work_id FROM WorkLog INNER JOIN Jobs ON WorkLog.job_id = Jobs.id WHERE Worklog.user_id = :uid AND Worklog.start_time BETWEEN :sd AND :ed ORDER BY WorkLog.start_time ASC";
+          $query = "SELECT Jobs.id as job_id, Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time, WorkLog.end_time, WorkLog.id as work_id FROM WorkLog INNER JOIN Jobs ON WorkLog.job_id = Jobs.id WHERE Worklog.user_id = :uid AND Worklog.start_time >= :sd AND Worklog.start_time <= :ed ORDER BY WorkLog.start_time ASC";
           $statement = $db->prepare($query);
           $statement->bindValue(':uid', $_SESSION['user_id']);
           $statement->bindValue(':sd', $start_date);
           $statement->bindValue(':ed', $end_date);
           $res = $statement->execute();
-
           $log = array();
           $total_duration = array();
           while($row = $res->fetchArray()) {
             $day = strtotime($row['start_time']);
             $day = date('d', $day);
+
             $sd = new DateTime($row['start_time']);
             $ed = new DateTime($row['end_time']);
             $interval = $ed->diff($sd);
@@ -93,6 +93,8 @@ $db = new DBLite();
             array_push($log[$day], $event);
             $total_duration[$row['job_id']] += $duration;
           }
+
+
           // Disabled days
 
           for ($i = 1; $i <= 5; $i++) {
