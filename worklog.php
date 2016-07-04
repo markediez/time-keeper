@@ -1,5 +1,6 @@
 <?php
 include("server.php");
+include("calendar.php");
 include('db/development/database.php');
 checkSession();
 $db = new DBLite();
@@ -80,34 +81,28 @@ $db = new DBLite();
           $end_date->setTime(23,59,59);
           $start_date = $start_date->format('Y-m-d H:i:s');
           $end_date = $end_date->format('Y-m-d H:i:s');
-          $query = "SELECT Jobs.id as job_id, Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time, WorkLog.end_time, WorkLog.id as work_id FROM WorkLog INNER JOIN Jobs ON WorkLog.job_id = Jobs.id WHERE Worklog.user_id = :uid AND Worklog.start_time >= :sd AND Worklog.start_time <= :ed ORDER BY WorkLog.start_time ASC";
+
+          // TEMP
+          $query = "SELECT Jobs.id as job_id, Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time, WorkLog.end_time, WorkLog.id as work_id FROM WorkLog INNER JOIN Jobs ON WorkLog.job_id = Jobs.id WHERE Worklog.user_id = :uid AND Worklog.start_time >= :sd AND Worklog.start_time <= :ed ORDER BY WorkLog.job_id ASC";
           $statement = $db->prepare($query);
           $statement->bindValue(':uid', $_SESSION['user_id']);
           $statement->bindValue(':sd', $start_date);
           $statement->bindValue(':ed', $end_date);
           $res = $statement->execute();
-          $log = array();
-          $total_duration = array();
-          while($row = $res->fetchArray()) {
-            $day = strtotime($row['start_time']);
-            $day = date('j', $day);
 
-            $sd = new DateTime($row['start_time']);
-            $ed = new DateTime($row['end_time']);
-            $interval = $ed->diff($sd);
-            $duration = $interval->h + ($interval->i / 60);
-            if(!is_array($log[$day])) {
-              $log[$day] = array();
+          $jobArray = array();
+          $jobIndex = -1;
+          $prev = -1;
+          while($row = $res->fetchArray()) {
+            if($prev != $row['job_id']) {
+              $jobIndex++;
+              $jobArray[$jobIndex] = new Job($row['job_title'], $row['job_id']);
+              $prev = $row['job_id'];
             }
 
-            $event = array();
-            $event['job_title'] = $row['job_title'];
-            $event['work_title'] = $row['work_title'];
-            $event['work_id'] = $row['work_id'];
-            $event['duration'] = $duration;
-            array_push($log[$day], $event);
-            $total_duration[$row['job_id']] += $duration;
+            $jobArray[$jobIndex]->addShift($row['work_title'], $row['start_time'], $row['end_time']);
           }
+          // END TEMP
 
           // Disabled days
 
@@ -122,17 +117,19 @@ $db = new DBLite();
                 echo '<div class="day col-md-1 no-padding">';
                 echo '<span class="event-date col-md-9 no-padding">' . ($day_num - $start_day) . '</span>';
               }
-              for ($event = 0; $event < sizeof($log[$dom]); $event++) {
-                echo '<div class="event col-md-12 no-padding" onclick="showEventDetails(this)" data-id="' . $log[$dom][$event]['work_id'] .'">';
-                echo '<a class="col-md-12 no-padding"><span class="col-md-8 ">' . $log[$dom][$event]['job_title'] . '</span>';
-                echo '<span class="col-md-4 ">' . number_format((float)$log[$dom][$event]['duration'], 2) . '</span></a>';
-                echo '</div>';
 
-                if (!isset($jobs[$log[$dom][$event]['job_title']])) {
-                  $jobs[$log[$dom][$event]['job_title']] = 0;
+              // Shifts or Events of each day
+              foreach($jobArray as $job) {
+                $shifts = $job->getShifts($dom);
+
+                foreach($shifts as $shift) {
+                  // Add shift to day
+                  echo '<div class="event col-md-12 no-padding" onclick="showEventDetails(this)" data-id="' . $job->id .'">';
+                  echo '<a class="col-md-12 no-padding"><span class="col-md-8 ">' . $job->title . '</span>';
+                  echo '<span class="col-md-4 ">' . $shift->getDuration() . '</span></a>';
+                  echo '</div>';
                 }
 
-                $jobs[$log[$dom][$event]['job_title']] += $log[$dom][$event]['duration'];
               }
               echo '</div>';
             }
@@ -147,10 +144,10 @@ $db = new DBLite();
   <div id="board" class="col-md-2 no-padding">
     <!-- Fill by AJAX -->
     <?php
-    foreach($jobs as $key => $value) {
+    foreach($jobArray as $job) {
       echo '<div class="board-post col-md-12 no-padding">';
-      echo '<span class="col-md-8">' . $key .'</span>';
-      echo '<span class="col-md-4">' . number_format($value, 2) .'</span>';
+      echo '<span class="col-md-8">' . $job->title .'</span>';
+      echo '<span class="col-md-4">' . $job->getTotalHours() .'</span>';
       echo '</div>';
     }
     ?>
