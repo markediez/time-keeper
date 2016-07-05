@@ -144,10 +144,26 @@ $db = new DBLite();
   <div id="board" class="col-md-2 no-padding">
     <!-- Fill by AJAX -->
     <?php
+    $i = 0;
     foreach($jobArray as $job) {
-      echo '<div class="board-post col-md-12 no-padding">';
-      echo '<span class="col-md-8">' . $job->title .'</span>';
-      echo '<span class="col-md-4">' . $job->getTotalHours() .'</span>';
+      echo '<div class="board-post col-md-12 no-padding" data-target="board-' . $i . '">';
+      echo '<a onclick="toggleCollapse(\'#board-' . $i . '\')">';
+      echo '<span class="col-md-8 half-padding">' . $job->title .'</span>';
+      echo '<span class="col-md-4 text-right half-padding">' . $job->getTotalHours() .'</span>';
+      echo '</a>';
+      echo '<div id="board-' . $i++ . '" class="board-extra col-md-12 no-padding">';
+      $allShifts = $job->getAllShifts();
+      foreach($allShifts as $shift) {
+        // var_dump($shift);
+        echo '<div class="board-event col-md-12 no-padding" data-collapse="false">';
+        echo '<span class="col-md-8 half-padding">';
+        echo '<span class="col-md-1 no-padding bold">' . $shift->getDay() . '</span>';
+        echo '<span class="col-md-11 no-padding half-padding-left">' . $shift->title . '</span>';
+        echo '</span>';
+        echo '<span class="col-md-4 text-right no-padding half-padding-right board-title">' . $shift->getStartTime() . ' - ' . $shift->getEndTime() .'</span>';
+        echo '</div>';
+      }
+      echo '</div>';
       echo '</div>';
     }
     ?>

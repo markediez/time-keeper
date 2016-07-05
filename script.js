@@ -128,3 +128,14 @@ function postFormSubmit(formID, elements, url) {
     xmlhttp.send(params);
   }
 }
+
+function toggleCollapse(id) {
+  console.log("HELLO");
+  if($(id).data("collapse") == "false") {
+    $(id).data("collapse", "true");
+    $(id).slideUp();
+  } else {
+    $(id).data("collapse", "false");
+    $(id).slideDown();
+  }
+}
