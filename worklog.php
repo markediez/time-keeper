@@ -151,11 +151,11 @@ $db = new DBLite();
       echo '<span class="col-md-8 half-padding">' . $job->title .'</span>';
       echo '<span class="col-md-4 text-right half-padding">' . $job->getTotalHours() .'</span>';
       echo '</a>';
-      echo '<div id="board-' . $i++ . '" class="board-extra col-md-12 no-padding">';
+      echo '<div id="board-' . $i++ . '" class="board-extra col-md-12 no-padding" data-collapse="true">';
       $allShifts = $job->getAllShifts();
       foreach($allShifts as $shift) {
         // var_dump($shift);
-        echo '<div class="board-event col-md-12 no-padding" data-collapse="false">';
+        echo '<div class="board-event col-md-12 no-padding">';
         echo '<span class="col-md-8 half-padding">';
         echo '<span class="col-md-1 no-padding bold">' . $shift->getDay() . '</span>';
         echo '<span class="col-md-11 no-padding half-padding-left">' . $shift->title . '</span>';

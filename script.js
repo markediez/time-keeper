@@ -130,12 +130,19 @@ function postFormSubmit(formID, elements, url) {
 }
 
 function toggleCollapse(id) {
-  console.log("HELLO");
-  if($(id).data("collapse") == "false") {
-    $(id).data("collapse", "true");
+  let openBoard = '#' + $('[data-collapse="false"]').attr("id");
+
+  if($(id).attr("data-collapse") == "false") {
+    console.log("Collapse is now true");
+    $(id).attr("data-collapse", "true");
     $(id).slideUp();
   } else {
-    $(id).data("collapse", "false");
+    console.log("Collapse is now false");
+    $(id).attr("data-collapse", "false");
     $(id).slideDown();
+
+    // Hide open board
+    $(openBoard).attr("data-collapse", "true");
+    $(openBoard).slideUp();
   }
 }
