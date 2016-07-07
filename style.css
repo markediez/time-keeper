@@ -62,14 +62,30 @@ a {
   justify-content: flex-end;
 }
 
+.flex-center {
+  justify-content: center;
+}
+
+.col-md-half {
+  width: 4.1666666667%;
+}
+
 .no-padding {
   padding: 0;
+}
+
+.no-padding-left {
+  padding-left: 0;
 }
 
 .circle {
   background-color: white;
   border-radius: 100%;
   text-align: center;
+}
+
+.title {
+  color: #FFFFFF;
 }
 
 .half-padding {
@@ -421,26 +437,32 @@ tr.clickable-row.active {
 /* ========= End Calendar ========= */
 
 /* ========= Work Log Description ========= */
-#entries {
-  background-color: pink;
+#entries > div{
+  margin-top: 1%;
 }
 
-.entry-num {
-  display: flex;
-  justify-content: space-around;
-  text-align: right;
-  align-self: center;
-  align-content: center;
+#new-entry {
+  margin-top: 15px;
+  margin-bottom: 1%;
 }
+
+.saved-entry {
+  background-color: #eeeeee;
+  border: 1px solid #d1d1d1;
+  border-radius: 5px;
+}
+
 .entry {
   border-radius: 5px;
-  border: 1px solid #d1d1d1
+  border: none;
+  margin-top: 4px;
+  margin-bottom: 4px;
 }
 .entry:disabled {
   cursor: pointer;
   background-color: #eeeeee;
   border-radius: 5px;
-  border: 1px solid #d1d1d1;
+  border: none;
 }
 /* ========= End Work Log Description ========= */
 
