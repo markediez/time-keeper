@@ -61,7 +61,7 @@
 
           <div id="description" class="col-md-8">
             <h2 class="row title"><?= $title ?></h2>
-            <div id="entries" class="row">
+            <div id="entries" class="row" data-id="<?=$_REQUEST['log_id']?>">
 
               <div class="col-md-12 saved-entry flex no-padding">
                 <span class="col-md-half flex flex-vertical-center flex-end no-padding">1.</span>
@@ -99,4 +99,43 @@
       </div> <!--End Row-->
     </div> <!-- End Container Fluid -->
   </body>
+
+  <!-- Scripts -->
+  <script type="text/javascript">
+  $(document).ready(function() {
+    setEntryListener();
+
+    $("#new-entry").keyup(function(e) {
+      let text = $(this).val();
+      if (e.keyCode == 13 && text !== "") {
+        let number = $("#entries").children().length + 1;
+
+        // Append entry
+        let newEntry = $('<div class="col-md-12 saved-entry flex no-padding"><span class="col-md-half flex flex-vertical-center flex-end no-padding">' + number + '.</span><input id="entry-' + number + '" type="text" class="col-md-10 entry" value="' +   text + '" onblur="toggleEntry(\'#entry-' + number + '\')" disabled><span class="col-md-1 flex flex-vertical-center flex-space-around no-padding"><a onclick="toggleEntry(\'#entry-' + number + '\')"><i class="fa fa-pencil" aria-hidden="true"></i></a><a onclick="deleteEntry(\'#entry-' + number + '\')"><i class="fa fa-trash" aria-hidden="true"></i></a></span></div>')
+        .appendTo($("#entries"));
+
+        $(newEntry).keyup(function(e) {
+          if (e.keyCode == 13) {
+            let text = $(this).val();
+            saveEntry(text);
+            setEntryListener();
+          }
+        });
+
+        $(this).val("");
+      }
+    }); // #new-entry
+  });
+
+  function setEntryListener() {
+    $(".entry").keyup(function(e) {
+      let entry = $(this);
+      if (e.keyCode == 13) {
+        let text = $(entry).val();
+        saveEntry(text);
+        $(entry).blur();
+      }
+    });
+  }
+  </script>
 </html>

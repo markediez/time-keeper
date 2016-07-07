@@ -153,10 +153,24 @@ function toggleEntry(target) {
     $(target).attr("disabled", "disabled");
   } else {
     $(target).removeAttr("disabled");
+
+    let text = $(target).val();
+    $(target).focus().val("").val(text);
+
+
   }
 
 }
 
 function deleteEntry(target) {
   console.log("Deleting " + target);
+}
+
+function saveEntry(text) {
+  if (text == "" || text == undefined) {
+    return false;
+  } else {
+    let logId = $("#entries").data("id");
+    
+  }
 }
