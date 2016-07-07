@@ -146,3 +146,17 @@ function toggleCollapse(id) {
     $(openBoard).slideUp();
   }
 }
+
+function toggleEntry(target) {
+  let isDisabled = $(target).attr("disabled");
+  if (isDisabled === undefined) {
+    $(target).attr("disabled", "disabled");
+  } else {
+    $(target).removeAttr("disabled");
+  }
+
+}
+
+function deleteEntry(target) {
+  console.log("Deleting " + target);
+}

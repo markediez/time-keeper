@@ -54,6 +54,14 @@ a {
   align-self: center;
 }
 
+.flex-space-around {
+  justify-content: space-around;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
 .no-padding {
   padding: 0;
 }
@@ -90,6 +98,7 @@ a {
 .bold {
   font-weight: bold;
 }
+
 /* ========= Legend ========= */
 #board {
   position: absolute;
@@ -410,6 +419,30 @@ tr.clickable-row.active {
   border-color: #877599;
 }
 /* ========= End Calendar ========= */
+
+/* ========= Work Log Description ========= */
+#entries {
+  background-color: pink;
+}
+
+.entry-num {
+  display: flex;
+  justify-content: space-around;
+  text-align: right;
+  align-self: center;
+  align-content: center;
+}
+.entry {
+  border-radius: 5px;
+  border: 1px solid #d1d1d1
+}
+.entry:disabled {
+  cursor: pointer;
+  background-color: #eeeeee;
+  border-radius: 5px;
+  border: 1px solid #d1d1d1;
+}
+/* ========= End Work Log Description ========= */
 
 
 /* ========= Animations ========= */
