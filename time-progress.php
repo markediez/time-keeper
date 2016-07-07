@@ -65,7 +65,7 @@
 
               <div class="col-md-12 saved-entry flex no-padding">
                 <span class="col-md-half flex flex-vertical-center flex-end no-padding">1.</span>
-                <input id="entry-1" type="text" class="col-md-10 entry " value="Added this" disabled>
+                <input id="entry-1" type="text" class="col-md-10 entry" value="Added this" onblur="toggleEntry('#entry-1')" disabled>
                 <span class="col-md-1 flex flex-vertical-center flex-space-around no-padding">
                   <a onclick="toggleEntry('#entry-1')"><i class="fa fa-pencil " aria-hidden="true"></i></a>
                   <a onclick="deleteEntry('#entry-1')"><i class="fa fa-trash" aria-hidden="true"></i></a>
@@ -74,7 +74,7 @@
 
               <div class="col-md-12 saved-entry flex no-padding">
                 <span class="col-md-half flex flex-vertical-center flex-end no-padding">2.</span>
-                <input id="entry-1" type="text" class="col-md-10 entry " value="Added this" disabled>
+                <input id="entry-2" type="text" class="col-md-10 entry" value="Added this" onblur="toggleEntry('#entry-2')" disabled>
                 <span class="col-md-1 flex flex-vertical-center flex-space-around no-padding">
                   <a onclick="toggleEntry('#entry-2')"><i class="fa fa-pencil " aria-hidden="true"></i></a>
                   <a onclick="deleteEntry('#entry-2')"><i class="fa fa-trash" aria-hidden="true"></i></a>
@@ -83,7 +83,7 @@
 
               <div class="col-md-12 saved-entry flex no-padding">
                 <span class="col-md-half flex flex-vertical-center flex-end no-padding">3.</span>
-                <input id="entry-1" type="text" class="col-md-10 entry " value="Added this" disabled>
+                <input id="entry-3" type="text" class="col-md-10 entry" value="Added this" onblur="toggleEntry('#entry-3')" disabled>
                 <span class="col-md-1 flex flex-vertical-center flex-space-around no-padding">
                   <a onclick="toggleEntry('#entry-3')"><i class="fa fa-pencil " aria-hidden="true"></i></a>
                   <a onclick="deleteEntry('#entry-3')"><i class="fa fa-trash" aria-hidden="true"></i></a>

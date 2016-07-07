@@ -163,7 +163,7 @@ function toggleEntry(target) {
 }
 
 function deleteEntry(target) {
-  console.log("Deleting " + target);
+  $(target).parent().remove();
 }
 
 function saveEntry(text) {
@@ -171,6 +171,6 @@ function saveEntry(text) {
     return false;
   } else {
     let logId = $("#entries").data("id");
-    
+
   }
 }
