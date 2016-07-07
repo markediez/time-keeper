@@ -28,13 +28,16 @@ function setSession($post) {
   $_SESSION['timeout'] = time();
 }
 
-function checkSession() {
+function checkSession($redirect = true) {
   if ($_SESSION['valid']) {
     return true;
   } else {
-    $_SESSION['valid'] = false;
-    redirect('index.php');
-    return false;
+    if ($redirect) {
+      redirect("index.php");
+    } else {
+      $_SESSION['valid'] = false;
+      return false;
+    }
   }
 }
 

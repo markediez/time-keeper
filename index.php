@@ -1,8 +1,15 @@
+<?php
+  ob_start();
+  session_start();
+  include('server.php');
+  if(checkSession(false)) {
+    redirect('time-keeper.php');
+  }
+?>
 <!DOCTYPE html>
 <html>
   <head>
     <?php
-      include('server.php');
       addHeaders("Time Keeper");
     ?>
     <script type="text/javascript">
