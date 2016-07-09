@@ -74,7 +74,7 @@
                 while ($row = $res->fetchArray()) {
               ?>
                 <div class="col-md-12 saved-entry flex no-padding">
-                  <span class="col-md-half flex flex-vertical-center flex-end no-padding"><?=$i?>.</span>
+                  <span class="entry-num col-md-half flex flex-vertical-center flex-end no-padding"><?=$i?>.</span>
                   <input id="entry-<?=$i?>" name="entry" type="text" class="col-md-10 entry" value="<?=$row['entry']?>" onblur="toggleEntry('#entry-<?=$i?>')" data-id="<?=$row['id']?>" disabled>
                   <span class="col-md-1 flex flex-vertical-center flex-space-around no-padding">
                     <a onclick="toggleEntry('#entry-<?=$i?>')"><i class="fa fa-pencil " aria-hidden="true"></i></a>
@@ -90,10 +90,6 @@
             <input id="new-entry" type="text" class="form-control row" placeholder="What have you done?">
             <a onclick="stopJob(<?=$_GET['log_id']?>);" class="btn btn-danger col-md-4 row">Stop</a>
           </div> <!-- End Description -->
-
-          <button class="btn btn-default" onclick="notify('success', 'Test')">Test Notify</button>
-          <button class="btn btn-default" onclick="notify('failure', 'Test')">Test Notify</button>
-          <button class="btn btn-default" onclick="notify('warning', 'Test')">Test Notify</button>
         </div> <!-- End Content -->
       </div> <!--End Row-->
     </div> <!-- End Container Fluid -->
@@ -111,7 +107,7 @@
         let number = $("#entries").children().length + 1;
 
         // Append entry
-        let newEntry = $('<div class="col-md-12 saved-entry flex no-padding"><span class="col-md-half flex flex-vertical-center flex-end no-padding">' + number + '.</span><input id="entry-' + number + '" type="text" name="entry" class="col-md-10 entry" value="' +   text + '" onblur="toggleEntry(\'#entry-' + number + '\')" disabled><span class="col-md-1 flex flex-vertical-center flex-space-around no-padding"><a onclick="toggleEntry(\'#entry-' + number + '\')"><i class="fa fa-pencil" aria-hidden="true"></i></a><a onclick="deleteEntry(\'#entry-' + number + '\')"><i class="fa fa-trash" aria-hidden="true"></i></a></span></div>')
+        let newEntry = $('<div class="col-md-12 saved-entry flex no-padding"><span class="col-md-half flex flex-vertical-center flex-end no-padding entry-num">' + number + '.</span><input id="entry-' + number + '" type="text" name="entry" class="col-md-10 entry" value="' +   text + '" onblur="toggleEntry(\'#entry-' + number + '\')" disabled><span class="col-md-1 flex flex-vertical-center flex-space-around no-padding"><a onclick="toggleEntry(\'#entry-' + number + '\')"><i class="fa fa-pencil" aria-hidden="true"></i></a><a onclick="deleteEntry(\'#entry-' + number + '\')"><i class="fa fa-trash" aria-hidden="true"></i></a></span></div>')
         .appendTo($("#entries"));
 
         $(newEntry).keyup(function(e) {
@@ -173,22 +169,31 @@
     };
 
     saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
-      notify('default', "Entry Deleted Successfully" )
     });
 
     $(target).parent().remove();
+    reindex();
   }
 
   function toggleEntry(target) {
     let isDisabled = $(target).attr("disabled");
     if (isDisabled === undefined) {
       $(target).attr("disabled", "disabled");
+      saveEntry($(target));
     } else {
       $(target).removeAttr("disabled");
 
       let text = $(target).val();
       $(target).focus().val("").val(text);
     }
+  }
+
+  function reindex() {
+    let i = 1;
+    $(".entry-num").each(function() {
+      $(this).text(i + ".");
+      i++;
+    });
   }
 
   </script>
