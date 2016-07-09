@@ -22,6 +22,15 @@
         updated_at DATETIME NOT NULL
       );');
 
+      // Entries Table
+      $statement[$index++] = $this->prepare('CREATE TABLE Entries (
+        id INTEGER PRIMARY KEY,
+        log_id INT NOT NULL,
+        entry TEXT,
+        created_at DATETIME NOT NULL,
+        updated_at DATETIME NOT NULL
+      );');
+
       // User Table
       $statement[$index++] = $this->prepare('CREATE TABLE Users (
         id INTEGER PRIMARY KEY,
