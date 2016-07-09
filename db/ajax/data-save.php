@@ -29,10 +29,6 @@ foreach($_POST['values'] as $key => $value) {
   $update .= $key . " = '" . $value . "',";
 }
 
-// $colNames = substr($colNames, 0, strrpos($colNames, ","));
-// $colValues = substr($colValues, 0, strrpos($colValues, ","));
-// $update = substr($update, 0, strrpos($update, ","));
-
 switch($_POST['action']) {
   case 'insert':
     $query = "INSERT INTO $tableName (" . $colNames . " created_at, updated_at) VALUES (" . $colValues . " '$timeNow', '$timeNow')";
@@ -42,7 +38,9 @@ switch($_POST['action']) {
     break;
   case 'delete':
     $query = "DELETE FROM $tableName WHERE id = " . $id;
+    break;
 }
+
 $stmt = $db->prepare($query);
 $result = $stmt->execute();
 

@@ -151,9 +151,6 @@
           'entry': text
         }
       };
-      console.log("Entry ID: " + entryID);
-      console.log("Log ID: " + logID);
-      console.log(values);
 
       saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
         // result == 0 when an update takes place
@@ -165,10 +162,17 @@
   }
 
   function deleteEntry(target) {
-    $(target).parent().remove();
-    saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
+    let values = {
+      'tableName': "Entries",
+      'action': "delete",
+      'id': $(target).data("id")
+    };
 
+    saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
+      notify('default', "Entry Deleted Successfully" )
     });
+
+    $(target).parent().remove();
   }
 
   function toggleEntry(target) {
