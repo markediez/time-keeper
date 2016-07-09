@@ -1,6 +1,6 @@
 <?php
 /**
- * This function saves data via AJAX post
+ * This php file CUD's table data
  * @param tableName - name of the table
  * @param action - update or insert
  * @param id - used for updating
@@ -40,6 +40,8 @@ switch($_POST['action']) {
   case 'update':
     $query = "UPDATE $tableName SET $update updated_at = '$timeNow' WHERE id = " . $id;
     break;
+  case 'delete':
+    $query = "DELETE FROM $tableName WHERE id = " . $id;
 }
 $stmt = $db->prepare($query);
 $result = $stmt->execute();
