@@ -156,10 +156,9 @@
       console.log(values);
 
       saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
-        // result == 0 when an update takes plae
+        // result == 0 when an update takes place
         if(result > 0) {
-          alert('INSERT');
-          $("#entry-" + result).data("id", result);
+          $(".entry:last").data("id", result);
         }
       });
     } // end else
@@ -167,6 +166,9 @@
 
   function deleteEntry(target) {
     $(target).parent().remove();
+    saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
+
+    });
   }
 
   function toggleEntry(target) {
