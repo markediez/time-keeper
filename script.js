@@ -18,14 +18,6 @@ function notify(type, msg) {
   });
 }
 
-function showLoading() {
-  // TODO: Implement
-}
-
-function hideLoading() {
-  // TODO: Implement
-}
-
 // *******************************************************************
 // This function transforms the form data into an object {name: value}
 // @param {jQuery selector} form - selector of the form e.g. '#myForm'
@@ -66,14 +58,12 @@ function getFormData(form) {
  // @param {String} msg - text to show
  // *******************************************************************
 function saveDataPost(url, values, callback) {
-  showLoading();
   $.ajax(
     {
       url: url,
       type: "POST",
       data: values,
       success: function(data, textStatus, jqXHR) {
-        hideLoading();
         callback(data, textStatus, jqXHR);
         notify('success', 'Saved');
       },
