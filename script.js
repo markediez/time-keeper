@@ -75,7 +75,7 @@ function saveDataPost(url, values, callback) {
       success: function(data, textStatus, jqXHR) {
         hideLoading();
         callback(data, textStatus, jqXHR);
-        notify('success', 'Saved!');
+        notify('success', 'Saved');
       },
       error: function(data, textStatus, jqXHR) {
         notify('failure', 'Something went wrong!');

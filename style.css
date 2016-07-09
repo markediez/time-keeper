@@ -466,6 +466,40 @@ tr.clickable-row.active {
 }
 /* ========= End Work Log Description ========= */
 
+/* ========= Notification Start ========= */
+
+.notify-success {
+  position: absolute;
+  bottom: 1%;
+  right: 1%;
+  background-color: #59bd61;
+  border-radius: 5px;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.notify-warning {
+  position: absolute;
+  bottom: 1%;
+  right: 1%;
+  background-color: #d9934f;
+  border-radius: 5px;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.notify-failure {
+  position: absolute;
+  bottom: 1%;
+  right: 1%;
+  background-color: #d9534f;
+  border-radius: 5px;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+/* ========= Notification End ========= */
+
 
 /* ========= Animations ========= */
 @keyframes remove {

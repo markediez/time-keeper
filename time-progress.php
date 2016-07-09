@@ -90,6 +90,10 @@
             <input id="new-entry" type="text" class="form-control row" placeholder="What have you done?">
             <a onclick="stopJob(<?=$_GET['log_id']?>);" class="btn btn-danger col-md-4 row">Stop</a>
           </div> <!-- End Description -->
+
+          <button class="btn btn-default" onclick="notify('success', 'Test')">Test Notify</button>
+          <button class="btn btn-default" onclick="notify('failure', 'Test')">Test Notify</button>
+          <button class="btn btn-default" onclick="notify('warning', 'Test')">Test Notify</button>
         </div> <!-- End Content -->
       </div> <!--End Row-->
     </div> <!-- End Container Fluid -->
