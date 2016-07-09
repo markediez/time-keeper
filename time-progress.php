@@ -62,34 +62,29 @@
           <div id="description" class="col-md-8">
             <h2 class="row title"><?= $title ?></h2>
             <div id="entries" class="row" data-id="<?=$_REQUEST['log_id']?>">
+              <?php
+                // Query for all notes related to the worklog
+                $noteQuery = "SELECT * FROM Entries WHERE log_id = :lid ORDER BY created_at ASC";
+                $stmt = $db->prepare($noteQuery);
+                $stmt->bindValue('lid', $_REQUEST['log_id']);
+                $res = $stmt->execute();
 
-              <div class="col-md-12 saved-entry flex no-padding">
-                <span class="col-md-half flex flex-vertical-center flex-end no-padding">1.</span>
-                <input id="entry-1" type="text" class="col-md-10 entry" value="Added this" onblur="toggleEntry('#entry-1')" disabled>
-                <span class="col-md-1 flex flex-vertical-center flex-space-around no-padding">
-                  <a onclick="toggleEntry('#entry-1')"><i class="fa fa-pencil " aria-hidden="true"></i></a>
-                  <a onclick="deleteEntry('#entry-1')"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                </span>
-              </div>
-
-              <div class="col-md-12 saved-entry flex no-padding">
-                <span class="col-md-half flex flex-vertical-center flex-end no-padding">2.</span>
-                <input id="entry-2" type="text" class="col-md-10 entry" value="Added this" onblur="toggleEntry('#entry-2')" disabled>
-                <span class="col-md-1 flex flex-vertical-center flex-space-around no-padding">
-                  <a onclick="toggleEntry('#entry-2')"><i class="fa fa-pencil " aria-hidden="true"></i></a>
-                  <a onclick="deleteEntry('#entry-2')"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                </span>
-              </div>
-
-              <div class="col-md-12 saved-entry flex no-padding">
-                <span class="col-md-half flex flex-vertical-center flex-end no-padding">3.</span>
-                <input id="entry-3" type="text" class="col-md-10 entry" value="Added this" onblur="toggleEntry('#entry-3')" disabled>
-                <span class="col-md-1 flex flex-vertical-center flex-space-around no-padding">
-                  <a onclick="toggleEntry('#entry-3')"><i class="fa fa-pencil " aria-hidden="true"></i></a>
-                  <a onclick="deleteEntry('#entry-3')"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                </span>
-              </div>
-
+                // show them all
+                $i = 1;
+                while ($row = $res->fetchArray()) {
+              ?>
+                <div class="col-md-12 saved-entry flex no-padding">
+                  <span class="col-md-half flex flex-vertical-center flex-end no-padding"><?=$i?>.</span>
+                  <input id="entry-<?=$i?>" name="entry" type="text" class="col-md-10 entry" value="<?=$row['entry']?>" onblur="toggleEntry('#entry-<?=$i?>')" data-id="<?=$row['id']?>" disabled>
+                  <span class="col-md-1 flex flex-vertical-center flex-space-around no-padding">
+                    <a onclick="toggleEntry('#entry-<?=$i?>')"><i class="fa fa-pencil " aria-hidden="true"></i></a>
+                    <a onclick="deleteEntry('#entry-<?=$i?>')"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                  </span>
+                </div>
+              <?php
+                  $i++;
+                }
+              ?>
             </div> <!-- End Saved Entries -->
 
             <input id="new-entry" type="text" class="form-control row" placeholder="What have you done?">
@@ -106,22 +101,23 @@
     setEntryListener();
 
     $("#new-entry").keyup(function(e) {
-      let text = $(this).val();
+      let thisEntry = $(this);
+      let text = thisEntry.val();
       if (e.keyCode == 13 && text !== "") {
         let number = $("#entries").children().length + 1;
 
         // Append entry
-        let newEntry = $('<div class="col-md-12 saved-entry flex no-padding"><span class="col-md-half flex flex-vertical-center flex-end no-padding">' + number + '.</span><input id="entry-' + number + '" type="text" class="col-md-10 entry" value="' +   text + '" onblur="toggleEntry(\'#entry-' + number + '\')" disabled><span class="col-md-1 flex flex-vertical-center flex-space-around no-padding"><a onclick="toggleEntry(\'#entry-' + number + '\')"><i class="fa fa-pencil" aria-hidden="true"></i></a><a onclick="deleteEntry(\'#entry-' + number + '\')"><i class="fa fa-trash" aria-hidden="true"></i></a></span></div>')
+        let newEntry = $('<div class="col-md-12 saved-entry flex no-padding"><span class="col-md-half flex flex-vertical-center flex-end no-padding">' + number + '.</span><input id="entry-' + number + '" type="text" name="entry" class="col-md-10 entry" value="' +   text + '" onblur="toggleEntry(\'#entry-' + number + '\')" disabled><span class="col-md-1 flex flex-vertical-center flex-space-around no-padding"><a onclick="toggleEntry(\'#entry-' + number + '\')"><i class="fa fa-pencil" aria-hidden="true"></i></a><a onclick="deleteEntry(\'#entry-' + number + '\')"><i class="fa fa-trash" aria-hidden="true"></i></a></span></div>')
         .appendTo($("#entries"));
 
         $(newEntry).keyup(function(e) {
           if (e.keyCode == 13) {
-            let text = $(this).val();
-            saveEntry(text);
+            saveEntry($(this));
             setEntryListener();
           }
         });
 
+        saveEntry(thisEntry);
         $(this).val("");
       }
     }); // #new-entry
@@ -132,10 +128,58 @@
       let entry = $(this);
       if (e.keyCode == 13) {
         let text = $(entry).val();
-        saveEntry(text);
+
+        saveEntry(entry);
         $(entry).blur();
       }
     });
   }
+
+  function saveEntry(el) {
+    let text = el.val();
+    if (text == "" || text == undefined) {
+      return false;
+    } else {
+      let entryID = $(el).data("id");
+      let logID = $("#entries").data("id");
+      let values = {
+        'tableName': "Entries",
+        'action': entryID ? "update" : "insert",
+        'id': entryID,
+        'values': {
+          'log_id': logID,
+          'entry': text
+        }
+      };
+      console.log("Entry ID: " + entryID);
+      console.log("Log ID: " + logID);
+      console.log(values);
+
+      saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
+        // result == 0 when an update takes plae
+        if(result > 0) {
+          alert('INSERT');
+          $("#entry-" + result).data("id", result);
+        }
+      });
+    } // end else
+  }
+
+  function deleteEntry(target) {
+    $(target).parent().remove();
+  }
+
+  function toggleEntry(target) {
+    let isDisabled = $(target).attr("disabled");
+    if (isDisabled === undefined) {
+      $(target).attr("disabled", "disabled");
+    } else {
+      $(target).removeAttr("disabled");
+
+      let text = $(target).val();
+      $(target).focus().val("").val(text);
+    }
+  }
+
   </script>
 </html>

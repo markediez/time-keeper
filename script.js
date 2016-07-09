@@ -1,6 +1,98 @@
+// *******************************************************************
+// This function shows a toaster-like notification
+// @param {String} type - success, warning, failure
+// @param {String} msg - text to show
+// *******************************************************************
+function notify(type, msg) {
+  let html = "<span id='notify' class = 'notify-" + type + " col-md-2'>" + msg + "</span>";
+  let notification = $(html).appendTo("body");
+  notification.css("opacity", 0);
+  notification.css("padding-top", 0);
+  notification.css("padding-bottom", 0);
+  notification.animate({ opacity: "1", paddingTop: "1%", paddingBottom: "1%" }, 500, function() {
+    setTimeout(function() {
+      notification.animate({opacity: "0"}, 500, function() {
+        notification.remove();
+      })
+    }, 500);
+  });
+}
+
+function showLoading() {
+  // TODO: Implement
+}
+
+function hideLoading() {
+  // TODO: Implement
+}
+
+// *******************************************************************
+// This function transforms the form data into an object {name: value}
+// @param {jQuery selector} form - selector of the form e.g. '#myForm'
+// TODO: check checkbox, radiobutton, textarea
+// *******************************************************************
+function getFormData(form) {
+  var values = {};
+
+  // Grab each input data
+  $(form + " input").each(function() {
+    var name = $(this).attr("name");
+    values[name] = $(this).val();
+    console.log("hi");
+  });
+
+  // Grab each textarea
+  $(form + " textarea").each(function() {
+    var name = $(this).attr("name");
+    values[name] = $(this).val();
+  });
+
+  // Grab each select data
+  $(form + " select").each(function() {
+    var name = $(this).attr("name");
+    values[name] = $(this).find(":selected").val();
+  });
+
+  return values;
+}
+
 /*
  * AJAX Scripts
  */
+
+ // *******************************************************************
+ // This function shows a toaster-like notification
+ // @param {String} type - success, warning, failure
+ // @param {String} msg - text to show
+ // *******************************************************************
+function saveDataPost(url, values, callback) {
+  showLoading();
+  $.ajax(
+    {
+      url: url,
+      type: "POST",
+      data: values,
+      success: function(data, textStatus, jqXHR) {
+        hideLoading();
+        callback(data, textStatus, jqXHR);
+        notify('success', 'Saved!');
+      },
+      error: function(data, textStatus, jqXHR) {
+        notify('failure', 'Something went wrong!');
+      }
+    }
+  );
+}
+
+function simpleQuery(tableName, action, values) {
+  let data = {};
+  data.tableName = tableName;
+  data.action = action;
+  $.extend(data, values);
+  saveDataPost('db/ajax/data-save.php', data, function(result, textStatus, jqXHR) {
+
+  })
+}
 
 function addJob() {
   var job_name = $('#job-input').val();
@@ -144,33 +236,5 @@ function toggleCollapse(id) {
     // Hide open board
     $(openBoard).attr("data-collapse", "true");
     $(openBoard).slideUp();
-  }
-}
-
-function toggleEntry(target) {
-  let isDisabled = $(target).attr("disabled");
-  if (isDisabled === undefined) {
-    $(target).attr("disabled", "disabled");
-  } else {
-    $(target).removeAttr("disabled");
-
-    let text = $(target).val();
-    $(target).focus().val("").val(text);
-
-
-  }
-
-}
-
-function deleteEntry(target) {
-  $(target).parent().remove();
-}
-
-function saveEntry(text) {
-  if (text == "" || text == undefined) {
-    return false;
-  } else {
-    let logId = $("#entries").data("id");
-
   }
 }
