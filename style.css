@@ -303,7 +303,6 @@ tr.clickable-row.active {
   height: 130px;
   width: 14%;
   background-color: #a28db6;
-  overflow-y: auto;
   padding: 0;
   color: #FFFFFF;
 }
@@ -478,6 +477,30 @@ tr.clickable-row.active {
   outline: none;
 }
 /* ========= Bootstrap End ========= */
+
+/* ========= Tooltip Start ========= */
+.tooltip-container {
+  position: relative;
+}
+
+.tooltip-text {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #EEEEEE;
+  color: black;
+  border-radius: 5px;
+  z-index: 2;
+  left: 103%;
+  padding: 4px;
+  bottom: 90%;
+  width: 300px;
+}
+
+.event-container {
+  overflow: auto;
+  height: 82%;
+}
+/* ========= Tooltip End ========= */
 
 
 /* ========= Animations ========= */

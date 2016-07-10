@@ -180,11 +180,13 @@
             if($dom <= 0 || $dom  > $end_day) {
               echo '<div class="day col-md-1 no-padding disabled">';
             } else {
+              // echo '<div class="day col-md-1 no-padding tooltip-container">';
               echo '<div class="day col-md-1 no-padding">';
               echo '<span class="event-date col-md-9 no-padding">' . ($day_num - $start_day) . '</span>';
             }
 
             // Shifts or Events of each day
+            echo '<div class="event-container col-md-12 no-padding">';
             foreach($jobArray as $job) {
               $shifts = $job->getShifts($dom);
 
@@ -197,9 +199,13 @@
               }
 
             }
-            echo '</div>';
+            echo '</div>'; // end event conatiner
+            // echo '<div class="tooltip-text">';
+            // echo '<span>Hello Motto</span>';
+            // echo '</div>';
+            echo '</div>'; // End day
           }
-          echo '</div>';
+          echo '</div>'; // end week
         }
         ?>
       </div> <!-- End Weeks -->
