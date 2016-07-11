@@ -39,19 +39,47 @@ $db = new DBLite();
 
 <script type="text/javascript">
 $(document).ready(function() {
-  $(".event").click(function(e) {
-    console.log("pageX: " + e.pageX + " pageY: " + e.pageY);
-    let y = e.pageX + "px";
-    let x = e.pageY + "px";
-    // $(".tooltip-container").css({top: x, left: y});
-  });
+
 });
 
-function showEventDetails(el) {
-  console.log(el);
-  console.log($(el).parent());
-  $(el).parent().parent().addClass("tooltip-container");
-  $('<div class="tooltip-text"><span>Hello Motto</span></div>').appendTo($(".tooltip-container"));
+function addTooltip(container) {
+  container.addClass("tooltip-container");
+  $('<div class="tooltip-text"></div>').appendTo($(".tooltip-container"));
 }
+
+function addTooltipHTML(html) {
+  $(html).appendTo($(".tooltip-text"));
+}
+
+function showEventDetails(el) {
+  // TODO: Show at left side for friday and saturday
+  // Close any open Details
+  closeEventDetails();
+
+  // Set up tooltip
+  addTooltip($(el).parent().parent());
+
+  // Add Job Title
+  addTooltipHTML('<div class="job-header"><span class="job-title">DSS IT</span><a onclick="closeEventDetails();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
+
+  // Add Event / Shift Title
+  addTooltipHTML('<div class="event-header"><span class="event-title">This is a test title</span><span class="event-time">13:00 - 15:00</span></div>');
+
+  // Add Event / Shift Tasks
+  addTooltipHTML('<div class="event-task-list"><span class="event-task"><span class="event-task-num">1.</span> This is this</span><span class="event-task"><span class="event-task-num">2.</span> This is this</span><span class="event-task"><span class="event-task-num">3.</span> This is this</span></div>');
+
+  // Add Event / Shift Title
+  addTooltipHTML('<div class="event-header"><span class="event-title">This is a test long title the quick brown fox jumps over the lazy dog near the riverbank</span><span class="event-time">16:30 - 18:00</span></div>');
+
+  // Add Event / Shift Tasks
+  addTooltipHTML('<div class="event-task-list"><span class="event-task"><span class="event-task-num">1.</span> This is this the quick brown fox jumps over the lazy dog near the riverbank</span><span class="event-task"><span class="event-task-num">2.</span> This is this</span><span class="event-task"><span class="event-task-num">3.</span> This is this</span></div>');
+}
+
+function closeEventDetails() {
+  // Remove Details
+  $(".tooltip-container").removeClass("tooltip-container");
+  $(".tooltip-text").remove();
+}
+
 </script>
 </html>

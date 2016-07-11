@@ -88,7 +88,7 @@
             </div> <!-- End Saved Entries -->
 
             <input id="new-entry" type="text" class="form-control row" placeholder="What have you done?">
-            <a onclick="stopJob(<?=$_GET['log_id']?>);" class="btn btn-danger col-md-4 row">Stop</a>
+            <a onclick="stopJob(<?=$_GET['log_id']?>);" class="btn btn-primary col-md-4 row">Stop</a>
           </div> <!-- End Description -->
         </div> <!-- End Content -->
       </div> <!--End Row-->
