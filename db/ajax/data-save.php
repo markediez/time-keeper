@@ -25,22 +25,28 @@ $update = "";
 
 foreach($_POST['values'] as $key => $value) {
   $colNames .= "$key, ";
-  $colValues .= "'$value', ";
-  $update .= $key . " = '" . $value . "',";
+  if ($value > 0) {
+    $colValues .= "$value, ";
+    $update .= $key . " = " . $value . ",";
+  } else {
+    $colValues .= "\"$value\", ";
+    $update .= $key . " = \"" . $value . "\",";
+  }
 }
 
 switch($_POST['action']) {
   case 'insert':
-    $query = "INSERT INTO $tableName (" . $colNames . " created_at, updated_at) VALUES (" . $colValues . " '$timeNow', '$timeNow')";
+    $query = "INSERT INTO $tableName (" . $colNames . " created_at, updated_at) VALUES (" . $colValues . " \"$timeNow\", \"$timeNow\")";
     break;
   case 'update':
-    $query = "UPDATE $tableName SET $update updated_at = '$timeNow' WHERE id = " . $id;
+    $query = "UPDATE $tableName SET $update updated_at = \"$timeNow\" WHERE id = " . $id;
     break;
   case 'delete':
     $query = "DELETE FROM $tableName WHERE id = " . $id;
     break;
 }
 
+$query = $db->escapeString($query);
 $stmt = $db->prepare($query);
 $result = $stmt->execute();
 

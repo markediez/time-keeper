@@ -52,7 +52,7 @@ function addTooltipHTML(html) {
 }
 
 function showEventDetails(el, toggle = false) {
-  // TODO: Show at left side for friday and saturday
+  console.log(el);
   // Close any open Details
   closeEventDetails();
 
