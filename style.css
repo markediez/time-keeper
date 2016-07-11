@@ -492,7 +492,6 @@ tr.clickable-row.active {
   color: black;
   border-radius: 5px;
   z-index: 2;
-  left: 103%;
   top: -20%;
   width: 300px;
   padding-bottom: 10px;

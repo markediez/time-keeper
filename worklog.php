@@ -51,7 +51,7 @@ function addTooltipHTML(html) {
   $(html).appendTo($(".tooltip-text"));
 }
 
-function showEventDetails(el) {
+function showEventDetails(el, toggle = false) {
   // TODO: Show at left side for friday and saturday
   // Close any open Details
   closeEventDetails();
@@ -73,6 +73,12 @@ function showEventDetails(el) {
 
   // Add Event / Shift Tasks
   addTooltipHTML('<div class="event-task-list"><span class="event-task"><span class="event-task-num">1.</span> This is this the quick brown fox jumps over the lazy dog near the riverbank</span><span class="event-task"><span class="event-task-num">2.</span> This is this</span><span class="event-task"><span class="event-task-num">3.</span> This is this</span></div>');
+
+  if (toggle) {
+    $(".tooltip-text").css("right", "103%");
+  } else {
+    $(".tooltip-text").css("left", "103%");
+  }
 }
 
 function closeEventDetails() {

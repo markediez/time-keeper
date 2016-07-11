@@ -186,13 +186,14 @@
             }
 
             // Shifts or Events of each day
+            $toggle = ($j > 5) ? "true" : "false";
             echo '<div class="event-container col-md-12 no-padding">';
             foreach($jobArray as $job) {
               $shifts = $job->getShifts($dom);
 
               foreach($shifts as $shift) {
                 // Add shift to day
-                echo '<div class="event col-md-12 no-padding" onclick="showEventDetails(this)" data-id="' . $job->id .'">';
+                echo '<div class="event col-md-12 no-padding" onclick="showEventDetails(this,' . $toggle . ')" data-id="' . $job->id .'">';
                 echo '<a class="col-md-12 no-padding"><span class="col-md-8 ">' . $job->title . '</span>';
                 echo '<span class="col-md-4 ">' . $shift->getDuration() . '</span></a>';
                 echo '</div>';
