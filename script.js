@@ -74,6 +74,28 @@ function saveDataPost(url, values, callback) {
   );
 }
 
+function getData(tableName, wantedColumns, targetValue, order ) {
+  let data = {};
+  data.tableName = tableName;
+  $.extend(data, wantedColumns);
+  $.extend(data, targetValue);
+  $.extend(data, order);
+
+  $.ajax(
+    {
+        url: "db/ajax/data-get.php",
+        type: "POST",
+        data: data,
+        success: function(result, textStatus, jqXHR) {
+          alert(result);
+        },
+        error: function(result, textStatus, jqXHR) {
+
+        }
+    }
+  );
+}
+
 function simpleQuery(tableName, action, values) {
   let data = {};
   data.tableName = tableName;

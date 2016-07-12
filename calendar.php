@@ -24,6 +24,7 @@
       $day = new DateTime($this->start_time);
       return $day->format('j');
     }
+
   }
 
   class Job {
@@ -113,6 +114,8 @@
       $nextMonth = $nextMonth->format('Y-m');
       $month = $start_date->format('F Y');
       $jobs = array();
+
+      $thisMonth = $start_date->format('Y-m');
       ?>
       <div id="calendar" class="col-md-12 no-padding">
         <!-- Month Title -->
@@ -193,7 +196,7 @@
 
               foreach($shifts as $shift) {
                 // Add shift to day
-                echo '<div class="event col-md-12 no-padding" onclick="showEventDetails(this,' . $toggle . ')" data-id="' . $job->id .'">';
+                echo '<div class="event col-md-12 no-padding" onclick="showEventDetails(this,' . $toggle . ')" data-id="' . $job->id .'" data-date="' . $thisMonth . "-" . $dom . '">';
                 echo '<a class="col-md-12 no-padding"><span class="col-md-8 ">' . $job->title . '</span>';
                 echo '<span class="col-md-4 ">' . $shift->getDuration() . '</span></a>';
                 echo '</div>';

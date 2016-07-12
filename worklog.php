@@ -51,8 +51,12 @@ function addTooltipHTML(html) {
   $(html).appendTo($(".tooltip-text"));
 }
 
+function getEventDetails(jobID) {
+
+}
+
 function showEventDetails(el, toggle = false) {
-  console.log(el);
+  // console.log(el);
   // Close any open Details
   closeEventDetails();
 
@@ -60,19 +64,59 @@ function showEventDetails(el, toggle = false) {
   addTooltip($(el).parent().parent());
 
   // Add Job Title
-  addTooltipHTML('<div class="job-header"><span class="job-title">DSS IT</span><a onclick="closeEventDetails();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
+  let title = $(el).children().children(":first").text();
+  addTooltipHTML('<div class="job-header"><span class="job-title">' + title + '</span><a onclick="closeEventDetails();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
 
-  // Add Event / Shift Title
-  addTooltipHTML('<div class="event-header"><span class="event-title">This is a test title</span><span class="event-time">13:00 - 15:00</span></div>');
+  let values = {};
+  values.jid = $(el).data("id");
+  values.date = $(el).data("date");
 
-  // Add Event / Shift Tasks
-  addTooltipHTML('<div class="event-task-list"><span class="event-task"><span class="event-task-num">1.</span> This is this</span><span class="event-task"><span class="event-task-num">2.</span> This is this</span><span class="event-task"><span class="event-task-num">3.</span> This is this</span></div>');
+  $.ajax({
+    url: "db/ajax/get-event.php",
+    data: values,
+    success: function(result) {
+      let currShift = undefined;
+      let prevShift = undefined;
+      let eventIndex = 1;
+      let entries = '<div class="event-task-list">';
+      for(let i = 0; i < result.length; i++) {
+        console.log(result[i]);
+        currShift = result[i]['work_start'];
+        // if a new shift occurs, set up the shift section;
+        if (currShift.indexOf(prevShift) === -1) {
+          if (prevShift !== undefined) {
+              entries += '</div>'; // end previous shift
+              addTooltipHTML(entries);
+              entries = '<div class="event-task-list">';
+          }
+          prevShift = currShift;
+          let newShiftTitle = result[i]['work_title'];
+          let shiftStart = result[i]['work_start'];
+          let shiftEnd = result[i]['work_end'];
+          let pos = shiftStart.indexOf(" ");
+          shiftStart = shiftStart.substring(pos + 1, pos + 6);
+          pos = shiftEnd.indexOf(" ");
+          shiftEnd = shiftEnd.substring(pos + 1,  pos + 6);
+          console.log("in");
+          addTooltipHTML('<div class="event-header"><span class="event-title">' + newShiftTitle + '</span><span class="event-time">' + shiftStart + ' - ' + shiftEnd + '</span></div>');
+          eventIndex = 1;
+        } // end if
 
-  // Add Event / Shift Title
-  addTooltipHTML('<div class="event-header"><span class="event-title">This is a test long title the quick brown fox jumps over the lazy dog near the riverbank</span><span class="event-time">16:30 - 18:00</span></div>');
+        // Add entries of shift
+        if (result[i]['entry'] != null) {
+          entries = entries + '<span class="event-task"><span class="event-task-num">' + eventIndex + '.</span>' + result[i]['entry'] + '</span>';
+        }
 
-  // Add Event / Shift Tasks
-  addTooltipHTML('<div class="event-task-list"><span class="event-task"><span class="event-task-num">1.</span> This is this the quick brown fox jumps over the lazy dog near the riverbank</span><span class="event-task"><span class="event-task-num">2.</span> This is this</span><span class="event-task"><span class="event-task-num">3.</span> This is this</span></div>');
+        eventIndex++;
+      } // end for
+
+      addTooltipHTML(entries); // addFinal Tasks
+
+    },
+    error: function(result) {
+      alert("Something went wrong");
+    }
+  });
 
   if (toggle) {
     $(".tooltip-text").css("right", "103%");

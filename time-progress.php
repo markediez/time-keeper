@@ -153,7 +153,6 @@
       };
 
       saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
-        // result == 0 when an update takes place
         if(result > 0) {
           $(".entry:last").data("id", result);
         }
