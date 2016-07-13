@@ -67,6 +67,8 @@ function showEventDetails(el, toggle = false) {
   let title = $(el).children().children(":first").text();
   addTooltipHTML('<div class="job-header"><span class="job-title">' + title + '</span><a onclick="closeEventDetails();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
 
+  showLoading(".tooltip-text");
+
   let values = {};
   values.jid = $(el).data("id");
   values.date = $(el).data("date");
@@ -75,6 +77,7 @@ function showEventDetails(el, toggle = false) {
     url: "db/ajax/get-event.php",
     data: values,
     success: function(result) {
+      hideLoading();
       let currShift = undefined;
       let prevShift = undefined;
       let eventIndex = 1;

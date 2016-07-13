@@ -478,6 +478,28 @@ tr.clickable-row.active {
 }
 /* ========= Bootstrap End ========= */
 
+/* ========= Loading Start ========= */
+.loading {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  bottom: 50%;
+  right: 0%;
+  text-align: center;
+}
+
+.loading span {
+  letter-spacing: 0px;
+}
+
+.animate-load {
+  animation-name: space-out-in;
+  animation-delay: 0s;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+}
+/* ========= Loading End ========= */
+
 /* ========= Tooltip Start ========= */
 .tooltip-container {
   position: relative;
@@ -486,6 +508,7 @@ tr.clickable-row.active {
 .tooltip-text {
   position: absolute;
   display: flex;
+  align-content: flex-start;
   flex-wrap: wrap;
   background-color: white;
   border: 1px solid #EEEEEE;
@@ -497,6 +520,7 @@ tr.clickable-row.active {
   padding-bottom: 10px;
   padding-top: 10px;
   max-height: 250px;
+  min-height: 250px;
   overflow-y: auto;
 }
 
@@ -604,5 +628,25 @@ tr.clickable-row.active {
   100% {
     transform: rotateZ(360deg);
   }
+}
+
+@keyframes blink {
+  0% {opacity: 0;}
+  50% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+@keyframes space-out-in {
+  0% {letter-spacing: 0px;}
+  10% {letter-spacing: 1px;}
+  20% {letter-spacing: 2px;}
+  30% {letter-spacing: 3px;}
+  40% {letter-spacing: 4px;}
+  50% {letter-spacing: 5px;}
+  60% {letter-spacing: 4px;}
+  70% {letter-spacing: 3px;}
+  80% {letter-spacing: 2px;}
+  90% {letter-spacing: 1px;}
+  100% {letter-spacing: 0px;}
 }
 /* ========= End Animations ========= */

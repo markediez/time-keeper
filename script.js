@@ -48,6 +48,23 @@ function getFormData(form) {
   return values;
 }
 
+// *******************************************************************
+// This function shows a loading animation
+// @param {String} target - container that will hold the loading text
+// *******************************************************************
+function showLoading(target) {
+  $(target).append('<div class="loading"><span class="animate-load">Loading...</span></div>');
+  $(".loading span").addClass("animate-load");
+}
+
+// *******************************************************************
+// This function removes the loading splash
+// @param {String} target - container that will hold the loading text
+// *******************************************************************
+function hideLoading() {
+  $(".loading").remove();
+}
+
 /*
  * AJAX Scripts
  */
