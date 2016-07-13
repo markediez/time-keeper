@@ -230,7 +230,9 @@
         $allShifts = $job->getAllShifts();
         foreach($allShifts as $shift) {
           // var_dump($shift);
-          echo '<div class="board-event col-md-12 no-padding">';
+
+          $selector = '.event[data-id=' . $job->id .'][data-date=' . $thisMonth . '-' . $shift->getDay() . ']';
+          echo '<div onclick="' . "$('$selector').click()" . '"class="board-event col-md-12 no-padding">';
           echo '<span class="col-md-8 half-padding">';
           echo '<span class="col-md-1 no-padding bold">' . $shift->getDay() . '</span>';
           echo '<span class="col-md-11 no-padding half-padding-left">' . $shift->title . '</span>';
