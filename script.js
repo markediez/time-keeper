@@ -65,6 +65,49 @@ function hideLoading() {
   $(".loading").remove();
 }
 
+// *******************************************************************
+// This function sets the container for the tooltip
+// @param {jQuery} container - the selector for the container e.g. $("#item")
+// @param {String} position - position of tooltip
+// *******************************************************************
+function addTooltip(container, position) {
+  container.addClass("tooltip-container");
+  $('<div class="tooltip-text"></div>').appendTo($(".tooltip-container"));
+
+  switch(position) {
+    case 'top':
+      $(".tooltip-text").css("bottom", "103%");
+      break;
+    case 'right':
+      $(".tooltip-text").css("left", "103%");
+      break;
+    case 'bottom':
+      $(".tooltip-text").css("top", "103%");
+      break;
+    case 'left':
+      $(".tooltip-text").css("right", "103%");
+      break;
+    default:;
+  }
+}
+
+// *******************************************************************
+// this function adds html to the tooltip
+// @param {String} html - html to add to the tooltip
+// *******************************************************************
+function addTooltipHTML(html) {
+  $(html).appendTo($(".tooltip-text"));
+}
+
+// *******************************************************************
+// This function removes all tootips on the page
+// *******************************************************************
+function removeToolTip() {
+  // Remove Details
+  $(".tooltip-container").removeClass("tooltip-container");
+  $(".tooltip-text").remove();
+}
+
 /*
  * AJAX Scripts
  */
@@ -266,4 +309,18 @@ function toggleCollapse(id) {
     $(openBoard).attr("data-collapse", "true");
     $(openBoard).slideUp();
   }
+}
+
+/**
+ * These scripts are not necessarily generalized. They just happened to be needed in all pages
+ */
+// *******************************************************************
+// This function shows a toaster-like notification
+// @param {String} type - success, warning, failure
+// @param {String} msg - text to show
+// *******************************************************************
+function showWork() {
+  removeToolTip();
+  addTooltip($("#links"), 'right');
+  addTooltipHTML('<div class="job-header"><span class="job-title">Work</span><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
 }

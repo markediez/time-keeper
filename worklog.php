@@ -42,15 +42,6 @@ $(document).ready(function() {
 
 });
 
-function addTooltip(container) {
-  container.addClass("tooltip-container");
-  $('<div class="tooltip-text"></div>').appendTo($(".tooltip-container"));
-}
-
-function addTooltipHTML(html) {
-  $(html).appendTo($(".tooltip-text"));
-}
-
 function getEventDetails(jobID) {
 
 }
@@ -58,14 +49,14 @@ function getEventDetails(jobID) {
 function showEventDetails(el, toggle = false) {
   // console.log(el);
   // Close any open Details
-  closeEventDetails();
+  removeToolTip();
 
   // Set up tooltip
-  addTooltip($(el).parent().parent());
+  addTooltip($(el).parent().parent(), (toggle) ? 'left' : 'right');
 
   // Add Job Title
   let title = $(el).children().children(":first").text();
-  addTooltipHTML('<div class="job-header"><span class="job-title">' + title + '</span><a onclick="closeEventDetails();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
+  addTooltipHTML('<div class="job-header"><span class="job-title">' + title + '</span><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
 
   showLoading(".tooltip-text");
 
@@ -120,18 +111,6 @@ function showEventDetails(el, toggle = false) {
       alert("Something went wrong");
     }
   });
-
-  if (toggle) {
-    $(".tooltip-text").css("right", "103%");
-  } else {
-    $(".tooltip-text").css("left", "103%");
-  }
-}
-
-function closeEventDetails() {
-  // Remove Details
-  $(".tooltip-container").removeClass("tooltip-container");
-  $(".tooltip-text").remove();
 }
 
 </script>
