@@ -52,7 +52,7 @@ function addPanel() { ?>
     <span class="col-md-8">Time Keeper</span>
   </div>
   <div id="links" class="row">
-    <a href="time-keeper.php" class="col-md-12 btn btn-panel">Work</a>
+    <a onclick="showWork();" class="col-md-12 btn btn-panel">Work</a>
     <a href="worklog.php" class="col-md-12 btn btn-panel">Log</a>
     <a href="logout.php" class="col-md-12 btn btn-panel">Logout</a>
   </div>
