@@ -319,8 +319,69 @@ function toggleCollapse(id) {
 // @param {String} type - success, warning, failure
 // @param {String} msg - text to show
 // *******************************************************************
+function selectJob(el) {
+  $(".active").removeClass("active");
+  $(el).addClass("active");
+}
+
 function showWork() {
   removeToolTip();
   addTooltip($("#links"), 'right');
   addTooltipHTML('<div class="job-header"><span class="job-title">Work</span><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
+  addTooltipHTML('<div id="job"><div id="job-form"><div class="select-multiple"><span class="job-item active" onclick="selectJob(this);">job 1</span><span class="job-item" onclick="selectJob(this);">job 1</span><span class="job-item" onclick="selectJob(this);">job 1</span><span class="job-item" onclick="selectJob(this);">job 1</span><span class="job-item" onclick="selectJob(this);">job 1</span><span class="job-item" onclick="selectJob(this);">job 1</span></div><button class="btn btn-primary">Start</button></div></div>');
+
+
+  // showLoading(".tooltip-text");
+
+  // let values = {};
+  // values.jid = $(el).data("id");
+  // values.date = $(el).data("date");
+  //
+  // $.ajax({
+  //   url: "db/ajax/get-event.php",
+  //   data: values,
+  //   success: function(result) {
+  //     hideLoading();
+  //     let currShift = undefined;
+  //     let prevShift = undefined;
+  //     let eventIndex = 1;
+  //     let entries = '<div class="event-task-list">';
+  //     for(let i = 0; i < result.length; i++) {
+  //       console.log(result[i]);
+  //       currShift = result[i]['work_start'];
+  //       // if a new shift occurs, set up the shift section;
+  //       if (currShift.indexOf(prevShift) === -1) {
+  //         if (prevShift !== undefined) {
+  //             entries += '</div>'; // end previous shift
+  //             addTooltipHTML(entries);
+  //             entries = '<div class="event-task-list">';
+  //         }
+  //         prevShift = currShift;
+  //         let newShiftTitle = result[i]['work_title'];
+  //         let shiftStart = result[i]['work_start'];
+  //         let shiftEnd = result[i]['work_end'];
+  //         let pos = shiftStart.indexOf(" ");
+  //         shiftStart = shiftStart.substring(pos + 1, pos + 6);
+  //         pos = shiftEnd.indexOf(" ");
+  //         shiftEnd = shiftEnd.substring(pos + 1,  pos + 6);
+  //         console.log("in");
+  //         addTooltipHTML('<div class="event-header"><span class="event-title">' + newShiftTitle + '</span><span class="event-time">' + shiftStart + ' - ' + shiftEnd + '</span></div>');
+  //         eventIndex = 1;
+  //       } // end if
+  //
+  //       // Add entries of shift
+  //       if (result[i]['entry'] != null) {
+  //         entries = entries + '<span class="event-task"><span class="event-task-num">' + eventIndex + '.</span>' + result[i]['entry'] + '</span>';
+  //       }
+  //
+  //       eventIndex++;
+  //     } // end for
+  //
+  //     addTooltipHTML(entries); // addFinal Tasks
+  //
+  //   },
+  //   error: function(result) {
+  //     alert("Something went wrong");
+  //   }
+  // });
 }

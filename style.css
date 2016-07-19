@@ -23,14 +23,9 @@ a {
 }
 
 #time-keeper-form {
-  /*border: 1px solid red !important;*/
-}
-
-#choices {
-  border: 1px solid rgb(203,203,203);
-  padding: 0;
-  max-height:200px;
-  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  height: 100%;
 }
 
 #job-input {
@@ -114,6 +109,45 @@ a {
 .bold {
   font-weight: bold;
 }
+
+/* ========= Start Job-Entries ========= */
+#job {
+  display:flex;
+  width:100%;
+}
+
+#job-form {
+  width: 100%;
+  height: 100%;
+  padding: 0 15px 0 15px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+}
+
+.select-multiple {
+  display:flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #EEEEEE;
+  font-size: 10px;
+  height: 120px;
+  overflow-y:auto;
+}
+
+.job-item {
+  padding:0 10px;
+  cursor: pointer;
+}
+
+.job-item.active {
+  background-color: #c1b3cf;
+}
+
+/* ========= End Job-Entries ========= */
 
 /* ========= Legend ========= */
 #board {
@@ -451,6 +485,9 @@ tr.clickable-row.active {
 /* ========= Notification End ========= */
 
 /* ========= Bootstrap Start ========= */
+.form-control:focus {
+  border-color: #7f78bf;
+}
 .btn-primary {
   background-color: #58487E;
   border: none;
