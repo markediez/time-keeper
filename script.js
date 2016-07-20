@@ -73,9 +73,6 @@ function hideLoading() {
 // @param {String} position - position of tooltip
 // *******************************************************************
 function addTooltip(container, position) {
-  // Clears the bind made at the end of this function
-  // $(":not(.tooltip-text)").unbind("click");
-
   container.addClass("tooltip-container");
   $('<div class="tooltip-text"></div>').appendTo($(".tooltip-container"));
 
@@ -94,13 +91,6 @@ function addTooltip(container, position) {
       break;
     default:;
   }
-
-  // Removes the tooltip when the user clicks outside of the tooltipbox
-  // setTimeout(function() {
-  //   $(":not(.tooltip-text)").on("click", function() {
-  //     removeToolTip();
-  //   });
-  // }, 100);
 }
 
 // *******************************************************************
