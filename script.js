@@ -33,7 +33,6 @@ function getFormData(form) {
   $(form + " input").each(function() {
     var name = $(this).attr("name");
     values[name] = $(this).val();
-    console.log("hi");
   });
 
   // Grab each textarea
@@ -74,6 +73,9 @@ function hideLoading() {
 // @param {String} position - position of tooltip
 // *******************************************************************
 function addTooltip(container, position) {
+  // Clears the bind made at the end of this function
+  $(":not(.tooltip-text)").unbind("click");
+
   container.addClass("tooltip-container");
   $('<div class="tooltip-text"></div>').appendTo($(".tooltip-container"));
 
@@ -92,6 +94,13 @@ function addTooltip(container, position) {
       break;
     default:;
   }
+
+  // Removes the tooltip when the user clicks outside of the tooltipbox
+  setTimeout(function() {
+    $(":not(.tooltip-text)").on("click", function() {
+      removeToolTip();
+    });
+  }, 100);
 }
 
 // *******************************************************************
@@ -268,11 +277,9 @@ function toggleCollapse(id) {
   let openBoard = '#' + $('[data-collapse="false"]').attr("id");
 
   if($(id).attr("data-collapse") == "false") {
-    console.log("Collapse is now true");
     $(id).attr("data-collapse", "true");
     $(id).slideUp();
   } else {
-    console.log("Collapse is now false");
     $(id).attr("data-collapse", "false");
     $(id).slideDown();
 
@@ -322,7 +329,6 @@ function startJob(user_id) {
         'start_time': timeNow
       }
     };
-    console.log(values);
     saveDataPost("db/ajax/data-save.php", values, function(data) {
       let url = "time-progress.php?log_id=" + data;
       window.location.href = url;
@@ -332,6 +338,7 @@ function startJob(user_id) {
 
 
 function showWork(user_id) {
+  console.log("click");
   removeToolTip();
   addTooltip($("#links"), 'right');
   addTooltipHTML('<div class="job-header"><span class="job-title">Work</span><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div>');

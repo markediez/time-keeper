@@ -52,7 +52,6 @@ function getEventDetails(jobID) {
 }
 
 function showEventDetails(el, toggle = false) {
-  // console.log(el);
   // Close any open Details
   removeToolTip();
 
@@ -79,7 +78,6 @@ function showEventDetails(el, toggle = false) {
       let eventIndex = 1;
       let entries = '<div class="event-task-list">';
       for(let i = 0; i < result.length; i++) {
-        console.log(result[i]);
         currShift = result[i]['work_start'];
         // if a new shift occurs, set up the shift section;
         if (currShift.indexOf(prevShift) === -1) {
@@ -96,7 +94,6 @@ function showEventDetails(el, toggle = false) {
           shiftStart = shiftStart.substring(pos + 1, pos + 6);
           pos = shiftEnd.indexOf(" ");
           shiftEnd = shiftEnd.substring(pos + 1,  pos + 6);
-          console.log("in");
           addTooltipHTML('<div class="event-header"><span class="event-title">' + newShiftTitle + '</span><span class="event-time">' + shiftStart + ' - ' + shiftEnd + '</span></div>');
           eventIndex = 1;
         } // end if
@@ -110,6 +107,8 @@ function showEventDetails(el, toggle = false) {
       } // end for
 
       addTooltipHTML(entries); // addFinal Tasks
+
+      
 
     },
     error: function(result) {

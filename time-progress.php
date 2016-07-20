@@ -145,7 +145,6 @@
   }
 
   function saveTitle(el) {
-    console.log(el.value);
     let logID = $("#entries").data("id");
     let values = {
       'tableName': "WorkLog",
