@@ -74,7 +74,7 @@ function hideLoading() {
 // *******************************************************************
 function addTooltip(container, position) {
   // Clears the bind made at the end of this function
-  $(":not(.tooltip-text)").unbind("click");
+  // $(":not(.tooltip-text)").unbind("click");
 
   container.addClass("tooltip-container");
   $('<div class="tooltip-text"></div>').appendTo($(".tooltip-container"));
@@ -96,11 +96,11 @@ function addTooltip(container, position) {
   }
 
   // Removes the tooltip when the user clicks outside of the tooltipbox
-  setTimeout(function() {
-    $(":not(.tooltip-text)").on("click", function() {
-      removeToolTip();
-    });
-  }, 100);
+  // setTimeout(function() {
+  //   $(":not(.tooltip-text)").on("click", function() {
+  //     removeToolTip();
+  //   });
+  // }, 100);
 }
 
 // *******************************************************************
@@ -364,8 +364,11 @@ function showWork(user_id) {
           html += '<span class="job-item" onclick="selectJob(this);"';
           html += ' data-id=' + res[i].id + '>' ;
           html += res[i].title;
+          html += '<span class="job-action"><i class="fa fa-pencil"></i>';
+          html += '<i class="fa fa-trash"></i></span>';
           html += '</span>';
         }
+        html += '<input type="text" class="job-input" placeholder="Add a job">';
 
         html += '</div><button class="btn btn-primary" onclick="startJob(' + user_id + ');">Start</button></div></div>';
         addTooltipHTML(html);

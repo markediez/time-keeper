@@ -152,12 +152,54 @@ a {
 }
 
 .job-item {
+  display: flex;
+  justify-content: space-between;
   padding:0 10px;
   cursor: pointer;
 }
 
-.job-item.active {
+.job-item.active,
+.job-item.active:hover {
   background-color: #c1b3cf;
+}
+
+.job-item:hover {
+  background-color: #EEEEEE;
+}
+
+.job-item i:nth-child(odd) {
+  margin-right: 5px;
+}
+
+.job-item i {
+  color: white;
+}
+
+.job-item.active i {
+  color: #c1b3cf;
+}
+
+.job-item:hover i {
+  color: #58487E;
+}
+
+.job-item:hover i:hover {
+  color: #7f78bf;
+}
+
+.job-item:hover i:focus {
+  color: #4d487e;
+}
+
+.job-input {
+  margin: 5px 10px 0 10px;
+  padding: 0;
+  border: none;
+  border-bottom: 1px solid #d1d1d1;
+}
+
+.job-action {
+  text-align: right;
 }
 
 /* ========= End Job-Entries ========= */

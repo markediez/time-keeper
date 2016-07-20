@@ -44,7 +44,13 @@ $db = new DBLite();
 
 <script type="text/javascript">
 $(document).ready(function() {
-
+  // http://stackoverflow.com/questions/1403615/use-jquery-to-hide-a-div-when-the-user-clicks-outside-of-it
+  $(document).mouseup(function(e){
+    let tooltipContainer = $(".tooltip-text");
+    if (!tooltipContainer.is(e.target) && tooltipContainer.has(e.target).length === 0) {
+      removeToolTip();
+    }
+  });
 });
 
 function getEventDetails(jobID) {
@@ -108,7 +114,7 @@ function showEventDetails(el, toggle = false) {
 
       addTooltipHTML(entries); // addFinal Tasks
 
-      
+
 
     },
     error: function(result) {
