@@ -110,6 +110,19 @@ a {
   font-weight: bold;
 }
 
+.title {
+  font-size: 36px;
+}
+
+.title-input {
+  background-color: transparent;
+  border: none;
+}
+
+.title-input:focus {
+  /*background-color: #58487E;*/
+}
+
 /* ========= Start Job-Entries ========= */
 #job {
   display:flex;
@@ -416,7 +429,6 @@ tr.clickable-row.active {
 
 .saved-entry {
   background-color: #761660;
-  /*border: 1px solid #FFFFFF;*/
   border-radius: 5px;
 }
 
@@ -427,7 +439,7 @@ tr.clickable-row.active {
   margin-bottom: 4px;
 }
 .entry:disabled {
-  cursor: pointer;
+  cursor: default;
   background-color: #761660;
   border-radius: 5px;
   border: none;

@@ -8,6 +8,7 @@
     $db = new DBLite();
     // Checks if a job is in progress
     $query = "SELECT * FROM WorkLog WHERE id = :id AND user_id=:uid AND end_time IS NULL OR end_time = ''";
+    $query = $db->escapeString($query);
     $statement = $db->prepare($query);
     $statement->bindValue(':uid', $_SESSION['user_id']);
     $statement->bindValue(':id', $_GET['log_id']);
@@ -30,7 +31,6 @@
   $statement->bindValue(':uid', $_SESSION['user_id']);
   $res = $statement->execute();
   $jobRow = $res->fetchArray();
-  $title = $jobRow['title'] . ": " . $row['title'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,7 +60,10 @@
           </div> <!-- End Clock -->
 
           <div id="description" class="col-md-8">
-            <h2 class="row title"><?= $title ?></h2>
+            <div class="row title">
+              <span><?= $jobRow['title'] . ": " ?></span>
+              <input type="text" placeholder="<click me to change title>" class="title-input" value="<?=$row['title']?>" onblur="saveTitle(this);">
+            </div>
             <div id="entries" class="row" data-id="<?=$_REQUEST['log_id']?>">
               <?php
                 // Query for all notes related to the worklog
@@ -121,6 +124,12 @@
         $(this).val("");
       }
     }); // #new-entry
+
+    $(".title-input").keyup(function(e) {
+      if(e.keyCode == 13) {
+        $(this).blur();
+      }
+    });
   });
 
   function setEntryListener() {
@@ -132,6 +141,23 @@
         saveEntry(entry);
         $(entry).blur();
       }
+    });
+  }
+
+  function saveTitle(el) {
+    console.log(el.value);
+    let logID = $("#entries").data("id");
+    let values = {
+      'tableName': "WorkLog",
+      'action': "update",
+      'id': logID,
+      'values': {
+        'title': el.value
+      }
+    };
+
+    saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
+
     });
   }
 

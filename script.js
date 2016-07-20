@@ -324,7 +324,8 @@ function startJob(user_id) {
     };
     console.log(values);
     saveDataPost("db/ajax/data-save.php", values, function(data) {
-
+      let url = "time-progress.php?log_id=" + data;
+      window.location.href = url;
     });
   }
 } // end startJob
