@@ -328,7 +328,6 @@ function startJob(user_id) {
 
 
 function showWork(user_id) {
-  console.log("click");
   removeToolTip();
   addTooltip($("#links"), 'right');
   addTooltipHTML('<div class="job-header"><span class="job-title">Work</span><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
@@ -345,8 +344,9 @@ function showWork(user_id) {
         notify("success", "There is a job in progress...", function(){
           let url = "time-progress.php?log_id=" + res.log_id;
           window.location.href = url;
-        })
+        });
       } else {
+        // List Jobs
         html = '<div id="job"><div id="job-form"><div class="select-multiple">';
         delete res.status;
 
@@ -358,10 +358,40 @@ function showWork(user_id) {
           html += '<i class="fa fa-trash"></i></span>';
           html += '</span>';
         }
+
+        // Option to add a job
         html += '<input type="text" class="job-input" placeholder="Add a job">';
 
+        // Start button
         html += '</div><button class="btn btn-primary" onclick="startJob(' + user_id + ');">Start</button></div></div>';
         addTooltipHTML(html);
+
+        // Add jobs on enter
+        $(".job-input").keyup(function(e) {
+          let obj = $(this);
+          if (e.keyCode == 13 && obj.val() != "") {
+            values = {
+              'tableName': "Jobs",
+              'action': "insert",
+              'values': {
+                'user_id': user_id,
+                'title': obj.val()
+              }
+            };
+            saveDataPost("db/ajax/data-save.php", values, function(result) {
+              //insertBefore
+              let jobRow = '<span class="job-item" onclick="selectJob(this);"';
+              jobRow += ' data-id=' + result + '>' ;
+              jobRow += obj.val();
+              jobRow += '<span class="job-action"><i class="fa fa-pencil"></i>';
+              jobRow += '<i class="fa fa-trash"></i></span>';
+              jobRow += '</span>';
+
+              $(jobRow).insertBefore($(".job-input"));
+              obj.val("");
+            });
+          }
+        });
       }
     },
     error: function(result, status) {
