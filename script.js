@@ -3,7 +3,7 @@
 // @param {String} type - success, warning, failure
 // @param {String} msg - text to show
 // *******************************************************************
-function notify(type, msg) {
+function notify(type, msg, callback) {
   let html = "<span id='notify' class = 'notify-" + type + " col-md-2'>" + msg + "</span>";
   let notification = $(html).appendTo("body");
   notification.css("opacity", 0);
@@ -13,6 +13,9 @@ function notify(type, msg) {
     setTimeout(function() {
       notification.animate({opacity: "0"}, 500, function() {
         notification.remove();
+        if (typeof callback == 'function') {
+          callback();
+        }
       })
     }, 500);
   });
@@ -197,38 +200,6 @@ function addJob() {
   }
 }
 
-function startJob() {
-  if(isValid('#time-start')) {
-    var jobID = $('.active td').data('id');
-    var title = $('#title-input').val();
-    if (!jobID) {
-      showToolTip('#choices', 'Please select a job', 'top');
-      $('#choices').addClass('form-invalid');
-      $('#choices').css('border','1px solid rgba(255,0,0,1)');
-      $('td').click(function() {
-        $('.tooltips .form-tooltip-top').fadeOut('fast', function() {
-          $(this).remove();
-        });
-
-        var animationEvent = whichAnimationEvent();
-        $(this).removeClass('form-invalid');
-      })
-    } else {
-      // Run AJAX
-      var xmlhttp = new XMLHttpRequest();
-
-      xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-          window.location.href="time-keeper.php";
-        }
-      }
-
-      xmlhttp.open("GET", "http://localhost:8888/db/ajax/start-job.php?job_id=" + jobID + "&title=" + title, true);
-      xmlhttp.send();
-    } // end else
-  } // end if
-} // end startJob
-
 function stopJob(logID) {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
@@ -320,68 +291,80 @@ function toggleCollapse(id) {
 // @param {String} msg - text to show
 // *******************************************************************
 function selectJob(el) {
+  // remove red outline if applicable
+  $(".select-multiple").css("border-color", "#EEEEEE");
+  $(".select-multiple").css("box-shadow", "");
   $(".active").removeClass("active");
   $(el).addClass("active");
 }
 
-function showWork() {
+function startJob(user_id) {
+  let id = $(".job-item.active").data("id");
+  if (id === null) {
+    $(".select-multiple").css("border-color", "red");
+    $(".select-multiple").css("box-shadow", "0 0 10px red");
+  } else {
+    let timeNow = new Date();
+    let Y = timeNow.getFullYear();
+    let m = ("0" + (timeNow.getMonth() + 1)).slice(-2);
+    let d = ("0" + timeNow.getDate()).slice(-2);
+    let H = ("0" + timeNow.getHours()).slice(-2);
+    let i = ("0" + timeNow.getMinutes()).slice(-2);
+    let s = ("0" + timeNow.getSeconds()).slice(-2);
+    timeNow = Y + "-" + m + "-" + d + " " + H + ":" + i + ":" + s;
+    let values = {
+      'tableName': "WorkLog",
+      'action': "insert",
+      'values': {
+        'user_id': user_id,
+        'job_id': id,
+        'title': "",
+        'start_time': timeNow
+      }
+    };
+    console.log(values);
+    saveDataPost("db/ajax/data-save.php", values, function(data) {
+
+    });
+  }
+} // end startJob
+
+
+function showWork(user_id) {
   removeToolTip();
   addTooltip($("#links"), 'right');
   addTooltipHTML('<div class="job-header"><span class="job-title">Work</span><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
-  addTooltipHTML('<div id="job"><div id="job-form"><div class="select-multiple"><span class="job-item active" onclick="selectJob(this);">job 1</span><span class="job-item" onclick="selectJob(this);">job 1</span><span class="job-item" onclick="selectJob(this);">job 1</span><span class="job-item" onclick="selectJob(this);">job 1</span><span class="job-item" onclick="selectJob(this);">job 1</span><span class="job-item" onclick="selectJob(this);">job 1</span></div><button class="btn btn-primary">Start</button></div></div>');
+  showLoading(".tooltip-text");
 
+  $.ajax({
+    url: "db/ajax/get-job.php",
+    success: function(result) {
+      hideLoading();
+      let html = "";
+      let res = JSON.parse(result);
+      if (res.status == "false") {
+        showLoading(".tooltip-text");
+        notify("success", "There is a job in progress...", function(){
+          let url = "time-progress.php?log_id=" + res.log_id;
+          window.location.href = url;
+        })
+      } else {
+        html = '<div id="job"><div id="job-form"><div class="select-multiple">';
+        delete res.status;
 
-  // showLoading(".tooltip-text");
+        for(let i in res) {
+          html += '<span class="job-item" onclick="selectJob(this);"';
+          html += ' data-id=' + res[i].id + '>' ;
+          html += res[i].title;
+          html += '</span>';
+        }
 
-  // let values = {};
-  // values.jid = $(el).data("id");
-  // values.date = $(el).data("date");
-  //
-  // $.ajax({
-  //   url: "db/ajax/get-event.php",
-  //   data: values,
-  //   success: function(result) {
-  //     hideLoading();
-  //     let currShift = undefined;
-  //     let prevShift = undefined;
-  //     let eventIndex = 1;
-  //     let entries = '<div class="event-task-list">';
-  //     for(let i = 0; i < result.length; i++) {
-  //       console.log(result[i]);
-  //       currShift = result[i]['work_start'];
-  //       // if a new shift occurs, set up the shift section;
-  //       if (currShift.indexOf(prevShift) === -1) {
-  //         if (prevShift !== undefined) {
-  //             entries += '</div>'; // end previous shift
-  //             addTooltipHTML(entries);
-  //             entries = '<div class="event-task-list">';
-  //         }
-  //         prevShift = currShift;
-  //         let newShiftTitle = result[i]['work_title'];
-  //         let shiftStart = result[i]['work_start'];
-  //         let shiftEnd = result[i]['work_end'];
-  //         let pos = shiftStart.indexOf(" ");
-  //         shiftStart = shiftStart.substring(pos + 1, pos + 6);
-  //         pos = shiftEnd.indexOf(" ");
-  //         shiftEnd = shiftEnd.substring(pos + 1,  pos + 6);
-  //         console.log("in");
-  //         addTooltipHTML('<div class="event-header"><span class="event-title">' + newShiftTitle + '</span><span class="event-time">' + shiftStart + ' - ' + shiftEnd + '</span></div>');
-  //         eventIndex = 1;
-  //       } // end if
-  //
-  //       // Add entries of shift
-  //       if (result[i]['entry'] != null) {
-  //         entries = entries + '<span class="event-task"><span class="event-task-num">' + eventIndex + '.</span>' + result[i]['entry'] + '</span>';
-  //       }
-  //
-  //       eventIndex++;
-  //     } // end for
-  //
-  //     addTooltipHTML(entries); // addFinal Tasks
-  //
-  //   },
-  //   error: function(result) {
-  //     alert("Something went wrong");
-  //   }
-  // });
+        html += '</div><button class="btn btn-primary" onclick="startJob(' + user_id + ');">Start</button></div></div>';
+        addTooltipHTML(html);
+      }
+    },
+    error: function(result, status) {
+      notify('failure', "Error Code: " + status);
+    }
+  });
 }

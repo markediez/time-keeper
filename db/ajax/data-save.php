@@ -26,7 +26,7 @@ $update = "";
 foreach($_POST['values'] as $key => $value) {
   $colNames .= "$key, ";
   if ($value > 0) {
-    $colValues .= "$value, ";
+    $colValues .= "\"$value\", ";
     $update .= $key . " = " . $value . ",";
   } else {
     $colValues .= "\"$value\", ";

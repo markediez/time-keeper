@@ -46,14 +46,14 @@ function redirect($url, $statusCode = 303) {
   die();
 }
 
-function addPanel() { ?>
+function addPanel() {?>
   <div id="logo" class="row">
     <img src="svg/logo.svg" class="img-responsive col-md-4">
     <span class="col-md-8">Time Keeper</span>
   </div>
   <div id="links" class="row">
-    <a onclick="showWork();" class="col-md-12 btn btn-panel">Work</a>
-    <a href="worklog.php" class="col-md-12 btn btn-panel">Log</a>
+    <a onclick="showWork(<?=$_SESSION['user_id']?>);" class="col-md-12 btn btn-panel">Work</a>
+    <a href="time-keeper.php" class="col-md-12 btn btn-panel">Log</a>
     <a href="logout.php" class="col-md-12 btn btn-panel">Logout</a>
   </div>
 <?php }
