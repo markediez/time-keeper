@@ -27,7 +27,7 @@ foreach($_POST['values'] as $key => $value) {
   $colNames .= "$key, ";
   if ($value > 0) {
     $colValues .= "\"$value\", ";
-    $update .= $key . " = " . $value . ",";
+    $update .= $key . " = \"" . $value . "\",";
   } else {
     $colValues .= "\"$value\", ";
     $update .= $key . " = \"" . $value . "\",";
@@ -49,6 +49,5 @@ switch($_POST['action']) {
 $query = $db->escapeString($query);
 $stmt = $db->prepare($query);
 $result = $stmt->execute();
-
 echo $db->lastInsertRowID();
 ?>

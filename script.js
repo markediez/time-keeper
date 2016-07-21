@@ -421,11 +421,16 @@ function spanToTextInput(jQueryEl, onblurFunctionCall = "") {
   }
 
   textInput += ' span-input span-input-' + id;
-  textInput += '" value="' + jQueryEl.text() + '" onblur="';
+  textInput += '" onblur="';
   textInput += onblurFunctionCall + '">';
 
   jQueryEl.replaceWith($(textInput));
-  $(".span-input-" + id).focus();
+  $(".span-input-" + id).focus().val(jQueryEl.text());
+  $(".span-input-" + id).keyup(function(e) {
+    if (e.keyCode == 13) {
+      $(this).blur();
+    }
+  });
 }
 
 // *******************************************************************
@@ -456,6 +461,17 @@ function textInputToSpan(jQueryEl) {
 // @param {?} input - should be a single object of a jQuery or "this" e.g. $(".item")[0]
 // *******************************************************************
 function saveJob(input) {
-  console.log($(input).parent()[0]);
-  textInputToSpan($(input));
+  let container = $(input).parent();
+  let values = {
+    'tableName': "Jobs",
+    'action': "update",
+    'id': container.data("id"),
+    'values': {
+      'title': $(input).val()
+    }
+  };
+
+  saveDataPost("db/ajax/data-save.php", values, function(data) {
+    textInputToSpan($(input));
+  });
 }
