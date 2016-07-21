@@ -35,6 +35,5 @@ while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
   array_push($json, $row);
 }
 
-
 echo json_encode($json);
 ?>

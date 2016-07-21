@@ -2,9 +2,8 @@
 /**
  * This php file CUD's table data
  * @param tableName - name of the table
- * @param action - update or insert
+ * @param action - update or insert or delete
  * @param where - where clause
- * @param id - used for updating
  * @param values - an object of 'columnName' => 'columnValues'
  */
 ob_start();
@@ -22,7 +21,6 @@ $colNames = "";
 $colValues = "";
 $update = "";
 $where = "";
-
 
 foreach($_POST['values'] as $key => $value) {
   $colNames .= "$key, ";

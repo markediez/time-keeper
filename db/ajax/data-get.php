@@ -9,6 +9,7 @@
  */
 ob_start();
 session_start();
+header('Content-Type: application/json');
 include('../../server.php');
 include('../development/database.php');
 checkSession();
@@ -35,17 +36,10 @@ $query = $db->escapeString($query);
 $stmt = $db->prepare($query);
 $result = $stmt->execute();
 
-$json = "{";
-$jsonIndex = 0;
+$json = array();
 while ($row = $result->fetchArray()) {
-  $json .= $jsonIndex . ": {";
-  foreach($row as $key => $value) {
-    $json .= "'$key': '$value',"
-  }
-  $json .= "},";
-  $jsonIndex++;
+  array_push($json, $row);
 }
-$json .= "}";
 
-echo $json;
+echo json_encode($json);
 ?>

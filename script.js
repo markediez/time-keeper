@@ -158,14 +158,15 @@ function getData(tableName, wantedColumns, targetValue, order ) {
   );
 }
 
-function simpleQuery(tableName, action, values) {
+function simpleQuery(tableName, action, values, where = {}, callback) {
   let data = {};
   data.tableName = tableName;
   data.action = action;
   $.extend(data, values);
+  $.extend(data, where);
   saveDataPost('db/ajax/data-save.php', data, function(result, textStatus, jqXHR) {
-
-  })
+    callback(result, textStatus, jqXHR);
+  });
 }
 
 function addJob() {
