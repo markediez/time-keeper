@@ -395,14 +395,17 @@ function insertJob(id, title) {
   html += title;
   html += '</span>';
   html += '<span class="job-action">';
-  html += '<a onclick="spanToTextInput(';
-  html += '$(\'.job-item[data-id=' + id + '] .job-edit\'), ';
-  html += '\'saveJob(this)\'';
-  html += ')">';
+  html += '<a onclick="editJob(' + id + ', this)">';
   html += '<i class="fa fa-pencil"></i></a>';
   html += '<i class="fa fa-trash"></i></span>';
   html += '</span>';
   return html;
+}
+
+function editJob(id, el) {
+  $(el).parent().parent().addClass("job-on-edit");
+  $(".job-action").hide();
+  spanToTextInput($(".job-item[data-id=" + id + "] .job-edit"), "saveJob(this)");
 }
 
 // *******************************************************************
@@ -452,7 +455,6 @@ function textInputToSpan(jQueryEl) {
   spanInput += '">';
   spanInput += jQueryEl.val();
   spanInput += '</span>';
-
   jQueryEl.replaceWith($(spanInput));
 }
 
@@ -472,6 +474,8 @@ function saveJob(input) {
   };
 
   saveDataPost("db/ajax/data-save.php", values, function(data) {
+    container.removeClass("job-on-edit");
     textInputToSpan($(input));
+    $(".job-action").show();
   });
 }

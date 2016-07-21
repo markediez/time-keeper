@@ -28,10 +28,6 @@ a {
   height: 100%;
 }
 
-#job-input {
-  margin: 15px 0 15px 0;
-}
-
 .blink {
   animation: glow-out 0.3s;
 }
@@ -212,6 +208,10 @@ a {
 .job-edit:focus {
   background-color: #EEEEEE;
   border-bottom: 1px solid #d1d1d1;
+}
+
+.job-on-edit {
+  background-color: #EEEEEE !important;
 }
 /* ========= End Job-Entries ========= */
 
