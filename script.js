@@ -351,12 +351,7 @@ function showWork(user_id) {
         delete res.status;
 
         for(let i in res) {
-          html += '<span class="job-item" onclick="selectJob(this);"';
-          html += ' data-id=' + res[i].id + '>' ;
-          html += res[i].title;
-          html += '<span class="job-action"><i class="fa fa-pencil"></i>';
-          html += '<i class="fa fa-trash"></i></span>';
-          html += '</span>';
+          html += insertJob(res[i].id, res[i].title);
         }
 
         // Option to add a job
@@ -379,15 +374,7 @@ function showWork(user_id) {
               }
             };
             saveDataPost("db/ajax/data-save.php", values, function(result) {
-              //insertBefore
-              let jobRow = '<span class="job-item" onclick="selectJob(this);"';
-              jobRow += ' data-id=' + result + '>' ;
-              jobRow += obj.val();
-              jobRow += '<span class="job-action"><i class="fa fa-pencil"></i>';
-              jobRow += '<i class="fa fa-trash"></i></span>';
-              jobRow += '</span>';
-
-              $(jobRow).insertBefore($(".job-input"));
+              $(insertJob(result, obj.val())).insertBefore($(".job-input"));
               obj.val("");
             });
           }
@@ -398,4 +385,45 @@ function showWork(user_id) {
       notify('failure', "Error Code: " + status);
     }
   });
+}
+
+function insertJob(id, title) {
+  let html = "";
+  html += '<span class="job-item" onclick="selectJob(this);"';
+  html += ' data-id=' + id + '>' ;
+  html += '<span class="job-edit">';
+  html += title;
+  html += '</span>';
+  html += '<span class="job-action">';
+  html += '<a onclick="spanToTextInput(';
+  html += '$(\'.job-item[data-id=' + id + '] .job-edit\')';
+  html += ')">';
+  html += '<i class="fa fa-pencil"></i></a>';
+  html += '<i class="fa fa-trash"></i></span>';
+  html += '</span>';
+
+  return html;
+}
+
+// *******************************************************************
+// This function converts a span into an input
+// @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
+// @param {String} onblurFunctionCall - should be a string for a function call on blur
+// *******************************************************************
+function spanToTextInput(jQueryEl, onblurFunctionCall = "") {
+  // <input type="text" class="<their class>" value= "text" onblur=callback>
+  // http://stackoverflow.com/questions/1227286/get-class-list-for-element-with-jquery
+  let classList = jQueryEl.attr("class").split(/\s+/);
+  let textInput = '<input type="text" class="';
+  let id = $(".span-input").length;
+  for (let i = 0; i < classList.length; i++) {
+    textInput += classList[i] + " ";
+  }
+
+  textInput += ' span-input span-input-' + id;
+  textInput += '" value="' + jQueryEl.text() + '" onblur="';
+  textInput += onblurFunctionCall + '">';
+
+  jQueryEl.replaceWith($(textInput));
+  $(".span-input-" + id).focus();
 }

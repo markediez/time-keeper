@@ -192,7 +192,7 @@ a {
 }
 
 .job-input {
-  margin: 5px 10px 0 10px;
+  margin: 5px 10px 5px 10px;
   padding: 0;
   border: none;
   border-bottom: 1px solid #d1d1d1;
@@ -202,6 +202,17 @@ a {
   text-align: right;
 }
 
+.job-edit {
+  width: 90%;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+.job-edit:focus {
+  background-color: #EEEEEE;
+  border-bottom: 1px solid #d1d1d1;
+}
 /* ========= End Job-Entries ========= */
 
 /* ========= Legend ========= */
