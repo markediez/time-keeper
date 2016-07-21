@@ -396,12 +396,12 @@ function insertJob(id, title) {
   html += '</span>';
   html += '<span class="job-action">';
   html += '<a onclick="spanToTextInput(';
-  html += '$(\'.job-item[data-id=' + id + '] .job-edit\')';
+  html += '$(\'.job-item[data-id=' + id + '] .job-edit\'), ';
+  html += '\'saveJob(this)\'';
   html += ')">';
   html += '<i class="fa fa-pencil"></i></a>';
   html += '<i class="fa fa-trash"></i></span>';
   html += '</span>';
-
   return html;
 }
 
@@ -411,11 +411,11 @@ function insertJob(id, title) {
 // @param {String} onblurFunctionCall - should be a string for a function call on blur
 // *******************************************************************
 function spanToTextInput(jQueryEl, onblurFunctionCall = "") {
-  // <input type="text" class="<their class>" value= "text" onblur=callback>
   // http://stackoverflow.com/questions/1227286/get-class-list-for-element-with-jquery
   let classList = jQueryEl.attr("class").split(/\s+/);
   let textInput = '<input type="text" class="';
   let id = $(".span-input").length;
+
   for (let i = 0; i < classList.length; i++) {
     textInput += classList[i] + " ";
   }
@@ -426,4 +426,36 @@ function spanToTextInput(jQueryEl, onblurFunctionCall = "") {
 
   jQueryEl.replaceWith($(textInput));
   $(".span-input-" + id).focus();
+}
+
+// *******************************************************************
+// This function converts a text input into a span
+// @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
+// *******************************************************************
+function textInputToSpan(jQueryEl) {
+  let classList = jQueryEl.attr("class").split(/\s+/);
+  let spanInput = '<span class="';
+
+  for (let i = 0; i < classList.length; i++) {
+    // The if is necessary to remove span-input* class generated
+    // by spanToTextInput
+    if (classList[i].indexOf("span-input") === -1) {
+      spanInput += classList[i] + " ";
+    }
+  }
+
+  spanInput += '">';
+  spanInput += jQueryEl.val();
+  spanInput += '</span>';
+
+  jQueryEl.replaceWith($(spanInput));
+}
+
+// *******************************************************************
+// This function saves a job
+// @param {?} input - should be a single object of a jQuery or "this" e.g. $(".item")[0]
+// *******************************************************************
+function saveJob(input) {
+  console.log($(input).parent()[0]);
+  textInputToSpan($(input));
 }
