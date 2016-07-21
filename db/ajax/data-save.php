@@ -16,7 +16,6 @@ $db = new DBLite();
 
 $tableName = $_POST['tableName'];
 $action = $_POST['action'];
-$id = $_POST['id'];
 $timeNow = date("Y-m-d H:i:s");
 
 $colNames = "";
