@@ -149,7 +149,9 @@
     let values = {
       'tableName': "WorkLog",
       'action': "update",
-      'id': logID,
+      'where': {
+        'id': logID
+      },
       'values': {
         'title': el.value
       }
@@ -170,7 +172,9 @@
       let values = {
         'tableName': "Entries",
         'action': entryID ? "update" : "insert",
-        'id': entryID,
+        'where': {
+          'id': entryID
+        },
         'values': {
           'log_id': logID,
           'entry': text
@@ -189,7 +193,9 @@
     let values = {
       'tableName': "Entries",
       'action': "delete",
-      'id': $(target).data("id")
+      'where': {
+        'id': $(target).data("id")
+      }
     };
 
     saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {

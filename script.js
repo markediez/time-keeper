@@ -467,7 +467,9 @@ function saveJob(input) {
   let values = {
     'tableName': "Jobs",
     'action': "update",
-    'id': container.data("id"),
+    'where': {
+      'id': container.data("id"),
+    },
     'values': {
       'title': $(input).val()
     }
