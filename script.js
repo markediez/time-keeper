@@ -136,11 +136,11 @@ function saveDataPost(url, values, callback) {
   );
 }
 
-function getData(tableName, wantedColumns, targetValue, order ) {
+function getData(tableName, wantedColumns, targetValue, order, callback ) {
   let data = {};
   data.tableName = tableName;
+  data.where = targetValue;
   $.extend(data, wantedColumns);
-  $.extend(data, targetValue);
   $.extend(data, order);
 
   $.ajax(
@@ -149,10 +149,10 @@ function getData(tableName, wantedColumns, targetValue, order ) {
         type: "POST",
         data: data,
         success: function(result, textStatus, jqXHR) {
-          alert(result);
+          callback(result, textStatus, jqXHR);
         },
         error: function(result, textStatus, jqXHR) {
-
+          notify("failure", "Error: " + textStatus);
         }
     }
   );
@@ -162,10 +162,11 @@ function simpleQuery(tableName, action, values, where = {}, callback) {
   let data = {};
   data.tableName = tableName;
   data.action = action;
-  $.extend(data, values);
-  $.extend(data, where);
+  data.values = values;
+  data.where = where;
   saveDataPost('db/ajax/data-save.php', data, function(result, textStatus, jqXHR) {
-    callback(result, textStatus, jqXHR);
+    if(typeof callback == 'function')
+      callback(result, textStatus, jqXHR);
   });
 }
 
@@ -398,7 +399,7 @@ function insertJob(id, title) {
   html += '<span class="job-action">';
   html += '<a onclick="editJob(' + id + ', this)">';
   html += '<i class="fa fa-pencil"></i></a>';
-  html += '<i class="fa fa-trash"></i></span>';
+  html += '<i class="fa fa-trash" onclick="deleteJob(\'' + title + '\',' + id + ')"></i></span>';
   html += '</span>';
   return html;
 }
@@ -481,4 +482,25 @@ function saveJob(input) {
     textInputToSpan($(input));
     $(".job-action").show();
   });
+}
+
+function deleteJob(title, id) {
+  if (confirm("Are you sure you want to delete \"" + title + "\" and all of its contents?" ) == true) {
+    // delete entries
+    getData("WorkLog", {}, {'job_id': id}, {}, function(data) {
+      for(let workLogIndex in data) {
+        let worklog = data[workLogIndex];
+        simpleQuery("Entries", "delete", {}, {'log_id': worklog.id});
+      }
+    });
+
+    // delete WorkLog
+    simpleQuery("WorkLog", "delete", {}, {'job_id': id});
+
+    // delete job
+    simpleQuery("Jobs", "delete", {}, {'id': id});
+
+    $(".job-item[data-id=" + id + "]").remove();
+    location.reload();
+  }
 }

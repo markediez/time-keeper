@@ -37,7 +37,7 @@ $stmt = $db->prepare($query);
 $result = $stmt->execute();
 
 $json = array();
-while ($row = $result->fetchArray()) {
+while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
   array_push($json, $row);
 }
 
