@@ -490,6 +490,8 @@ tr.clickable-row.active {
   border: none;
   margin-top: 4px;
   margin-bottom: 4px;
+  padding-left: 5px;
+  margin-left: 10px;
 }
 .entry:disabled {
   cursor: default;
