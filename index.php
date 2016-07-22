@@ -28,14 +28,6 @@
   </head>
   <body>
     <div id="index" class="container-fluid">
-
-      <!-- <div id="header" class="head flex">
-        <div class="flex flex-vertical-center">
-          <img src="svg/logo.svg" class="head-logo">
-          <h1 class="head-title">Time Keeper</h1>
-        </div>
-      </div> -->
-
       <div id="login">
         <div class="head">
           <img src="svg/logo.svg" class="head-logo">
@@ -53,7 +45,6 @@
           <button id="login-button" class="btn btn-primary form-item">Login</button>
         </form>
       </div>
-
     </div>
   </body>
 </html>
