@@ -36,8 +36,31 @@ a {
   background-color: #20033C;
 }
 
+.form {
+  width: 30%;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: #20033C;
+}
+
 #legend-container {
   padding-right: 0px;
+}
+
+#register-button {
+  width: 100%;
+}
+
+#register-alter {
+  display: block;
+  width: 100%;
+  color: white;
+  text-align: right;
+  text-decoration: underline;
+}
+
+#register-alter:hover {
+  text-decoration: none;
 }
 
 #time-keeper-form {
