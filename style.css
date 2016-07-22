@@ -18,6 +18,24 @@ a {
   background-color: #451B6D;
 }
 
+#index {
+  height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #20033C;
+  color: #FFFFFF;
+  justify-content: center;
+  align-items: center;
+  text-align: center;;
+}
+
+#login {
+  width: 30%;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: #20033C;
+}
+
 #legend-container {
   padding-right: 0px;
 }
@@ -34,6 +52,22 @@ a {
 
 .blink {
   animation: glow-out 0.3s;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.head-logo {
+  width: 50px;
+  margin: 10px;
+}
+
+.head-title {
+  font-size: 36px;
 }
 
 .error {

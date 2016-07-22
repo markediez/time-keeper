@@ -27,25 +27,32 @@
     ?>
   </head>
   <body>
-    <div id="content" class="container-fluid">
+    <div id="index" class="container-fluid">
 
-      <div id="header" class="row">
-        <div class="col-md-12">
-          <h1>Time Keeper</h1>
+      <!-- <div id="header" class="head flex">
+        <div class="flex flex-vertical-center">
+          <img src="svg/logo.svg" class="head-logo">
+          <h1 class="head-title">Time Keeper</h1>
         </div>
+        <?php if ($error) {?>
         <div class="col-md-4">
           <p class="error">Invalid credentials</p>
         </div>
-      </div>
+        <?php } ?>
+      </div> -->
 
-      <div id="login" class="row">
-        <form id="login-form" class="col-md-4" method="POST">
-          <div class="tooltips col-md-12 no-padding">
-            <input class="col-md-12 form-control" type="text" placeholder="username" name="username" required>
-            <input class="col-md-12 form-control form-item" type="password" placeholder="password" name="password" required>
+      <div id="login">
+        <div class="head">
+          <img src="svg/logo.svg" class="head-logo">
+          <span class="head-title">Time Keeper</span>
+        </div>
+        <form id="login-form" method="POST">
+          <div>
+            <input class="form-control" type="text" placeholder="username" name="username" required>
+            <input class="form-control form-item" type="password" placeholder="password" name="password" required>
           </div>
-          <a class="col-md-4 col-md-offset-3 btn btn-primary form-item" href="register.php">Register</a>
-          <button id="login-button" class="col-md-4 col-md-offset-1 btn btn-primary form-item">Login</button>
+          <a class="btn btn-primary form-item" href="register.php">Register</a>
+          <button id="login-button" class="btn btn-primary form-item">Login</button>
         </form>
       </div>
 
