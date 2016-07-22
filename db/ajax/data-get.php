@@ -11,7 +11,6 @@ ob_start();
 session_start();
 header('Content-Type: application/json');
 include('../../server.php');
-include('../development/database.php');
 checkSession();
 $db = new DBLite();
 

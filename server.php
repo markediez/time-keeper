@@ -1,6 +1,7 @@
 <?php
 ob_start();
 session_start();
+include("db/development/database.php");
 
 function addHeaders($title) {
   echo "<title>$title</title>";
@@ -15,16 +16,16 @@ function addHeaders($title) {
   echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/script.js"></script>';
 }
 
-function setSession($post) {
+function setSession($post, $id = null) {
   $index = 0;
   $_SESSION[$index++] = $post['user_id'];
   $_SESSION[$index++] = $post['username'];
   $_SESSION[$index++] = true;
   $_SESSION[$index++] = time();
 
-  $_SESSION['user_id'] = $post['user_id'];
+  $_SESSION['user_id'] = $id;
   $_SESSION['username'] = $post['username'];
-  $_SESSION['valid'] = true;
+  $_SESSION['valid'] = ($_SESSION['user_id']) ? true : false;
   $_SESSION['timeout'] = time();
 }
 
@@ -39,6 +40,8 @@ function checkSession($redirect = true) {
       return false;
     }
   }
+
+  var_dump($_SESSION);
 }
 
 function redirect($url, $statusCode = 303) {
@@ -58,6 +61,19 @@ function addPanel() {?>
   </div>
 <?php }
 
+function login($username, $password) {
+  $db = new DBLite();
+  $query = "SELECT * FROM Users WHERE username = \"$username\" AND password = \"$password\"";
+  $query = $db->escapeString($query);
+  $stmt = $db->prepare($query);
+  $res = $stmt->execute();
+  $row = $res->fetchArray();
 
+  if ($row['id'] > 0) {
+    return $row['id'];
+  } else {
+    return 0;
+  }
+}
 
 ?>

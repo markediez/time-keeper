@@ -3,7 +3,6 @@ header('Content-Type: application/json');
 ob_start();
 session_start();
 include('../../server.php');
-include('../development/database.php');
 checkSession();
 $db = new DBLite();
 

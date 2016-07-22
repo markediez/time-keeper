@@ -1,13 +1,12 @@
 <?php
 include("server.php");
 include("calendar.php");
-include('db/development/database.php');
 // Move to Login if the passed values are invalid or no session
 if(sizeof($_POST) > 0) {
   setSession($_POST);
-} else {
-  checkSession();
 }
+
+// checkSession();
 $db = new DBLite();
 ?>
 <!DOCTYPE html>

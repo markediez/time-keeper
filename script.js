@@ -356,7 +356,8 @@ function showWork(user_id) {
       delete res.status;
 
       for(let i in res) {
-        html += insertJob(res[i].id, res[i].title);
+        if(typeof res[i] == 'object')
+          html += insertJob(res[i].id, res[i].title);
       }
 
       // Option to add a job
