@@ -120,9 +120,9 @@
       <div id="calendar" class="col-md-12 no-padding">
         <!-- Month Title -->
         <div class="col-md-12 text-center month no-padding">
-          <a href="worklog.php?date=<?=$lastMonth?>" class="col-md-1 col-md-offset-4"><i class="fa fa-arrow-left fa-lg" aria-hidden="true"></i></a>
+          <a href="time-keeper.php?date=<?=$lastMonth?>" class="col-md-1 col-md-offset-4"><i class="fa fa-arrow-left fa-lg" aria-hidden="true"></i></a>
           <span id="month-name" class="col-md-2"><?=$month?></span>
-          <a href="worklog.php?date=<?=$nextMonth?>" class="col-md-1"><i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i></a>
+          <a href="time-keeper.php?date=<?=$nextMonth?>" class="col-md-1"><i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i></a>
         </div>
 
         <!-- Day Title -->

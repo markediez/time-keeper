@@ -13,6 +13,8 @@
     if ($id > 0) {
       setSession($_POST, $id);
       header("Refresh:0");
+    } else {
+      $error = true;
     }
   }
   // var_dump($_POST);
@@ -23,26 +25,16 @@
     <?php
       addHeaders("Time Keeper");
     ?>
-    <script type="text/javascript">
-      // $( document ).ready(function() {
-      //   $('input').keydown(function(event) {
-      //     // Enter Key
-      //     if(event.keyCode==13) {
-      //       event.preventDefault();
-      //       $('#login-button').click();
-      //       console.log('stopped!');
-      //       return false;
-      //     }
-      //   });
-      // });
-    </script>
   </head>
   <body>
-    <div class="container-fluid">
+    <div id="content" class="container-fluid">
 
       <div id="header" class="row">
         <div class="col-md-12">
           <h1>Time Keeper</h1>
+        </div>
+        <div class="col-md-4">
+          <p class="error">Invalid credentials</p>
         </div>
       </div>
 
