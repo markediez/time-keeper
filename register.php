@@ -5,17 +5,6 @@
       include('server.php');
       addHeaders("Time Keeper");
     ?>
-    <script type="text/javascript">
-      $( document ).ready(function() {
-        $('input').keydown(function(event) {
-          // Enter Key
-          if(event.keyCode==13) {
-            $('#register-button').click();
-            return false;
-          }
-        });
-      });
-    </script>
   </head>
   <body>
     <div class="container-fluid">

@@ -34,17 +34,15 @@
           <img src="svg/logo.svg" class="head-logo">
           <h1 class="head-title">Time Keeper</h1>
         </div>
-        <?php if ($error) {?>
-        <div class="col-md-4">
-          <p class="error">Invalid credentials</p>
-        </div>
-        <?php } ?>
       </div> -->
 
       <div id="login">
         <div class="head">
           <img src="svg/logo.svg" class="head-logo">
           <span class="head-title">Time Keeper</span>
+          <?php if ($error) {?>
+          <p class="error">Invalid credentials</p>
+          <?php } ?>
         </div>
         <form id="login-form" method="POST">
           <div>

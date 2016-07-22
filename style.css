@@ -71,6 +71,7 @@ a {
 }
 
 .error {
+  width: 100%;
   background-color: #761660;
   color: #FFFFFF;
   border-radius: 5px;
