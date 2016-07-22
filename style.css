@@ -486,12 +486,15 @@ tr.clickable-row.active {
 }
 
 .entry {
-  border-radius: 5px;
   border: none;
+  border-bottom: 1px solid #B04898;
   margin-top: 4px;
   margin-bottom: 4px;
-  padding-left: 5px;
-  margin-left: 10px;
+  margin-left: 15px;
+  background-color: #761660;
+  color: #FFFFFF;
+  padding-left:0px;
+
 }
 .entry:disabled {
   cursor: default;

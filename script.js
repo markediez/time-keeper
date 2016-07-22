@@ -1,3 +1,7 @@
+function redirect(url) {
+  window.location.href = url;
+}
+
 // *******************************************************************
 // This function shows a toaster-like notification
 // @param {String} type - success, warning, failure
@@ -341,47 +345,45 @@ function showWork(user_id) {
       hideLoading();
       let html = "";
       let res = JSON.parse(result);
+      let startButton = '<button class="btn btn-primary" onclick="startJob(' + user_id + ');">Start</button>';
       if (res.status == "false") {
-        showLoading(".tooltip-text");
-        notify("success", "There is a job in progress...", function(){
-          let url = "time-progress.php?log_id=" + res.log_id;
-          window.location.href = url;
-        });
-      } else {
-        // List Jobs
-        html = '<div id="job"><div id="job-form"><div class="select-multiple">';
-        delete res.status;
-
-        for(let i in res) {
-          html += insertJob(res[i].id, res[i].title);
-        }
-
-        // Option to add a job
-        html += '<input type="text" class="job-input" placeholder="Add a job">';
-
-        // Start button
-        html += '</div><button class="btn btn-primary" onclick="startJob(' + user_id + ');">Start</button></div></div>';
-        addTooltipHTML(html);
-
-        // Add jobs on enter
-        $(".job-input").keyup(function(e) {
-          let obj = $(this);
-          if (e.keyCode == 13 && obj.val() != "") {
-            values = {
-              'tableName': "Jobs",
-              'action': "insert",
-              'values': {
-                'user_id': user_id,
-                'title': obj.val()
-              }
-            };
-            saveDataPost("db/ajax/data-save.php", values, function(result) {
-              $(insertJob(result, obj.val())).insertBefore($(".job-input"));
-              obj.val("");
-            });
-          }
-        });
+        let url = "time-progress.php?log_id=" + res.log_id;
+        startButton = '<button class="btn btn-primary" onclick="redirect(\'' + url + '\');">In Progress</button>';
       }
+
+      // List Jobs
+      html = '<div id="job"><div id="job-form"><div class="select-multiple">';
+      delete res.status;
+
+      for(let i in res) {
+        html += insertJob(res[i].id, res[i].title);
+      }
+
+      // Option to add a job
+      html += '<input type="text" class="job-input" placeholder="Add a job">';
+
+      // Start button
+      html += '</div>' + startButton + '</div></div>';
+      addTooltipHTML(html);
+
+      // Add jobs on enter
+      $(".job-input").keyup(function(e) {
+        let obj = $(this);
+        if (e.keyCode == 13 && obj.val() != "") {
+          values = {
+            'tableName': "Jobs",
+            'action': "insert",
+            'values': {
+              'user_id': user_id,
+              'title': obj.val()
+            }
+          };
+          saveDataPost("db/ajax/data-save.php", values, function(result) {
+            $(insertJob(result, obj.val())).insertBefore($(".job-input"));
+            obj.val("");
+          });
+        }
+      });
     },
     error: function(result, status) {
       notify('failure', "Error Code: " + status);
