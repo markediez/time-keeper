@@ -1,4 +1,4 @@
 # Development
-db/development/development.sqlite3
+db/development/development.sqlite3*
 ./test.php
 test.php
