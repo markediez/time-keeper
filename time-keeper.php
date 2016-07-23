@@ -79,10 +79,12 @@ function showEventDetails(el, toggle = false) {
     data: values,
     success: function(result) {
       hideLoading();
+      console.log(result);
       let currShift = undefined;
       let prevShift = undefined;
       let eventIndex = 1;
       let entries = '<div class="event-task-list">';
+      let inProgress = false;
       for(let i = 0; i < result.length; i++) {
         currShift = result[i]['work_start'];
         // if a new shift occurs, set up the shift section;
@@ -91,6 +93,7 @@ function showEventDetails(el, toggle = false) {
               entries += '</div>'; // end previous shift
               addTooltipHTML(entries);
               entries = '<div class="event-task-list">';
+              inProgress = false;
           }
           prevShift = currShift;
           let newShiftTitle = result[i]['work_title'];
@@ -98,8 +101,14 @@ function showEventDetails(el, toggle = false) {
           let shiftEnd = result[i]['work_end'];
           let pos = shiftStart.indexOf(" ");
           shiftStart = shiftStart.substring(pos + 1, pos + 6);
-          pos = shiftEnd.indexOf(" ");
-          shiftEnd = shiftEnd.substring(pos + 1,  pos + 6);
+          if (shiftEnd != null) {
+            pos = shiftEnd.indexOf(" ");
+            shiftEnd = shiftEnd.substring(pos + 1,  pos + 6);
+          } else {
+            shiftEnd = "xx:xx";
+            inProgress = true;
+          }
+
           addTooltipHTML('<div class="event-header"><span class="event-title">' + newShiftTitle + '</span><span class="event-time">' + shiftStart + ' - ' + shiftEnd + '</span></div>');
           eventIndex = 1;
         } // end if
@@ -112,6 +121,9 @@ function showEventDetails(el, toggle = false) {
         eventIndex++;
       } // end for
 
+      if (inProgress) {
+        entries = entries + '<span class="event-task event-progress animate-load">In Progress</span>';
+      }
       addTooltipHTML(entries); // addFinal Tasks
 
 
