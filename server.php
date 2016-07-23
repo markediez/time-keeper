@@ -12,8 +12,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 ob_start();
 session_start();
-include("db/development/database.php");
 include("config.php");
+include("db/development/database.php");
 
 function addHeaders($title) {
   echo "<title>$title</title>";
