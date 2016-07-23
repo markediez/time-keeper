@@ -40,8 +40,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         foreach($this->shifts as $day) {
           foreach($day as $shift) {
             $shiftStart = new DateTime($shift->start_time);
-            $shiftEnd = new DateTime($shift->end_time);
-            if ($shiftStart >= $start && $shiftEnd <= $end) {
+            if ($shiftStart >= $start && $shiftStart <= $end) {
               $totalDuration += $shift->duration;
             }
           }
