@@ -43,8 +43,25 @@ a {
   background-color: #20033C;
 }
 
+.g-recaptcha {
+  display: block;
+  margin-top: 15px;
+  align-self: center;
+}
+
 #legend-container {
   padding-right: 0px;
+}
+
+#register-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+}
+
+#register-form div {
+  width: 100%;
 }
 
 #register-button {
@@ -83,6 +100,7 @@ a {
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin-bottom: 10%;
 }
 .head-logo {
   width: 50px;
