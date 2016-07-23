@@ -1,90 +1,5 @@
 <?php
-  class Shift {
-    public $date; // date
-    public $title; // strings
-    public $start_time;
-    public $end_time;
-    public $duration; // float
-
-    function getDuration() {
-      return number_format((float)$this->duration, 2);
-    }
-
-    function getStartTime() {
-      $st = new DateTime($this->start_time);
-      return $st->format('H:i');
-    }
-
-    function getEndTime() {
-      $et = new DateTime($this->end_time);
-      return $et->format('H:i');
-    }
-
-    function getDay() {
-      $day = new DateTime($this->start_time);
-      return $day->format('j');
-    }
-
-  }
-
-  class Job {
-    public $title; // string
-    public $id; // int
-    public $shifts; // array of shift
-
-    function __construct($title, $id) {
-      $this->title = $title;
-      $this->id = $id;
-      $shifts = array();
-    }
-
-    function getTotalHours() {
-      $totalDuration = 0;
-      foreach($this->shifts as $day) {
-        foreach($day as $shift) {
-          $totalDuration += $shift->duration;
-        }
-      }
-
-      return number_format($totalDuration, 2);
-    }
-
-    function getAllShifts() {
-      $retShift = array();
-      foreach($this->shifts as $day) {
-        foreach($day as $shift) {
-          array_push($retShift, $shift);
-        }
-      }
-
-      return $retShift;
-    }
-
-    function addShift($title, $start_time, $end_time) {
-      $interval = new DateTime($end_time);
-      $interval = $interval->diff(new DateTime($start_time));
-
-      $newShift = new Shift();
-      $newShift->date = new DateTime($start_time);;
-      $newShift->title = $title;
-      $newShift->start_time = $start_time;
-      $newShift->end_time = $end_time;
-      $newShift->duration = $interval->h + ($interval->i / 60);
-
-      $day = date('j', strtotime($start_time));
-      if (!is_array($shifts[$day])) {
-        $this->shifts[$day] = array();
-      }
-
-      array_push($this->shifts[$day], $newShift);
-    }
-
-    function getShifts($day) {
-      return $this->shifts[$day];
-    }
-
-  } // class Job
-
+  include("job.php");
   class Calendar {
     function buildCalendar() {
       // Get Jobs
@@ -151,8 +66,9 @@
         $start_date = $start_date->format('Y-m-d H:i:s');
         $end_date = $end_date->format('Y-m-d H:i:s');
 
-        // TEMP
+        // Grab and organize all shifts with jobs
         $query = "SELECT Jobs.id as job_id, Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time, WorkLog.end_time, WorkLog.id as work_id FROM WorkLog INNER JOIN Jobs ON WorkLog.job_id = Jobs.id WHERE Worklog.user_id = :uid AND Worklog.start_time >= :sd AND Worklog.start_time <= :ed ORDER BY WorkLog.job_id ASC";
+        $query = $db->escapeString($query);
         $statement = $db->prepare($query);
         $statement->bindValue(':uid', $_SESSION['user_id']);
         $statement->bindValue(':sd', $start_date);
@@ -171,10 +87,9 @@
 
           $jobArray[$jobIndex]->addShift($row['work_title'], $row['start_time'], $row['end_time']);
         }
-        // END TEMP
+        // End grabbing data
 
         // Disabled days
-
         for ($i = 1; $i <= 5; $i++) {
           echo '<div class="week col-md-12 no-padding">';
           for ($j = 1; $j <= 7; $j++) {
@@ -203,10 +118,7 @@
               }
 
             }
-            echo '</div>'; // end event conatiner
-            // echo '<div class="tooltip-text">';
-            // echo '<span>Hello Motto</span>';
-            // echo '</div>';
+            echo '</div>'; // end event container
             echo '</div>'; // End day
           }
           echo '</div>'; // end week
