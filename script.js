@@ -206,15 +206,20 @@ function addJob() {
 }
 
 function stopJob(logID) {
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      window.location.href = 'time-keeper.php';
+  let values = {
+    'tableName': "WorkLog",
+    'action': "update",
+    'values': {
+      'end_time': getTimeNow()
+    },
+    'where': {
+      'id': logID
     }
-  }
+  };
 
-  xmlhttp.open("GET", 'http://localhost:8888/db/ajax/end-job.php?log_id=' + logID, true);
-  xmlhttp.send();
+  saveDataPost('db/ajax/data-save.php', values, function(data, status) {
+    redirect('time-keeper.php');
+  });
 }
 
 function postFormSubmit(formID, elements, url) {
@@ -301,20 +306,25 @@ function selectJob(el) {
   $(el).addClass("active");
 }
 
+function getTimeNow() {
+  let timeNow = new Date();
+  let Y = timeNow.getFullYear();
+  let m = ("0" + (timeNow.getMonth() + 1)).slice(-2);
+  let d = ("0" + timeNow.getDate()).slice(-2);
+  let H = ("0" + timeNow.getHours()).slice(-2);
+  let i = ("0" + timeNow.getMinutes()).slice(-2);
+  let s = ("0" + timeNow.getSeconds()).slice(-2);
+  timeNow = Y + "-" + m + "-" + d + " " + H + ":" + i + ":" + s;
+  return timeNow;
+}
+
 function startJob(user_id) {
   let id = $(".job-item.active").data("id");
   if (id === null) {
     $(".select-multiple").css("border-color", "red");
     $(".select-multiple").css("box-shadow", "0 0 10px red");
   } else {
-    let timeNow = new Date();
-    let Y = timeNow.getFullYear();
-    let m = ("0" + (timeNow.getMonth() + 1)).slice(-2);
-    let d = ("0" + timeNow.getDate()).slice(-2);
-    let H = ("0" + timeNow.getHours()).slice(-2);
-    let i = ("0" + timeNow.getMinutes()).slice(-2);
-    let s = ("0" + timeNow.getSeconds()).slice(-2);
-    timeNow = Y + "-" + m + "-" + d + " " + H + ":" + i + ":" + s;
+    let timeNow = getTimeNow();
     let values = {
       'tableName': "WorkLog",
       'action': "insert",
