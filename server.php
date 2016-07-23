@@ -2,6 +2,7 @@
 ob_start();
 session_start();
 include("db/development/database.php");
+include("config.php");
 
 function addHeaders($title) {
   echo "<title>$title</title>";
