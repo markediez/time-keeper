@@ -69,13 +69,22 @@
             <input id="email" class="col-md-12 form-control form-item <?=$eError?>" type="email" placeholder="email" name="email" value="<?=$_POST['email']?>" required>
           </div>
           <div class="tos">
-            <p>
-              By agreeing, you acknowledge that the owner(s) of Time Keeper and its affiliates are not liable for any loss of data nor does it guarantee any privacy to the contents posted by its users.
-            </p>
-            <p>
-              Please take care to avoid posting or storing sensitive information.
-            </p>
-            <input type="checkbox" name="tos" required><span>I Agree</span>
+            <!-- MIT LICENSE -->
+            <div class="disclaimer">
+              <p>
+                THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+              </p>
+              <p>
+                BY AGREEING, YOU ACKNOWLEDGE THAT THE AUTHORS OR COPYRIGHT HOLDERS OF TIME KEEPER ARE NOT LIABLE FOR ANY LOSS OF DATA NOR DOES IT GUARANTEE ANY PRIVACY TO THE CONTENTS POSTED BY ITS USERS.
+              </p>
+              <p>
+                PLEASE TAKE CARE TO AVOID POSTING OR STORING SENSITIVE INFORMATION.
+              </p>
+            </div>
+            <div class="disclaimer-check">
+              <input type="checkbox" name="tos" required>
+              <span>I Agree</span>
+            </div>
           </div>
           <div class="g-recaptcha" data-sitekey="<?=$KEY['captcha_form']?>"></div>
           <button id="register-button" class="btn btn-primary form-item">Register</button>

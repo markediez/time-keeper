@@ -8,6 +8,11 @@
 a {
   cursor: pointer;
 }
+
+body {
+  background-color: #20033C;
+}
+
 #panel {
   height: 100vh;
   background-color: #20033C;
@@ -127,14 +132,27 @@ a {
 
 .tos {
   text-align: left;
-  padding: 10px 10px 10px 10px;
   background-color: #451B6D;
   margin-top: 10px;
   border-radius: 5px;
+  padding-bottom: 10px;
 }
 
 .tos input {
   margin-right: 10px;
+}
+
+.disclaimer {
+  height: 150px;
+  padding: 10px 10px 10px 10px;
+  overflow: auto;
+}
+
+.disclaimer-check {
+  margin-top: 10px;
+  background-color: #58487E;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .container-fluid {
