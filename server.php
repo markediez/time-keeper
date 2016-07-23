@@ -77,4 +77,52 @@ function login($username, $password) {
   }
 }
 
+function register($username, $password, $email) {
+  $db = new DBLite();
+  $currDateTime = date('Y-m-d H:i:s');
+
+  $statement = $db->prepare("INSERT INTO Users (role_id, username, password, email, created_at, updated_at)
+            VALUES (2, :username, :password, :email, :start_time, :end_time)");
+
+  $statement->bindParam(':username', $username, SQLITE3_TEXT);
+  $statement->bindParam(':password', $password, SQLITE3_TEXT);
+  $statement->bindParam(':email', $email, SQLITE3_TEXT);
+  $statement->bindParam(':start_time', $currDateTime);
+  $statement->bindParam(':end_time', $currDateTime);
+
+  if($statement === false) {
+    return "Failure, statement is invalid.";
+  } else {
+    $res = $statement->execute();
+    if($res !== false) {
+      // Success
+      return $db->lastInsertRowID();
+    } else {
+      // username/email already exists
+      return $db->lastErrorMsg();
+    }
+  }
+}
+
+function verifyCaptcha($response) {
+  // http://stackoverflow.com/questions/5647461/how-do-i-send-a-post-request-with-php
+  $url = 'https://www.google.com/recaptcha/api/siteverify';
+  $data = array('secret' => $GLOBALS['KEY']['captcha_secret'],
+                'response' => $response);
+
+  // use key 'http' even if you send the request to https://...
+  $options = array(
+      'http' => array(
+          'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+          'method'  => 'POST',
+          'content' => http_build_query($data)
+      )
+  );
+  $context  = stream_context_create($options);
+  $result = file_get_contents($url, false, $context);
+  if ($result === FALSE) { /* Handle error */ }
+
+  $result = json_decode($result);
+  return $result->success;
+}
 ?>
