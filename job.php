@@ -72,6 +72,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       $newShift->start_time = $start_time;
       $newShift->end_time = $end_time;
       $newShift->duration = $interval->h + ($interval->i / 60);
+      if ($interval->days > 0) {
+        $newShift->duration += 24 * $interval->days;
+      }
 
       $day = date('j', strtotime($start_time));
       if (!is_array($this->shifts[$day])) {
