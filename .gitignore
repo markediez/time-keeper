@@ -2,3 +2,6 @@
 db/development/development.sqlite3*
 ./test.php
 test.php
+
+# Sensitive
+config.php
