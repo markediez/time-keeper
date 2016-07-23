@@ -124,6 +124,18 @@ a {
   box-shadow: 0px 0px 10px pink;
 }
 
+.tos {
+  text-align: left;
+  padding: 10px 10px 10px 10px;
+  background-color: #451B6D;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.tos input {
+  margin-right: 10px;
+}
+
 .container-fluid {
   position:relative;
 }

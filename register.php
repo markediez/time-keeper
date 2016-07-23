@@ -1,7 +1,7 @@
 <?php
   include('server.php');
 
-  if ($_POST['g-recaptcha-response'] == '') {
+  if (isset($_POST['g-recaptcha-response']) && $_POST['g-recaptcha-response'] == '') {
     $error = true;
     $errorResponse = "Are you a robot?";
   } else {
@@ -67,6 +67,15 @@
           </div>
           <div>
             <input id="email" class="col-md-12 form-control form-item <?=$eError?>" type="email" placeholder="email" name="email" value="<?=$_POST['email']?>" required>
+          </div>
+          <div class="tos">
+            <p>
+              By agreeing, you acknowledge that the owner(s) of Time Keeper and its affiliates are not liable for any loss of data nor does it guarantee any privacy to the contents posted by its users.
+            </p>
+            <p>
+              Please take care to avoid posting or storing sensitive information.
+            </p>
+            <input type="checkbox" name="tos" required><span>I Agree</span>
           </div>
           <div class="g-recaptcha" data-sitekey="<?=$KEY['captcha_form']?>"></div>
           <button id="register-button" class="btn btn-primary form-item">Register</button>
