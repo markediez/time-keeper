@@ -21,7 +21,7 @@ ob_start();
 session_start();
 include('../../server.php');
 checkSession();
-$db = new DBLite();
+$db = new DBSql();
 
 $tableName = $_POST['tableName'];
 $action = $_POST['action'];
@@ -32,15 +32,20 @@ $colValues = "";
 $update = "";
 $where = "";
 
+$values = array();
+$whereKey = array();
+
 foreach($_POST['values'] as $key => $value) {
   $colNames .= "$key, ";
-  $colValues .= "\"$value\", ";
-  $update .= $key . " = \"" . $value . "\",";
+  $colValues .= ":$key, ";
+  $update .= $key . " = :" . $key . ",";
+  $values[":$key"] = $value;
 }
 
 foreach($_POST['where'] as $key => $value) {
-  $where .= $key . " = \"" . $value . "\"";
+  $where .= $key . " = :" . $key . "";
   $where .= " AND ";
+  $whereKey[":$key"] = $value;
 }
 
 $where = substr($where, 0, strlen($where) - 4); // Removes last "AND "
@@ -57,8 +62,20 @@ switch($_POST['action']) {
     break;
 }
 
-$query = $db->escapeString($query);
 $stmt = $db->prepare($query);
-$result = $stmt->execute();
-echo $db->lastInsertRowID();
+error_log($query);
+error_log("values");
+foreach($values as $key => $value) {
+  $stmt->bindValue($key, $value);
+  error_log("$key => $value");
+}
+
+error_log("where");
+foreach($whereKey as $key => $value) {
+  $stmt->bindValue($key, $value);
+  error_log("$key => $value");
+}
+
+$stmt->execute();
+echo $db->lastInsertId();
 ?>
