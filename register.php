@@ -17,7 +17,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     // If you're not a robot and the captcha is valid then continue registering
     if (verifyCaptcha($_POST['g-recaptcha-response'])) {
       $validReg = register($_POST['username'], $_POST['password'], $_POST['email']);
-
       // If it was invalid, then show error
       if ($validReg <= 0) {
         $error = true;
