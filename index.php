@@ -20,6 +20,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
   // If user attempted to log in, check credentials
   if (isset($_POST) && sizeof($_POST) > 0) {
+    $error = false;
     $id = login($_POST['username'], $_POST['password']);
     if ($id > 0) {
       setSession($_POST, $id);
@@ -42,10 +43,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         <div class="head">
           <img src="svg/logo.svg" class="head-logo">
           <span class="head-title">Time Keeper</span>
-          <?php if ($error) {?>
-          <p class="error">Invalid credentials</p>
-          <?php } ?>
         </div>
+        <?php if ($error) {?>
+        <p class="error">Invalid credentials</p>
+        <?php } ?>
         <form id="login-form" method="POST">
           <div>
             <input class="form-control" type="text" placeholder="username" name="username" required>
