@@ -13,17 +13,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   include('server.php');
   checkSession();
 
-
   if(isset($_REQUEST['log_id'])) {
-    $db = new DBLite();
+    $db = new DBSql();
     // Checks if a job is in progress
     $query = "SELECT * FROM WorkLog WHERE id = :id AND user_id=:uid AND end_time IS NULL OR end_time = ''";
-    $query = $db->escapeString($query);
     $statement = $db->prepare($query);
     $statement->bindValue(':uid', $_SESSION['user_id']);
     $statement->bindValue(':id', $_GET['log_id']);
-    $res = $statement->execute();
-    $row = $res->fetchArray();
+    $statement->execute();
+    $row = $statement->fetch(PDO::FETCH_ASSOC);
 
     // If there isn't a job in progress, or someone else is trying to hack,
     // Go back go index -- it will go back to logged in index if user is logged properly
@@ -39,8 +37,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   $statement = $db->prepare($query);
   $statement->bindValue(':jid', $row['job_id']);
   $statement->bindValue(':uid', $_SESSION['user_id']);
-  $res = $statement->execute();
-  $jobRow = $res->fetchArray();
+  $statement->execute();
+  $jobRow = $statement->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html>
@@ -80,11 +78,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 $noteQuery = "SELECT * FROM Entries WHERE log_id = :lid ORDER BY created_at ASC";
                 $stmt = $db->prepare($noteQuery);
                 $stmt->bindValue('lid', $_REQUEST['log_id']);
-                $res = $stmt->execute();
+                $stmt->execute();
 
                 // show them all
                 $i = 1;
-                while ($row = $res->fetchArray()) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               ?>
                 <div class="col-md-12 saved-entry flex no-padding">
                   <span class="entry-num col-md-half flex flex-vertical-center flex-end no-padding"><?=$i?>.</span>
