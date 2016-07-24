@@ -18,7 +18,6 @@ if(sizeof($_POST) > 0) {
 }
 
 // checkSession();
-$db = new DBLite();
 ?>
 <!DOCTYPE html>
 <html>

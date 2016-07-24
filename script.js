@@ -516,16 +516,16 @@ function deleteJob(title, id) {
         let worklog = data[workLogIndex];
         simpleQuery("Entries", "delete", {}, {'log_id': worklog.id});
       }
+
+      // delete WorkLog
+      simpleQuery("WorkLog", "delete", {}, {'job_id': id});
+
+      // delete job
+      simpleQuery("Jobs", "delete", {}, {'id': id});
+
+      $(".job-item[data-id=" + id + "]").remove();
+      location.reload();
     });
-
-    // delete WorkLog
-    simpleQuery("WorkLog", "delete", {}, {'job_id': id});
-
-    // delete job
-    simpleQuery("Jobs", "delete", {}, {'id': id});
-
-    $(".job-item[data-id=" + id + "]").remove();
-    location.reload();
   }
 }
 

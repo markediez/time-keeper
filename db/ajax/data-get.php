@@ -23,31 +23,44 @@ session_start();
 header('Content-Type: application/json');
 include('../../server.php');
 checkSession();
-$db = new DBLite();
+$db = new DBSql();
 
 $query = "";
 $columns = "*";
 $tableName = $_POST['tableName'];
 $where = "";
+$whereKey = array();
 
 foreach($_POST['where'] as $key => $value) {
-  $where .= " AND $key = \"$value\"";
+  $where .= $key . " = :" . $key . "";
+  $where .= " AND ";
+  $whereKey[":$key"] = $value;
 }
 
+$where = substr($where, 0, strlen($where) - 4); // Removes last "AND "
+
 if (isset($_POST['orderCol']) && isset($_POST['orderBy'])) {
-  $order = "ORDER BY $_POST[orderCol] $_POST[orderBy]";
+  $order = "ORDER BY :orderCol :orderBy";
+  // $order = "ORDER BY $_POST[orderCol] $_POST[orderBy]";
 } else {
   $order = "";
 }
 
-$query = "SELECT $columns FROM $tableName WHERE 1=1 $where $order";
-
-$query = $db->escapeString($query);
+$query = "SELECT $columns FROM $tableName WHERE $where $order";
 $stmt = $db->prepare($query);
-$result = $stmt->execute();
+foreach($whereKey as $key => $value) {
+  $stmt->bindValue($key, $value);
+}
+
+if ($order != "") {
+  $stmt->bindValue(':orderCol', $_POST['orderCol']);
+  $stmt->bindValue(':orderBy', $_POST['orderBy']);
+}
+
+$stmt->execute();
 
 $json = array();
-while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
   array_push($json, $row);
 }
 
