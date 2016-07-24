@@ -22,11 +22,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   if (isset($_POST) && sizeof($_POST) > 0) {
     $error = false;
     $id = login($_POST['username'], $_POST['password']);
-    if ($id > 0) {
+    if (!$id) {
+      $error = true;
+    } else {
       setSession($_POST, $id);
       header("Refresh:0");
-    } else {
-      $error = true;
     }
   }
 ?>

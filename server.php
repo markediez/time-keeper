@@ -81,14 +81,10 @@ function login($username, $password) {
   $stmt->bindParam(':user', $username);
   $stmt->bindParam(':password', $password);
   $stmt->execute();
-  $row = $stmt->fetchAll();
-
-  if ($row['id'] > 0) {
-    return $row['id'];
-  } else {
-    return 0;
-  }
-  $db->close();
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  $db = null;
+  $stmt = null;
+  return $row['id'];
 }
 
 function register($username, $password, $email) {
