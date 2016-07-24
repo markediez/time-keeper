@@ -10,6 +10,13 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+  class DBSql extends PDO {
+    function __construct() {
+      parent::__construct("mysql:host=" . $GLOBALS['DB']['host'] . ";dbname=" . $GLOBALS['DB']['name'], $GLOBALS['DB']['username'], $GLOBALS['DB']['password'] );
+      $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+  }
+
   class DBLite extends SQLite3 {
     function __construct() {
       $this->open(__DIR__ . '/development.sqlite3'); // __DIR__ gets the cwd of this file
