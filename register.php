@@ -68,13 +68,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           <p class="error"><?=$errorResponse?></p>
           <?php } ?>
           <div>
-            <input id="username" class="col-md-12 form-control <?=$uError?>" type="text" placeholder="username" name="username" value="<?=$_POST['username']?>" required>
+            <input id="username" class="col-md-12 form-control <?=$uError?>" type="text" placeholder="username" name="username" value="<?=$_POST['username']?>" maxlength="50" required>
           </div>
           <div>
             <input class="col-md-12 form-control form-item" type="password" placeholder="password" name="password" required>
           </div>
           <div>
-            <input id="email" class="col-md-12 form-control form-item <?=$eError?>" type="email" placeholder="email" name="email" value="<?=$_POST['email']?>" required>
+            <input id="email" class="col-md-12 form-control form-item <?=$eError?>" type="email" placeholder="email" name="email" value="<?=$_POST['email']?>" maxlength="100" required>
           </div>
           <div class="tos">
             <!-- MIT LICENSE -->
