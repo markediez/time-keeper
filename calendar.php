@@ -14,13 +14,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   class Calendar {
     function buildCalendar() {
       // Get Jobs
-      $db = new DBLite();
+      $db = new DBSql();
       $userJobs = array();
       $query = "SELECT id, title FROM Jobs WHERE user_id = :uid";
       $statement = $db->prepare($query);
       $statement->bindValue(':uid', $_SESSION['user_id']);
-      $res = $statement->execute();
-      while($row = $res->fetchArray()) {
+      $statement->execute();
+      while($row = $statement->fetch(PDO::FETCH_ASSOC)) {
         $userJobs[$row['id']] = $row['title'];
       }
 
@@ -79,17 +79,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         // Grab and organize all shifts with jobs
         $query = "SELECT Jobs.id as job_id, Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time, WorkLog.end_time, WorkLog.id as work_id FROM WorkLog INNER JOIN Jobs ON WorkLog.job_id = Jobs.id WHERE Worklog.user_id = :uid AND Worklog.start_time >= :sd AND Worklog.start_time <= :ed ORDER BY WorkLog.job_id ASC";
-        $query = $db->escapeString($query);
         $statement = $db->prepare($query);
         $statement->bindValue(':uid', $_SESSION['user_id']);
         $statement->bindValue(':sd', $start_date);
         $statement->bindValue(':ed', $end_date);
-        $res = $statement->execute();
+        $statement->execute();
 
         $jobArray = array();
         $jobIndex = -1;
         $prev = -1;
-        while($row = $res->fetchArray()) {
+        while($row = $statement->fetch(PDO::FETCH_ASSOC)) {
           if($prev != $row['job_id']) {
             $jobIndex++;
             $jobArray[$jobIndex] = new Job($row['job_title'], $row['job_id']);
