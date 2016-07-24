@@ -15,4 +15,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     'captcha_form'  => "CHANGE ME",
     'captcha_secret' => "CHANGE ME",
   );
+
+  $DB = array(
+    'host' => "CHANGE ME",
+    'name' => "CHANGE ME",
+    'username' => "CHANGE ME",
+    'password' => "CHANGE ME"
+  );
 ?>
