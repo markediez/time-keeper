@@ -63,17 +63,12 @@ switch($_POST['action']) {
 }
 
 $stmt = $db->prepare($query);
-error_log($query);
-error_log("values");
 foreach($values as $key => $value) {
   $stmt->bindValue($key, $value);
-  error_log("$key => $value");
 }
 
-error_log("where");
 foreach($whereKey as $key => $value) {
   $stmt->bindValue($key, $value);
-  error_log("$key => $value");
 }
 
 $stmt->execute();
