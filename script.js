@@ -13,14 +13,25 @@ function redirect(url) {
   window.location.href = url;
 }
 
+// http://stackoverflow.com/questions/1144783/replacing-all-occurrences-of-a-string-in-javascript
+function escapeRegExp(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+}
+
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    search = escapeRegExp(search);
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
 // *******************************************************************
 // This function shows a toaster-like notification
 // @param {String} type - success, warning, failure
 // @param {String} msg - text to show
 // *******************************************************************
 function notify(type, msg, callback) {
-  let html = "<span id='notify' class = 'notify-" + type + " col-md-2'>" + msg + "</span>";
-  let notification = $(html).appendTo("body");
+  var html = "<span id='notify' class = 'notify-" + type + " col-md-2'>" + msg + "</span>";
+  var notification = $(html).appendTo("body");
   notification.css("opacity", 0);
   notification.css("padding-top", 0);
   notification.css("padding-bottom", 0);
@@ -152,7 +163,7 @@ function saveDataPost(url, values, callback) {
 }
 
 function getData(tableName, wantedColumns, targetValue, order, callback ) {
-  let data = {};
+  var data = {};
   data.tableName = tableName;
   data.where = targetValue;
   $.extend(data, wantedColumns);
@@ -173,12 +184,14 @@ function getData(tableName, wantedColumns, targetValue, order, callback ) {
   );
 }
 
-function simpleQuery(tableName, action, values, where = {}, callback) {
-  let data = {};
+function simpleQuery(tableName, action, values, where, callback) {
+  var data = {};
   data.tableName = tableName;
   data.action = action;
   data.values = values;
-  data.where = where;
+  if (where != undefined) {
+    data.where = where;
+  }
   saveDataPost('db/ajax/data-save.php', data, function(result, textStatus, jqXHR) {
     if(typeof callback == 'function')
       callback(result, textStatus, jqXHR);
@@ -217,7 +230,7 @@ function addJob() {
 }
 
 function stopJob(logID) {
-  let values = {
+  var values = {
     'tableName': "WorkLog",
     'action': "update",
     'values': {
@@ -286,7 +299,7 @@ function postFormSubmit(formID, elements, url) {
 }
 
 function toggleCollapse(id) {
-  let openBoard = '#' + $('[data-collapse="false"]').attr("id");
+  var openBoard = '#' + $('[data-collapse="false"]').attr("id");
 
   if($(id).attr("data-collapse") == "false") {
     $(id).attr("data-collapse", "true");
@@ -318,25 +331,25 @@ function selectJob(el) {
 }
 
 function getTimeNow() {
-  let timeNow = new Date();
-  let Y = timeNow.getFullYear();
-  let m = ("0" + (timeNow.getMonth() + 1)).slice(-2);
-  let d = ("0" + timeNow.getDate()).slice(-2);
-  let H = ("0" + timeNow.getHours()).slice(-2);
-  let i = ("0" + timeNow.getMinutes()).slice(-2);
-  let s = ("0" + timeNow.getSeconds()).slice(-2);
+  var timeNow = new Date();
+  var Y = timeNow.getFullYear();
+  var m = ("0" + (timeNow.getMonth() + 1)).slice(-2);
+  var d = ("0" + timeNow.getDate()).slice(-2);
+  var H = ("0" + timeNow.getHours()).slice(-2);
+  var i = ("0" + timeNow.getMinutes()).slice(-2);
+  var s = ("0" + timeNow.getSeconds()).slice(-2);
   timeNow = Y + "-" + m + "-" + d + " " + H + ":" + i + ":" + s;
   return timeNow;
 }
 
 function startJob(user_id) {
-  let id = $(".job-item.active").data("id");
+  var id = $(".job-item.active").data("id");
   if (id === null) {
     $(".select-multiple").css("border-color", "red");
     $(".select-multiple").css("box-shadow", "0 0 10px red");
   } else {
-    let timeNow = getTimeNow();
-    let values = {
+    var timeNow = getTimeNow();
+    var values = {
       'tableName': "WorkLog",
       'action': "insert",
       'values': {
@@ -347,7 +360,7 @@ function startJob(user_id) {
       }
     };
     saveDataPost("db/ajax/data-save.php", values, function(data) {
-      let url = "time-progress.php?log_id=" + data;
+      var url = "time-progress.php?log_id=" + data;
       window.location.href = url;
     });
   }
@@ -364,11 +377,11 @@ function showWork(user_id) {
     url: "db/ajax/get-job.php",
     success: function(result) {
       hideLoading();
-      let html = "";
-      let res = JSON.parse(result);
-      let startButton = '<button class="btn btn-primary" onclick="startJob(' + user_id + ');">Start</button>';
+      var html = "";
+      var res = JSON.parse(result);
+      var startButton = '<button class="btn btn-primary" onclick="startJob(' + user_id + ');">Start</button>';
       if (res.status == "false") {
-        let url = "time-progress.php?log_id=" + res.log_id;
+        var url = "time-progress.php?log_id=" + res.log_id;
         startButton = '<button class="btn btn-primary" onclick="redirect(\'' + url + '\');">In Progress</button>';
       }
 
@@ -376,7 +389,7 @@ function showWork(user_id) {
       html = '<div id="job"><div id="job-form"><div class="select-multiple">';
       delete res.status;
 
-      for(let i in res) {
+      for(var i in res) {
         if(typeof res[i] == 'object')
           html += insertJob(res[i].id, res[i].title);
       }
@@ -390,7 +403,7 @@ function showWork(user_id) {
 
       // Add jobs on enter
       $(".job-input").keyup(function(e) {
-        let obj = $(this);
+        var obj = $(this);
         if (e.keyCode == 13 && obj.val() != "") {
           values = {
             'tableName': "Jobs",
@@ -414,7 +427,7 @@ function showWork(user_id) {
 }
 
 function insertJob(id, title) {
-  let html = "";
+  var html = "";
   html += '<span class="job-item" onclick="selectJob(this);"';
   html += ' data-id=' + id + '>' ;
   html += '<span class="job-edit">';
@@ -439,13 +452,17 @@ function editJob(id, el) {
 // @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
 // @param {String} onblurFunctionCall - should be a string for a function call on blur
 // *******************************************************************
-function spanToTextInput(jQueryEl, onblurFunctionCall = "") {
+function spanToTextInput(jQueryEl, onblurFunctionCall) {
   // http://stackoverflow.com/questions/1227286/get-class-list-for-element-with-jquery
-  let classList = jQueryEl.attr("class").split(/\s+/);
-  let textInput = '<input type="text" class="';
-  let id = $(".span-input").length;
+  var classList = jQueryEl.attr("class").split(/\s+/);
+  var textInput = '<input type="text" class="';
+  var id = $(".span-input").length;
 
-  for (let i = 0; i < classList.length; i++) {
+  if (onblurFunctionCall == undefined) {
+    onblurFunctionCall = "";
+  }
+
+  for (var i = 0; i < classList.length; i++) {
     textInput += classList[i] + " ";
   }
 
@@ -467,10 +484,10 @@ function spanToTextInput(jQueryEl, onblurFunctionCall = "") {
 // @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
 // *******************************************************************
 function textInputToSpan(jQueryEl) {
-  let classList = jQueryEl.attr("class").split(/\s+/);
-  let spanInput = '<span class="';
+  var classList = jQueryEl.attr("class").split(/\s+/);
+  var spanInput = '<span class="';
 
-  for (let i = 0; i < classList.length; i++) {
+  for (var i = 0; i < classList.length; i++) {
     // The if is necessary to remove span-input* class generated
     // by spanToTextInput
     if (classList[i].indexOf("span-input") === -1) {
@@ -489,8 +506,8 @@ function textInputToSpan(jQueryEl) {
 // @param {?} input - should be a single object of a jQuery or "this" e.g. $(".item")[0]
 // *******************************************************************
 function saveJob(input) {
-  let container = $(input).parent();
-  let values = {
+  var container = $(input).parent();
+  var values = {
     'tableName': "Jobs",
     'action': "update",
     'where': {
@@ -512,8 +529,10 @@ function deleteJob(title, id) {
   if (confirm("Are you sure you want to delete \"" + title + "\" and all of its contents?" ) == true) {
     // delete entries
     getData("WorkLog", {}, {'job_id': id}, {}, function(data) {
-      for(let workLogIndex in data) {
-        let worklog = data[workLogIndex];
+      var dataArray = JSON.parse(data);
+      console.log(dataArray);
+      for(var workLogIndex = 0; workLogIndex < dataArray.length; workLogIndex++) {
+        var worklog = dataArray[workLogIndex];
         simpleQuery("Entries", "delete", {}, {'log_id': worklog.id});
       }
 
@@ -532,7 +551,7 @@ function deleteJob(title, id) {
 $(document).ready(function() {
   // http://stackoverflow.com/questions/1403615/use-jquery-to-hide-a-div-when-the-user-clicks-outside-of-it
   $(document).mouseup(function(e){
-    let tooltipContainer = $(".tooltip-text");
+    var tooltipContainer = $(".tooltip-text");
     if (!tooltipContainer.is(e.target) && tooltipContainer.has(e.target).length === 0) {
       removeToolTip();
     }

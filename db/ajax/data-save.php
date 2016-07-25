@@ -42,10 +42,12 @@ foreach($_POST['values'] as $key => $value) {
   $values[":$key"] = $value;
 }
 
-foreach($_POST['where'] as $key => $value) {
-  $where .= $key . " = :" . $key . "";
-  $where .= " AND ";
-  $whereKey[":$key"] = $value;
+if (isset($_POST['where']) && is_array($_POST['where'])) {
+  foreach($_POST['where'] as $key => $value) {
+    $where .= $key . " = :" . $key . "";
+    $where .= " AND ";
+    $whereKey[":$key"] = $value;
+  }
 }
 
 $where = substr($where, 0, strlen($where) - 4); // Removes last "AND "

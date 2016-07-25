@@ -13,6 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   include("job.php");
   class Calendar {
     function buildCalendar() {
+      date_default_timezone_set('America/Los_Angeles');
       // Get Jobs
       $db = new DBSql();
       $userJobs = array();
@@ -27,15 +28,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       if(!isset($_GET['date'])) {
         $_GET['date'] = date('Y-m');
       }
+
+      $d = new DateTime($_GET['date']);
       $start_date = new DateTime($_GET['date']);
       $end_date = new DateTime($_GET['date']);
       $lastMonth = new DateTime($_GET['date']);
       $nextMonth = new DateTime($_GET['date']);
 
-      $start_date->modify("first day of this month");
-      $end_date->modify("last day of this month");
-      $lastMonth->modify("-1 months");
-      $nextMonth->modify("+1 months");
+      $start_date->setTime(0,0,0);
+      $start_date->setDate($d->format('Y'), $d->format('n'), 1);
+      $end_date->setTime(23,59,59);
+      $end_date->setDate($d->format('Y'), $d->format('n'), $d->format('t'));
+
+      $lastMonth->setDate($d->format('Y'), $d->format('n') - 1, $d->format('j'));
+      $nextMonth->setDate($d->format('Y'), $d->format('n') + 1, $d->format('j'));
       $lastMonth = $lastMonth->format('Y-m');
       $nextMonth = $nextMonth->format('Y-m');
       $month = $start_date->format('F Y');
@@ -78,7 +84,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         $end_date = $end_date->format('Y-m-d H:i:s');
 
         // Grab and organize all shifts with jobs
-        $query = "SELECT Jobs.id as job_id, Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time, WorkLog.end_time, WorkLog.id as work_id FROM WorkLog INNER JOIN Jobs ON WorkLog.job_id = Jobs.id WHERE Worklog.user_id = :uid AND Worklog.start_time >= :sd AND Worklog.start_time <= :ed ORDER BY WorkLog.job_id ASC";
+        $query = "SELECT Jobs.id as job_id, Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time, WorkLog.end_time, WorkLog.id as work_id FROM WorkLog INNER JOIN Jobs ON WorkLog.job_id = Jobs.id WHERE WorkLog.user_id = :uid AND WorkLog.start_time >= :sd AND WorkLog.start_time <= :ed ORDER BY WorkLog.job_id ASC";
         $statement = $db->prepare($query);
         $statement->bindValue(':uid', $_SESSION['user_id']);
         $statement->bindValue(':sd', $start_date);
@@ -100,7 +106,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         // End grabbing data
 
         // Disabled days
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 6; $i++) {
           echo '<div class="week col-md-12 no-padding">';
           for ($j = 1; $j <= 7; $j++) {
             $day_num = 7 * ($i - 1) + $j;

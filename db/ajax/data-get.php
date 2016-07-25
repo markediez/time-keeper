@@ -20,7 +20,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 ob_start();
 session_start();
-header('Content-Type: application/json');
 include('../../server.php');
 checkSession();
 $db = new DBSql();
@@ -31,13 +30,15 @@ $tableName = $_POST['tableName'];
 $where = "";
 $whereKey = array();
 
-foreach($_POST['where'] as $key => $value) {
-  $where .= $key . " = :" . $key . "";
-  $where .= " AND ";
-  $whereKey[":$key"] = $value;
-}
+if (isset($_POST['where']) && is_array($_POST['where'])) {
+  foreach($_POST['where'] as $key => $value) {
+    $where .= $key . " = :" . $key . "";
+    $where .= " AND ";
+    $whereKey[":$key"] = $value;
+  }
 
-$where = substr($where, 0, strlen($where) - 4); // Removes last "AND "
+  $where = substr($where, 0, strlen($where) - 4); // Removes last "AND "
+}
 
 if (isset($_POST['orderCol']) && isset($_POST['orderBy'])) {
   $order = "ORDER BY :orderCol :orderBy";

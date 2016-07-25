@@ -56,20 +56,24 @@ function getEventDetails(jobID) {
 
 }
 
-function showEventDetails(el, toggle = false) {
+function showEventDetails(el, toggle) {
   // Close any open Details
   removeToolTip();
+
+  if (toggle == undefined) {
+    toggle = false;
+  }
 
   // Set up tooltip
   addTooltip($(el).parent().parent(), (toggle) ? 'left' : 'right');
 
   // Add Job Title
-  let title = $(el).children().children(":first").text();
+  var title = $(el).children().children(":first").text();
   addTooltipHTML('<div class="job-header"><span class="job-title">' + title + '</span><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
 
   showLoading(".tooltip-text");
 
-  let values = {};
+  var values = {};
   values.jid = $(el).data("id");
   values.date = $(el).data("date");
 
@@ -79,26 +83,27 @@ function showEventDetails(el, toggle = false) {
     success: function(result) {
       hideLoading();
       console.log(result);
-      let currShift = undefined;
-      let prevShift = undefined;
-      let eventIndex = 1;
-      let entries = '<div class="event-task-list">';
-      let inProgress = false;
-      for(let i = 0; i < result.length; i++) {
+      var currShift = undefined;
+      var prevShift = undefined;
+      var eventIndex = 1;
+      var entries = '<div class="event-task-list">';
+      var inProgress = false;
+      for(var i = 0; i < result.length; i++) {
         currShift = result[i]['work_start'];
         // if a new shift occurs, set up the shift section;
         if (currShift.indexOf(prevShift) === -1) {
           if (prevShift !== undefined) {
               entries += '</div>'; // end previous shift
+              entries = entries.replaceAll("\\", "");
               addTooltipHTML(entries);
               entries = '<div class="event-task-list">';
               inProgress = false;
           }
           prevShift = currShift;
-          let newShiftTitle = result[i]['work_title'];
-          let shiftStart = result[i]['work_start'];
-          let shiftEnd = result[i]['work_end'];
-          let pos = shiftStart.indexOf(" ");
+          var newShiftTitle = result[i]['work_title'];
+          var shiftStart = result[i]['work_start'];
+          var shiftEnd = result[i]['work_end'];
+          var pos = shiftStart.indexOf(" ");
           shiftStart = shiftStart.substring(pos + 1, pos + 6);
           if (shiftEnd != null) {
             pos = shiftEnd.indexOf(" ");
@@ -108,6 +113,7 @@ function showEventDetails(el, toggle = false) {
             inProgress = true;
           }
 
+          newShiftTitle = newShiftTitle.replaceAll("\\", "");
           addTooltipHTML('<div class="event-header"><span class="event-title">' + newShiftTitle + '</span><span class="event-time">' + shiftStart + ' - ' + shiftEnd + '</span></div>');
           eventIndex = 1;
         } // end if
@@ -123,6 +129,7 @@ function showEventDetails(el, toggle = false) {
       if (inProgress) {
         entries = entries + '<span class="event-task event-progress animate-load">In Progress</span>';
       }
+      entries = entries.replaceAll("\\", "");
       addTooltipHTML(entries); // addFinal Tasks
 
 

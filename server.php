@@ -12,6 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 ob_start();
 session_start();
+date_default_timezone_set("America/Los_Angeles");
 include("config.php");
 include("db/development/database.php");
 
@@ -42,6 +43,7 @@ function setSession($post, $id = null) {
 }
 
 function checkSession($redirect = true) {
+  // var_dump($_SESSION);
   if ($_SESSION['valid']) {
     return true;
   } else {
@@ -52,8 +54,6 @@ function checkSession($redirect = true) {
       return false;
     }
   }
-
-  var_dump($_SESSION);
 }
 
 function redirect($url, $statusCode = 303) {
@@ -94,9 +94,9 @@ function register($username, $password, $email) {
   $statement = $db->prepare("INSERT INTO Users (role_id, username, password, email, created_at, updated_at)
             VALUES (2, :username, :password, :email, :start_time, :end_time)");
 
-  $statement->bindParam(':username', $username, SQLITE3_TEXT);
-  $statement->bindParam(':password', $password, SQLITE3_TEXT);
-  $statement->bindParam(':email', $email, SQLITE3_TEXT);
+  $statement->bindParam(':username', $username);
+  $statement->bindParam(':password', $password);
+  $statement->bindParam(':email', $email);
   $statement->bindParam(':start_time', $currDateTime);
   $statement->bindParam(':end_time', $currDateTime);
   try {

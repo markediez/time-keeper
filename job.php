@@ -62,18 +62,19 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     }
 
     function addShift($title, $start_time, $end_time) {
-      $interval = new DateTime($end_time);
-      $interval = $interval->diff(new DateTime($start_time));
+      $start = new DateTime($start_time);
+      $end = new DateTime($end_time);
+      $interval = $end->format('U') - $start->format('U');
 
       $newShift = new Shift();
       $newShift->date = new DateTime($start_time);;
       $newShift->title = $title;
       $newShift->start_time = $start_time;
       $newShift->end_time = $end_time;
-      $newShift->duration = $interval->h + ($interval->i / 60);
-      if ($interval->days > 0) {
-        $newShift->duration += 24 * $interval->days;
-      }
+      $newShift->duration = $interval / 3600;
+      // if ($interval->days > 0) {
+      //   $newShift->duration += 24 * $interval->days;
+      // }
 
       $day = date('j', strtotime($start_time));
       if (!is_array($this->shifts[$day])) {

@@ -70,6 +70,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           <div id="description" class="col-md-8">
             <div class="row title">
               <span><?= $jobRow['title'] . ": " ?></span>
+              <?php $row['title'] = str_replace("\\","", $row['title']); ?>
               <input type="text" placeholder="<click me to change title>" class="title-input" value="<?=$row['title']?>" onblur="saveTitle(this);">
             </div>
             <div id="entries" class="row" data-id="<?=$_REQUEST['log_id']?>">
@@ -86,6 +87,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
               ?>
                 <div class="col-md-12 saved-entry flex no-padding">
                   <span class="entry-num col-md-half flex flex-vertical-center flex-end no-padding"><?=$i?>.</span>
+                  <?php $row['entry'] = str_replace("\\","", $row['entry']); ?>
                   <input id="entry-<?=$i?>" name="entry" type="text" class="col-md-10 entry" value="<?=$row['entry']?>" onblur="toggleEntry('#entry-<?=$i?>')" data-id="<?=$row['id']?>" disabled>
                   <span class="col-md-1 flex flex-vertical-center flex-space-around no-padding">
                     <a onclick="toggleEntry('#entry-<?=$i?>')"><i class="fa fa-pencil " aria-hidden="true"></i></a>
@@ -112,13 +114,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     setEntryListener();
 
     $("#new-entry").keyup(function(e) {
-      let thisEntry = $(this);
-      let text = thisEntry.val();
+      var thisEntry = $(this);
+      var text = thisEntry.val();
       if (e.keyCode == 13 && text !== "") {
-        let number = $("#entries").children().length + 1;
+        var number = $("#entries").children().length + 1;
 
         // Append entry
-        let newEntry = $('<div class="col-md-12 saved-entry flex no-padding"><span class="col-md-half flex flex-vertical-center flex-end no-padding entry-num">' + number + '.</span><input id="entry-' + number + '" type="text" name="entry" class="col-md-10 entry" value="' +   text + '" onblur="toggleEntry(\'#entry-' + number + '\')" disabled><span class="col-md-1 flex flex-vertical-center flex-space-around no-padding"><a onclick="toggleEntry(\'#entry-' + number + '\')"><i class="fa fa-pencil" aria-hidden="true"></i></a><a onclick="deleteEntry(\'#entry-' + number + '\')"><i class="fa fa-trash" aria-hidden="true"></i></a></span></div>')
+        var newEntry = $('<div class="col-md-12 saved-entry flex no-padding"><span class="col-md-half flex flex-vertical-center flex-end no-padding entry-num">' + number + '.</span><input id="entry-' + number + '" type="text" name="entry" class="col-md-10 entry" value="' +   text + '" onblur="toggleEntry(\'#entry-' + number + '\')" disabled><span class="col-md-1 flex flex-vertical-center flex-space-around no-padding"><a onclick="toggleEntry(\'#entry-' + number + '\')"><i class="fa fa-pencil" aria-hidden="true"></i></a><a onclick="deleteEntry(\'#entry-' + number + '\')"><i class="fa fa-trash" aria-hidden="true"></i></a></span></div>')
         .appendTo($("#entries"));
 
         $(newEntry).keyup(function(e) {
@@ -142,9 +144,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
   function setEntryListener() {
     $(".entry").keyup(function(e) {
-      let entry = $(this);
+      var entry = $(this);
       if (e.keyCode == 13) {
-        let text = $(entry).val();
+        var text = $(entry).val();
 
         saveEntry(entry);
         $(entry).blur();
@@ -153,8 +155,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   }
 
   function saveTitle(el) {
-    let logID = $("#entries").data("id");
-    let values = {
+    var logID = $("#entries").data("id");
+    var values = {
       'tableName': "WorkLog",
       'action': "update",
       'where': {
@@ -171,13 +173,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   }
 
   function saveEntry(el) {
-    let text = el.val();
+    var text = el.val();
     if (text == "" || text == undefined) {
       return false;
     } else {
-      let entryID = $(el).data("id");
-      let logID = $("#entries").data("id");
-      let values = {
+      var entryID = $(el).data("id");
+      var logID = $("#entries").data("id");
+      var values = {
         'tableName': "Entries",
         'action': entryID ? "update" : "insert",
         'where': {
@@ -198,7 +200,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   }
 
   function deleteEntry(target) {
-    let values = {
+    var values = {
       'tableName': "Entries",
       'action': "delete",
       'where': {
@@ -214,20 +216,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   }
 
   function toggleEntry(target) {
-    let isDisabled = $(target).attr("disabled");
+    var isDisabled = $(target).attr("disabled");
     if (isDisabled === undefined) {
       $(target).attr("disabled", "disabled");
       saveEntry($(target));
     } else {
       $(target).removeAttr("disabled");
 
-      let text = $(target).val();
+      var text = $(target).val();
       $(target).focus().val("").val(text);
     }
   }
 
   function reindex() {
-    let i = 1;
+    var i = 1;
     $(".entry-num").each(function() {
       $(this).text(i + ".");
       i++;
