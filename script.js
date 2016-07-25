@@ -184,11 +184,12 @@ function getData(tableName, wantedColumns, targetValue, order, callback ) {
   );
 }
 
-function simpleQuery(tableName, action, values, where, callback) {
+function simpleQuery(tableName, action, values, where, options, callback) {
   var data = {};
   data.tableName = tableName;
   data.action = action;
   data.values = values;
+  data.async = options.async;
   if (where != undefined) {
     data.where = where;
   }
@@ -530,20 +531,22 @@ function deleteJob(title, id) {
     // delete entries
     getData("WorkLog", {}, {'job_id': id}, {}, function(data) {
       var dataArray = JSON.parse(data);
-      console.log(dataArray);
+      var options = {'async': false};
+
       for(var workLogIndex = 0; workLogIndex < dataArray.length; workLogIndex++) {
         var worklog = dataArray[workLogIndex];
-        simpleQuery("Entries", "delete", {}, {'log_id': worklog.id});
+        simpleQuery("Entries", "delete", {}, {'log_id': worklog.id}, options);
       }
 
       // delete WorkLog
-      simpleQuery("WorkLog", "delete", {}, {'job_id': id});
+      simpleQuery("WorkLog", "delete", {}, {'job_id': id}, options);
 
       // delete job
-      simpleQuery("Jobs", "delete", {}, {'id': id});
+      simpleQuery("Jobs", "delete", {}, {'id': id}, {'async': true }, function(data) {
+        $(".job-item[data-id=" + id + "]").remove();
+        location.reload();
+      });
 
-      $(".job-item[data-id=" + id + "]").remove();
-      location.reload();
     });
   }
 }
