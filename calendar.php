@@ -128,7 +128,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
               if ($job->getTotalHours($thisDay) > 0) {
                 echo '<div class="event col-md-12 no-padding" onclick="showEventDetails(this,' . $toggle . ')" data-id="' . $job->id .'" data-date="' . $thisMonth . "-" . $dom . '">';
                 echo '<a class="col-md-12 no-padding"><span class="col-md-8 ">' . $job->title . '</span>';
-                echo '<span class="col-md-4 ">' . $job->getTotalHours($thisDay) . '</span></a>';
+                echo '<span class="col-md-4 ">' . number_format($job->getTotalHours($thisDay), 2) . '</span></a>';
                 echo '</div>';
               }
             }
