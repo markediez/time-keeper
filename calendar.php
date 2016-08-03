@@ -80,17 +80,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         }
         $start_date->setTime(0,0,0);
         $end_date->setTime(23,59,59);
-        $start_date = $start_date->format('Y-m-d H:i:s');
-        $end_date = $end_date->format('Y-m-d H:i:s');
+        $sd = $start_date->format('Y-m-d H:i:s');
+        $ed = $end_date->format('Y-m-d H:i:s');
 
         // Grab and organize all shifts with jobs
         $query = "SELECT Jobs.id as job_id, Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time, WorkLog.end_time, WorkLog.id as work_id FROM WorkLog INNER JOIN Jobs ON WorkLog.job_id = Jobs.id WHERE WorkLog.user_id = :uid AND WorkLog.start_time >= :sd AND WorkLog.start_time <= :ed ORDER BY WorkLog.job_id ASC";
         $statement = $db->prepare($query);
         $statement->bindValue(':uid', $_SESSION['user_id']);
-        $statement->bindValue(':sd', $start_date);
-        $statement->bindValue(':ed', $end_date);
+        $statement->bindValue(':sd', $sd);
+        $statement->bindValue(':ed', $ed);
         $statement->execute();
-
         $jobArray = array();
         $jobIndex = -1;
         $prev = -1;
@@ -123,7 +122,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             $toggle = ($j > 5) ? "true" : "false";
             echo '<div class="event-container col-md-12 no-padding">';
             $thisDay = new DateTime();
-            $thisDay->setDate(date('Y'), date('n'), $dom);
+            $thisDay->setDate($start_date->format('Y'), $start_date->format('n'), $dom);
             foreach($jobArray as $job) {
               if ($job->getTotalHours($thisDay) > 0) {
                 echo '<div class="event col-md-12 no-padding" onclick="showEventDetails(this,' . $toggle . ')" data-id="' . $job->id .'" data-date="' . $thisMonth . "-" . $dom . '">';
