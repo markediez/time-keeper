@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
   ob_start();
   session_start();
-  include('server.php');
+  include('assets/php/server.php');
   // If user is already logged in, redirect to time-keeper
   if(checkSession(false)) {
     redirect('time-keeper.php');

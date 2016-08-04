@@ -19,7 +19,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 ob_start();
 session_start();
-include('../../server.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/assets/php/server.php');
 checkSession();
 $db = new DBSql();
 

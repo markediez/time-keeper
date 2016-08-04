@@ -13,8 +13,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ob_start();
 session_start();
 date_default_timezone_set("America/Los_Angeles");
-include("config.php");
-include("db/development/database.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/db/development/database.php");
 
 function addHeaders($title) {
   echo "<title>$title</title>";
@@ -23,10 +23,10 @@ function addHeaders($title) {
   echo "<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>";
   echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/vendor/bootstrap-3.3.6-dist/css/bootstrap.min.css">';
   echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/vendor/font-awesome-4.6.3/css/font-awesome.min.css">';
-  echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/style.css">';
+  echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/assets/stylesheets/style.css">';
   echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/vendor/jquery/jquery.js"></script>';
-  echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/behaviour.js"></script>';
-  echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/script.js"></script>';
+  echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js//behaviour.js"></script>';
+  echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js/script.js"></script>';
 }
 
 function setSession($post, $id = null) {
