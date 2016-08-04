@@ -48,35 +48,6 @@ function notify(type, msg, callback) {
 }
 
 // *******************************************************************
-// This function transforms the form data into an object {name: value}
-// @param {jQuery selector} form - selector of the form e.g. '#myForm'
-// TODO: check checkbox, radiobutton, textarea
-// *******************************************************************
-function getFormData(form) {
-  var values = {};
-
-  // Grab each input data
-  $(form + " input").each(function() {
-    var name = $(this).attr("name");
-    values[name] = $(this).val();
-  });
-
-  // Grab each textarea
-  $(form + " textarea").each(function() {
-    var name = $(this).attr("name");
-    values[name] = $(this).val();
-  });
-
-  // Grab each select data
-  $(form + " select").each(function() {
-    var name = $(this).attr("name");
-    values[name] = $(this).find(":selected").val();
-  });
-
-  return values;
-}
-
-// *******************************************************************
 // This function shows a loading animation
 // @param {String} target - container that will hold the loading text
 // *******************************************************************
@@ -199,106 +170,6 @@ function simpleQuery(tableName, action, values, where, options, callback) {
   });
 }
 
-function addJob() {
-  var job_name = $('#job-input').val();
-
-  if(job_name != '') {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-        if(xmlhttp.responseText.indexOf('true') !== -1) {
-          var id = xmlhttp.responseText.substring(xmlhttp.responseText.indexOf(' ') + 1);
-          $('.table-choice tr:last').before('<tr class="clickable-row"><td data-id="'+ id +'">' + job_name + '</td><td></td></tr>');
-          $('.clickable-row').click(function() {
-            // Remove previous active
-            $('.clickable-row.active').removeClass("active");
-            $(this).addClass("active");
-          });
-          $('#job-input').val('');
-        } else if(xmlhttp.responseText.indexOf('Invalid') !== -1) {
-          window.location.href = "index.php";
-        } else {
-          $('#job-input').addClass('form-invalid');
-          $('#job-input').focus();
-          showToolTip('#job-input', 'This job already exists!', 'top');
-        }
-      }
-    };
-
-    xmlhttp.open("GET", "http://localhost:8888/db/ajax/add-job.php?title=" + job_name, true);
-    xmlhttp.send();
-  }
-}
-
-function stopJob(logID) {
-  var values = {
-    'tableName': "WorkLog",
-    'action': "update",
-    'values': {
-      'end_time': getTimeNow()
-    },
-    'where': {
-      'id': logID
-    }
-  };
-
-  saveDataPost('db/ajax/data-save.php', values, function(data, status) {
-    redirect('time-keeper.php');
-  });
-}
-
-function postFormSubmit(formID, elements, url) {
-  if(isValid(formID)) {
-    // Get params
-    var inputs = $(elements);
-    var params = inputs[0].name + "=" + inputs[0].value;
-    for(var i = 1; i < $(elements).length; i++) {
-      if(inputs[i].name != '') {
-        params += "&" + inputs[i].name + "=" + inputs[i].value;
-      }
-    }
-
-    // Run AJAX
-    var xmlhttp = new XMLHttpRequest();
-
-    xmlhttp.onreadystatechange = function() {
-      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-        switch(formID) {
-          case '#login-form':
-            if(xmlhttp.responseText.indexOf('false') !== -1) {
-              alert("xmlhttp.responseText");
-              // showToolTip(formID);
-            } else { // Logged In
-              $(formID).append('<input type="hidden" name="user_id" value="' + xmlhttp.responseText + '">');
-              $(formID).find(':submit').click();
-
-            }
-            break;
-          case '#register-form':
-            if(xmlhttp.responseText.indexOf('username') !== -1) {
-              $(formID + ' #username').addClass('form-invalid');
-              $(formID + ' #username').focus();
-              showToolTip($(formID + ' #username'), "This username is already in use!", 'bottom');
-            } else if (xmlhttp.responseText.indexOf('email') !== -1) {
-              $(formID + ' #email').addClass('form-invalid');
-              $(formID + ' #email').focus();
-              showToolTip($(formID + ' #email'), "This email address is already in use!", 'bottom');
-            } else {
-              window.location.href = 'index.php';
-            }
-            break;
-          default:
-            alert(xmlhttp.responseText);
-        }
-      } // end if
-    }; // end xmlhttp
-
-    xmlhttp.open("POST", url, true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-  }
-}
-
 function toggleCollapse(id) {
   var openBoard = '#' + $('[data-collapse="false"]').attr("id");
 
@@ -318,18 +189,6 @@ function toggleCollapse(id) {
 /**
  * These scripts are not necessarily generalized. They just happened to be needed in all pages
  */
-// *******************************************************************
-// This function shows a toaster-like notification
-// @param {String} type - success, warning, failure
-// @param {String} msg - text to show
-// *******************************************************************
-function selectJob(el) {
-  // remove red outline if applicable
-  $(".select-multiple").css("border-color", "#EEEEEE");
-  $(".select-multiple").css("box-shadow", "");
-  $(".active").removeClass("active");
-  $(el).addClass("active");
-}
 
 function getTimeNow() {
   var timeNow = new Date();
@@ -342,30 +201,6 @@ function getTimeNow() {
   timeNow = Y + "-" + m + "-" + d + " " + H + ":" + i + ":" + s;
   return timeNow;
 }
-
-function startJob(user_id) {
-  var id = $(".job-item.active").data("id");
-  if (id === null) {
-    $(".select-multiple").css("border-color", "red");
-    $(".select-multiple").css("box-shadow", "0 0 10px red");
-  } else {
-    var timeNow = getTimeNow();
-    var values = {
-      'tableName': "WorkLog",
-      'action': "insert",
-      'values': {
-        'user_id': user_id,
-        'job_id': id,
-        'title': "",
-        'start_time': timeNow
-      }
-    };
-    saveDataPost("db/ajax/data-save.php", values, function(data) {
-      var url = "time-progress.php?log_id=" + data;
-      window.location.href = url;
-    });
-  }
-} // end startJob
 
 
 function showWork(user_id) {
@@ -427,27 +262,6 @@ function showWork(user_id) {
   });
 }
 
-function insertJob(id, title) {
-  var html = "";
-  html += '<span class="job-item" onclick="selectJob(this);"';
-  html += ' data-id=' + id + '>' ;
-  html += '<span class="job-edit">';
-  html += title;
-  html += '</span>';
-  html += '<span class="job-action">';
-  html += '<a onclick="editJob(' + id + ', this)">';
-  html += '<i class="fa fa-pencil"></i></a>';
-  html += '<i class="fa fa-trash" onclick="deleteJob(\'' + title + '\',' + id + ')"></i></span>';
-  html += '</span>';
-  return html;
-}
-
-function editJob(id, el) {
-  $(el).parent().parent().addClass("job-on-edit");
-  $(".job-action").hide();
-  spanToTextInput($(".job-item[data-id=" + id + "] .job-edit"), "saveJob(this)");
-}
-
 // *******************************************************************
 // This function converts a span into an input
 // @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
@@ -500,55 +314,6 @@ function textInputToSpan(jQueryEl) {
   spanInput += jQueryEl.val();
   spanInput += '</span>';
   jQueryEl.replaceWith($(spanInput));
-}
-
-// *******************************************************************
-// This function saves a job
-// @param {?} input - should be a single object of a jQuery or "this" e.g. $(".item")[0]
-// *******************************************************************
-function saveJob(input) {
-  var container = $(input).parent();
-  var values = {
-    'tableName': "Jobs",
-    'action': "update",
-    'where': {
-      'id': container.data("id"),
-    },
-    'values': {
-      'title': $(input).val()
-    }
-  };
-
-  saveDataPost("db/ajax/data-save.php", values, function(data) {
-    container.removeClass("job-on-edit");
-    textInputToSpan($(input));
-    $(".job-action").show();
-  });
-}
-
-function deleteJob(title, id) {
-  if (confirm("Are you sure you want to delete \"" + title + "\" and all of its contents?" ) == true) {
-    // delete entries
-    getData("WorkLog", {}, {'job_id': id}, {}, function(data) {
-      var dataArray = JSON.parse(data);
-      var options = {'async': false};
-
-      for(var workLogIndex = 0; workLogIndex < dataArray.length; workLogIndex++) {
-        var worklog = dataArray[workLogIndex];
-        simpleQuery("Entries", "delete", {}, {'log_id': worklog.id}, options);
-      }
-
-      // delete WorkLog
-      simpleQuery("WorkLog", "delete", {}, {'job_id': id}, options);
-
-      // delete job
-      simpleQuery("Jobs", "delete", {}, {'id': id}, {'async': true }, function(data) {
-        $(".job-item[data-id=" + id + "]").remove();
-        location.reload();
-      });
-
-    });
-  }
 }
 
 $(document).ready(function() {
