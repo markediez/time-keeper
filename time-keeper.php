@@ -40,12 +40,6 @@ if(sizeof($_POST) > 0) {
           $cal = new Calendar(isset($_GET['date']) ? $_GET['date'] : date('Y-m'));
           $cal->buildCalendar();
         ?>
-
-        <!-- <div class="tooltip-container col-md-3 no-padding"> -->
-          <!-- <div class="tooltip-text"> -->
-            <!-- <span class="tooltip-text col-md-12 no-padding">Hello Motto</span> -->
-          <!-- </div> -->
-        <!-- </div> -->
       </div> <!-- End Content -->
     </div> <!-- End Row -->
   </div> <!-- End container-fluid -->
