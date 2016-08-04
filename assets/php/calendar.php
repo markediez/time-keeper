@@ -163,8 +163,8 @@ class Calendar {
       }
       echo '</div>';
       echo '</div>';
-      echo '</div>';
     }
+    echo '</div>';
   } // function setBoard
 
   function buildCalendar() {
