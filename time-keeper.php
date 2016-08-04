@@ -37,7 +37,7 @@ if(sizeof($_POST) > 0) {
 
       <div id="content" class="col-md-10 flex">
         <?php
-          $cal = new Calendar();
+          $cal = new Calendar(isset($_GET['date']) ? $_GET['date'] : date('Y-m'));
           $cal->buildCalendar();
         ?>
 
