@@ -24,10 +24,11 @@ function addHeaders($title) {
   echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/vendor/bootstrap-3.3.6-dist/css/bootstrap.min.css">';
   echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/vendor/font-awesome-4.6.3/css/font-awesome.min.css">';
   echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/assets/stylesheets/style.css">';
+}
+
+function addScripts() {
   echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/vendor/jquery/jquery.js"></script>';
-  echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js//behaviour.js"></script>';
   echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js/script.js"></script>';
-  echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js/job.js"></script>';
 }
 
 function setSession($post, $id = null) {

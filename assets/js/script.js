@@ -25,6 +25,60 @@ String.prototype.replaceAll = function(search, replacement) {
 };
 
 // *******************************************************************
+// This function converts a span into an input
+// @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
+// @param {String} onblurFunctionCall - should be a string for a function call on blur
+// *******************************************************************
+function spanToTextInput(jQueryEl, onblurFunctionCall) {
+  // http://stackoverflow.com/questions/1227286/get-class-list-for-element-with-jquery
+  var classList = jQueryEl.attr("class").split(/\s+/);
+  var textInput = '<input type="text" class="';
+  var id = $(".span-input").length;
+
+  if (onblurFunctionCall == undefined) {
+    onblurFunctionCall = "";
+  }
+
+  for (var i = 0; i < classList.length; i++) {
+    textInput += classList[i] + " ";
+  }
+
+  textInput += ' span-input span-input-' + id;
+  textInput += '" onblur="';
+  textInput += onblurFunctionCall + '">';
+
+  jQueryEl.replaceWith($(textInput));
+  $(".span-input-" + id).focus().val(jQueryEl.text());
+  $(".span-input-" + id).keyup(function(e) {
+    if (e.keyCode == 13) {
+      $(this).blur();
+    }
+  });
+}
+
+// *******************************************************************
+// This function converts a text input into a span
+// @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
+// *******************************************************************
+function textInputToSpan(jQueryEl) {
+  var classList = jQueryEl.attr("class").split(/\s+/);
+  var spanInput = '<span class="';
+
+  for (var i = 0; i < classList.length; i++) {
+    // The if is necessary to remove span-input* class generated
+    // by spanToTextInput
+    if (classList[i].indexOf("span-input") === -1) {
+      spanInput += classList[i] + " ";
+    }
+  }
+
+  spanInput += '">';
+  spanInput += jQueryEl.val();
+  spanInput += '</span>';
+  jQueryEl.replaceWith($(spanInput));
+}
+
+// *******************************************************************
 // This function shows a toaster-like notification
 // @param {String} type - success, warning, failure
 // @param {String} msg - text to show
@@ -107,6 +161,18 @@ function removeToolTip() {
   $(".tooltip-text").remove();
 }
 
+function getTimeNow() {
+  var timeNow = new Date();
+  var Y = timeNow.getFullYear();
+  var m = ("0" + (timeNow.getMonth() + 1)).slice(-2);
+  var d = ("0" + timeNow.getDate()).slice(-2);
+  var H = ("0" + timeNow.getHours()).slice(-2);
+  var i = ("0" + timeNow.getMinutes()).slice(-2);
+  var s = ("0" + timeNow.getSeconds()).slice(-2);
+  timeNow = Y + "-" + m + "-" + d + " " + H + ":" + i + ":" + s;
+  return timeNow;
+}
+
 /*
  * AJAX Scripts
  */
@@ -170,151 +236,73 @@ function simpleQuery(tableName, action, values, where, options, callback) {
   });
 }
 
-function toggleCollapse(id) {
-  var openBoard = '#' + $('[data-collapse="false"]').attr("id");
-
-  if($(id).attr("data-collapse") == "false") {
-    $(id).attr("data-collapse", "true");
-    $(id).slideUp();
-  } else {
-    $(id).attr("data-collapse", "false");
-    $(id).slideDown();
-
-    // Hide open board
-    $(openBoard).attr("data-collapse", "true");
-    $(openBoard).slideUp();
-  }
-}
-
 /**
  * These scripts are not necessarily generalized. They just happened to be needed in all pages
  */
 
-function getTimeNow() {
-  var timeNow = new Date();
-  var Y = timeNow.getFullYear();
-  var m = ("0" + (timeNow.getMonth() + 1)).slice(-2);
-  var d = ("0" + timeNow.getDate()).slice(-2);
-  var H = ("0" + timeNow.getHours()).slice(-2);
-  var i = ("0" + timeNow.getMinutes()).slice(-2);
-  var s = ("0" + timeNow.getSeconds()).slice(-2);
-  timeNow = Y + "-" + m + "-" + d + " " + H + ":" + i + ":" + s;
-  return timeNow;
-}
+ /**
+  * This function shows the work available to start
+  * @param {int} user_id - userid
+  */
+ function showWork(user_id) {
+   removeToolTip();
+   addTooltip($("#links"), 'right');
+   addTooltipHTML('<div class="job-header"><span class="job-title">Work</span><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
+   showLoading(".tooltip-text");
 
+   $.ajax({
+     url: "db/ajax/get-job.php",
+     success: function(result) {
+       hideLoading();
+       var html = "";
+       var res = JSON.parse(result);
+       var startButton = '<button class="btn btn-primary" onclick="startJob(' + user_id + ');">Start</button>';
+       if (res.status == "false") {
+         var url = "time-progress.php?log_id=" + res.log_id;
+         startButton = '<button class="btn btn-primary" onclick="redirect(\'' + url + '\');">In Progress</button>';
+       }
 
-function showWork(user_id) {
-  removeToolTip();
-  addTooltip($("#links"), 'right');
-  addTooltipHTML('<div class="job-header"><span class="job-title">Work</span><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
-  showLoading(".tooltip-text");
+       // List Jobs
+       html = '<div id="job"><div id="job-form"><div class="select-multiple">';
+       delete res.status;
 
-  $.ajax({
-    url: "db/ajax/get-job.php",
-    success: function(result) {
-      hideLoading();
-      var html = "";
-      var res = JSON.parse(result);
-      var startButton = '<button class="btn btn-primary" onclick="startJob(' + user_id + ');">Start</button>';
-      if (res.status == "false") {
-        var url = "time-progress.php?log_id=" + res.log_id;
-        startButton = '<button class="btn btn-primary" onclick="redirect(\'' + url + '\');">In Progress</button>';
-      }
+       for(var i in res) {
+         if(typeof res[i] == 'object')
+           html += insertJob(res[i].id, res[i].title);
+       }
 
-      // List Jobs
-      html = '<div id="job"><div id="job-form"><div class="select-multiple">';
-      delete res.status;
+       // Option to add a job
+       html += '<input type="text" class="job-input" placeholder="Add a job">';
 
-      for(var i in res) {
-        if(typeof res[i] == 'object')
-          html += insertJob(res[i].id, res[i].title);
-      }
+       // Start button
+       html += '</div>' + startButton + '</div></div>';
+       addTooltipHTML(html);
 
-      // Option to add a job
-      html += '<input type="text" class="job-input" placeholder="Add a job">';
+       // Add jobs on enter
+       $(".job-input").keyup(function(e) {
+         var obj = $(this);
+         if (e.keyCode == 13 && obj.val() != "") {
+           values = {
+             'tableName': "Jobs",
+             'action': "insert",
+             'values': {
+               'user_id': user_id,
+               'title': obj.val()
+             }
+           };
+           saveDataPost("db/ajax/data-save.php", values, function(result) {
+             $(insertJob(result, obj.val())).insertBefore($(".job-input"));
+             obj.val("");
+           });
+         }
+       });
+     },
+     error: function(result, status) {
+       notify('failure', "Error Code: " + status);
+     }
+   });
+ }
 
-      // Start button
-      html += '</div>' + startButton + '</div></div>';
-      addTooltipHTML(html);
-
-      // Add jobs on enter
-      $(".job-input").keyup(function(e) {
-        var obj = $(this);
-        if (e.keyCode == 13 && obj.val() != "") {
-          values = {
-            'tableName': "Jobs",
-            'action': "insert",
-            'values': {
-              'user_id': user_id,
-              'title': obj.val()
-            }
-          };
-          saveDataPost("db/ajax/data-save.php", values, function(result) {
-            $(insertJob(result, obj.val())).insertBefore($(".job-input"));
-            obj.val("");
-          });
-        }
-      });
-    },
-    error: function(result, status) {
-      notify('failure', "Error Code: " + status);
-    }
-  });
-}
-
-// *******************************************************************
-// This function converts a span into an input
-// @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
-// @param {String} onblurFunctionCall - should be a string for a function call on blur
-// *******************************************************************
-function spanToTextInput(jQueryEl, onblurFunctionCall) {
-  // http://stackoverflow.com/questions/1227286/get-class-list-for-element-with-jquery
-  var classList = jQueryEl.attr("class").split(/\s+/);
-  var textInput = '<input type="text" class="';
-  var id = $(".span-input").length;
-
-  if (onblurFunctionCall == undefined) {
-    onblurFunctionCall = "";
-  }
-
-  for (var i = 0; i < classList.length; i++) {
-    textInput += classList[i] + " ";
-  }
-
-  textInput += ' span-input span-input-' + id;
-  textInput += '" onblur="';
-  textInput += onblurFunctionCall + '">';
-
-  jQueryEl.replaceWith($(textInput));
-  $(".span-input-" + id).focus().val(jQueryEl.text());
-  $(".span-input-" + id).keyup(function(e) {
-    if (e.keyCode == 13) {
-      $(this).blur();
-    }
-  });
-}
-
-// *******************************************************************
-// This function converts a text input into a span
-// @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
-// *******************************************************************
-function textInputToSpan(jQueryEl) {
-  var classList = jQueryEl.attr("class").split(/\s+/);
-  var spanInput = '<span class="';
-
-  for (var i = 0; i < classList.length; i++) {
-    // The if is necessary to remove span-input* class generated
-    // by spanToTextInput
-    if (classList[i].indexOf("span-input") === -1) {
-      spanInput += classList[i] + " ";
-    }
-  }
-
-  spanInput += '">';
-  spanInput += jQueryEl.val();
-  spanInput += '</span>';
-  jQueryEl.replaceWith($(spanInput));
-}
 
 $(document).ready(function() {
   // http://stackoverflow.com/questions/1403615/use-jquery-to-hide-a-div-when-the-user-clicks-outside-of-it

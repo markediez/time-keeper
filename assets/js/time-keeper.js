@@ -11,8 +11,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 // *******************************************************************
-// This JS file consists of functions to
+// This JS file consists of functions specific for calendar page
 // Create, Read, Edit, Delete, Start, and Stop a Job
+// Shows work
+// Toggles board
 // *******************************************************************
 
 /**
@@ -140,23 +142,103 @@ function saveJob(input) {
   });
 } // function saveJob
 
-/**
- * This function stops a log of a job
- * @param {int} logID - id of log
- */
-function stopJob(logID) {
-  var values = {
-    'tableName': "WorkLog",
-    'action': "update",
-    'values': {
-      'end_time': getTimeNow()
-    },
-    'where': {
-      'id': logID
-    }
-  };
+function showEventDetails(el, toggle) {
+  // Close any open Details
+  removeToolTip();
 
-  saveDataPost('db/ajax/data-save.php', values, function(data, status) {
-    redirect('time-keeper.php');
+  if (toggle == undefined) {
+    toggle = false;
+  }
+
+  // Set up tooltip
+  addTooltip($(el).parent().parent(), (toggle) ? 'left' : 'right');
+
+  // Add Job Title
+  var title = $(el).children().children(":first").text();
+  addTooltipHTML('<div class="job-header"><span class="job-title">' + title + '</span><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
+
+  showLoading(".tooltip-text");
+
+  var values = {};
+  values.jid = $(el).data("id");
+  values.date = $(el).data("date");
+
+  $.ajax({
+    url: "db/ajax/get-event.php",
+    data: values,
+    success: function(result) {
+      hideLoading();
+      console.log(result);
+      var currShift = undefined;
+      var prevShift = undefined;
+      var eventIndex = 1;
+      var entries = '<div class="event-task-list">';
+      var inProgress = false;
+      for(var i = 0; i < result.length; i++) {
+        currShift = result[i]['work_start'];
+        // if a new shift occurs, set up the shift section;
+        if (currShift.indexOf(prevShift) === -1) {
+          if (prevShift !== undefined) {
+              entries += '</div>'; // end previous shift
+              entries = entries.replaceAll("\\", "");
+              addTooltipHTML(entries);
+              entries = '<div class="event-task-list">';
+              inProgress = false;
+          }
+          prevShift = currShift;
+          var newShiftTitle = result[i]['work_title'];
+          var shiftStart = result[i]['work_start'];
+          var shiftEnd = result[i]['work_end'];
+          var pos = shiftStart.indexOf(" ");
+          shiftStart = shiftStart.substring(pos + 1, pos + 6);
+          if (shiftEnd != null) {
+            pos = shiftEnd.indexOf(" ");
+            shiftEnd = shiftEnd.substring(pos + 1,  pos + 6);
+          } else {
+            shiftEnd = "xx:xx";
+            inProgress = true;
+          }
+
+          newShiftTitle = newShiftTitle.replaceAll("\\", "");
+          addTooltipHTML('<div class="event-header"><span class="event-title">' + newShiftTitle + '</span><span class="event-time">' + shiftStart + ' - ' + shiftEnd + '</span></div>');
+          eventIndex = 1;
+        } // end if
+
+        // Add entries of shift
+        if (result[i]['entry'] != null) {
+          entries = entries + '<span class="event-task"><span class="event-task-num">' + eventIndex + '.</span>' + result[i]['entry'] + '</span>';
+        }
+
+        eventIndex++;
+      } // end for
+
+      if (inProgress) {
+        entries = entries + '<span class="event-task event-progress animate-load">In Progress</span>';
+      }
+      entries = entries.replaceAll("\\", "");
+      addTooltipHTML(entries); // addFinal Tasks
+
+
+
+    },
+    error: function(result) {
+      alert("Something went wrong");
+    }
   });
-} // function stopJob
+} // function showEventDetails
+
+function toggleCollapse(id) {
+  var openBoard = '#' + $('[data-collapse="false"]').attr("id");
+
+  if($(id).attr("data-collapse") == "false") {
+    $(id).attr("data-collapse", "true");
+    $(id).slideUp();
+  } else {
+    $(id).attr("data-collapse", "false");
+    $(id).slideDown();
+
+    // Hide open board
+    $(openBoard).attr("data-collapse", "true");
+    $(openBoard).slideUp();
+  }
+} // function toggleCollapse
