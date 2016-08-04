@@ -9,26 +9,42 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+
+// *******************************************************************
+// General Scripts
+// *******************************************************************
+
+/**
+ * Redirects the page
+ */
 function redirect(url) {
   window.location.href = url;
-}
+} // function redirect
 
-// http://stackoverflow.com/questions/1144783/replacing-all-occurrences-of-a-string-in-javascript
+/**
+ * Escapes a string ** required for replaceAll **
+ * // http://stackoverflow.com/questions/1144783/replacing-all-occurrences-of-a-string-in-javascript
+ */
 function escapeRegExp(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
-}
+} // functione escapeRegExp
 
+/**
+ * This function searches the piece given and replaces it with the second piece
+ * @param {String} search - the piece we don't want
+ * @param {String} replacement - the piece we want instead
+ */
 String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     search = escapeRegExp(search);
     return target.replace(new RegExp(search, 'g'), replacement);
-};
+}; // function replaceAll
 
-// *******************************************************************
-// This function converts a span into an input
-// @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
-// @param {String} onblurFunctionCall - should be a string for a function call on blur
-// *******************************************************************
+/**
+ * This function converts a span into an input
+ * @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
+ * @param {String} onblurFunctionCall - should be a string for a function call on blur
+ */
 function spanToTextInput(jQueryEl, onblurFunctionCall) {
   // http://stackoverflow.com/questions/1227286/get-class-list-for-element-with-jquery
   var classList = jQueryEl.attr("class").split(/\s+/);
@@ -54,12 +70,12 @@ function spanToTextInput(jQueryEl, onblurFunctionCall) {
       $(this).blur();
     }
   });
-}
+} // function spanToTextInput
 
-// *******************************************************************
-// This function converts a text input into a span
-// @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
-// *******************************************************************
+/**
+ * This function converts a text input into a span
+ * @param {jQuery Object} jQueryEl - A jQuery object e.g. $(".item")
+ */
 function textInputToSpan(jQueryEl) {
   var classList = jQueryEl.attr("class").split(/\s+/);
   var spanInput = '<span class="';
@@ -76,13 +92,13 @@ function textInputToSpan(jQueryEl) {
   spanInput += jQueryEl.val();
   spanInput += '</span>';
   jQueryEl.replaceWith($(spanInput));
-}
+} // function textInputToSpan
 
-// *******************************************************************
-// This function shows a toaster-like notification
-// @param {String} type - success, warning, failure
-// @param {String} msg - text to show
-// *******************************************************************
+/**
+ * This function shows a toaster-like notification
+ * @param {String} type - success, warning, failure
+ * @param {String} msg - text to show
+ */
 function notify(type, msg, callback) {
   var html = "<span id='notify' class = 'notify-" + type + " col-md-2'>" + msg + "</span>";
   var notification = $(html).appendTo("body");
@@ -99,30 +115,30 @@ function notify(type, msg, callback) {
       })
     }, 500);
   });
-}
+} // function notifify
 
-// *******************************************************************
-// This function shows a loading animation
-// @param {String} target - container that will hold the loading text
-// *******************************************************************
+/**
+ * This function shows a loading animation
+ * @param {String} target - container that will hold the loading text
+ */
 function showLoading(target) {
   $(target).append('<div class="loading"><span class="animate-load">Loading...</span></div>');
   $(".loading span").addClass("animate-load");
-}
+} // function showLoading
 
-// *******************************************************************
-// This function removes the loading splash
-// @param {String} target - container that will hold the loading text
-// *******************************************************************
+/**
+ * This function removes the loading splash
+ * @param {String} target - container that will hold the loading text
+ */
 function hideLoading() {
   $(".loading").remove();
-}
+} // function hideLoading
 
-// *******************************************************************
-// This function sets the container for the tooltip
-// @param {jQuery} container - the selector for the container e.g. $("#item")
-// @param {String} position - position of tooltip
-// *******************************************************************
+/**
+ * This function sets the container for the tooltip
+ * @param {jQuery} container - the selector for the container e.g. $("#item")
+ * @param {String} position - position of tooltip
+ */
 function addTooltip(container, position) {
   container.addClass("tooltip-container");
   $('<div class="tooltip-text"></div>').appendTo($(".tooltip-container"));
@@ -142,25 +158,29 @@ function addTooltip(container, position) {
       break;
     default:;
   }
-}
+} // function addTooltip
 
-// *******************************************************************
-// this function adds html to the tooltip
-// @param {String} html - html to add to the tooltip
-// *******************************************************************
+/**
+ * this function adds html to the tooltip
+ * @param {String} html - html to add to the tooltip
+ */
 function addTooltipHTML(html) {
   $(html).appendTo($(".tooltip-text"));
-}
+} // function addTooltipHTML
 
-// *******************************************************************
-// This function removes all tootips on the page
-// *******************************************************************
+/**
+ * This function removes all tootips on the page
+ */
 function removeToolTip() {
   // Remove Details
   $(".tooltip-container").removeClass("tooltip-container");
   $(".tooltip-text").remove();
-}
+} // function removeToolTip
 
+/**
+ * This function grabs the current time and returns a string in
+ * Y-m-d H:i:s format
+ */
 function getTimeNow() {
   var timeNow = new Date();
   var Y = timeNow.getFullYear();
@@ -171,17 +191,19 @@ function getTimeNow() {
   var s = ("0" + timeNow.getSeconds()).slice(-2);
   timeNow = Y + "-" + m + "-" + d + " " + H + ":" + i + ":" + s;
   return timeNow;
-}
+} // function getTimeNow
 
-/*
- * AJAX Scripts
- */
+// *******************************************************************
+//  AJAX Scripts
+// *******************************************************************
 
- // *******************************************************************
- // This function shows a toaster-like notification
- // @param {String} type - success, warning, failure
- // @param {String} msg - text to show
- // *******************************************************************
+ /**
+  * This function saves data via AJAX POST
+  * Mainly used to Create / Delete / Update
+  * @param {String} url - url for ajax call
+  * @param {Object} values - data to send
+  * @param {function} callback - function to call on success
+  */
 function saveDataPost(url, values, callback) {
   $.ajax(
     {
@@ -197,8 +219,14 @@ function saveDataPost(url, values, callback) {
       }
     }
   );
-}
+} // function saveDataPost
 
+/**
+ * This function gets data via ajax post
+ * @param {String} url - url for ajax call
+ * @param {Object} values - data to send
+ * @param {function} callback - function to call on success
+ */
 function getData(tableName, wantedColumns, targetValue, order, callback ) {
   var data = {};
   data.tableName = tableName;
@@ -219,8 +247,19 @@ function getData(tableName, wantedColumns, targetValue, order, callback ) {
         }
     }
   );
-}
+} // function getData
 
+/**
+ * This function create, update, and deletes using saveDataPost
+ * While saveDataPost is sufficient, this provides more of a guide
+ * on the values that are required
+ * @param {String} tableName - name of table to alter
+ * @param {String} action - insert / delete / update
+ * @param {Object} values - columns to change in 'key': 'value' format
+ * @param {Object} where - identifier for rows for update / delete in 'key': 'value' format
+ * @param {Object} options - options for the jquery call itself like options.async = true
+ * @param {function} callback - function to call once the call to saveDataPost is done
+ */
 function simpleQuery(tableName, action, values, where, options, callback) {
   var data = {};
   data.tableName = tableName;
@@ -234,7 +273,7 @@ function simpleQuery(tableName, action, values, where, options, callback) {
     if(typeof callback == 'function')
       callback(result, textStatus, jqXHR);
   });
-}
+} // function simpleQuery
 
 /**
  * These scripts are not necessarily generalized. They just happened to be needed in all pages
@@ -301,15 +340,24 @@ function simpleQuery(tableName, action, values, where, options, callback) {
        notify('failure', "Error Code: " + status);
      }
    });
- }
+ } // function showWork
 
+ // *******************************************************************
+ //  Document Scripts
+ // *******************************************************************
 
+ /**
+  * Functions to run on document ready
+  */
 $(document).ready(function() {
-  // http://stackoverflow.com/questions/1403615/use-jquery-to-hide-a-div-when-the-user-clicks-outside-of-it
+  /**
+   * This function sets a listener to close tooltips on click elsewhere
+   * http://stackoverflow.com/questions/1403615/use-jquery-to-hide-a-div-when-the-user-clicks-outside-of-it
+   */
   $(document).mouseup(function(e){
     var tooltipContainer = $(".tooltip-text");
     if (!tooltipContainer.is(e.target) && tooltipContainer.has(e.target).length === 0) {
       removeToolTip();
     }
   });
-});
+}); // function document ready
