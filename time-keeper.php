@@ -17,7 +17,7 @@ if(sizeof($_POST) > 0) {
   setSession($_POST);
 }
 
-// checkSession();
+checkSession();
 ?>
 <!DOCTYPE html>
 <html>

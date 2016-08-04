@@ -25,6 +25,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     if (!$id) {
       $error = true;
     } else {
+      $error = false;
       setSession($_POST, $id);
       header("Refresh:0");
     }
