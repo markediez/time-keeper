@@ -12,7 +12,7 @@
  */
 ob_start();
 session_start();
-include($_SERVER['DOCUMENT_ROOT'] . '/assets/php/server.php');
+include(realpath(dirname(__FILE__)) . '/../../assets/php/server.php');
 checkSession();
 $db = new DBSql();
 

@@ -13,8 +13,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ob_start();
 session_start();
 date_default_timezone_set("America/Los_Angeles");
-include($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
-include($_SERVER['DOCUMENT_ROOT'] . "/db/development/database.php");
+include(realpath(dirname(__FILE__)) . "/../../config/config.php");
+include(realpath(dirname(__FILE__)) . "/../../db/development/database.php");
 
 function addHeaders($title) {
   echo "<title>$title</title>";
@@ -27,6 +27,7 @@ function addHeaders($title) {
   echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/vendor/jquery/jquery.js"></script>';
   echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js//behaviour.js"></script>';
   echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js/script.js"></script>';
+  echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js/job.js"></script>';
 }
 
 function setSession($post, $id = null) {
