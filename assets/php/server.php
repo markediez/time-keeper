@@ -42,6 +42,7 @@ function setSession($post, $id = null) {
   $_SESSION['username'] = $post['username'];
   $_SESSION['valid'] = ($_SESSION['user_id']) ? true : false;
   $_SESSION['timeout'] = time();
+  $_SESSION['folder'] = getcwd();
 }
 
 function checkSession($redirect = true) {
