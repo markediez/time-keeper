@@ -100,8 +100,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
               ?>
             </div> <!-- End Saved Entries -->
 
-            <input id="new-entry" type="text" class="form-control row" placeholder="What have you done?">
-            <a onclick="stopJob(<?=$_GET['log_id']?>);" class="btn btn-primary col-md-4 row">Stop</a>
+            <div id="new-entry" class="flex row">
+              <input type="text" class="form-control" placeholder="What have you done?">
+              <a onclick='addEntry()' class="btn btn-primary col-md-2 btn-inline">Add Entry</a>
+              <a onclick="stopJob(<?=$_GET['log_id']?>);" class="btn btn-primary col-md-2 btn-inline">Stop</a>
+            </div>
           </div> <!-- End Description -->
         </div> <!-- End Content -->
       </div> <!--End Row-->
