@@ -53,8 +53,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             <input class="form-control" type="text" placeholder="username" name="username" required>
             <input class="form-control form-item" type="password" placeholder="password" name="password" required>
           </div>
-          <a class="btn btn-primary form-item" href="register.php">Register</a>
           <button id="login-button" class="btn btn-primary form-item">Login</button>
+          <a id="register-alter" href="register.php">
+            <span class="small">Don't have an account? Register</span>
+          </a>
         </form>
       </div>
     </div>
