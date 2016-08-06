@@ -18,6 +18,7 @@ $(document).ready(function() {
  * This function adds an entry to the WorkLog
  */
 function addEntry() {
+  console.log("add");
   var thisEntry = $("#new-entry");
   var text = thisEntry.val();
   if (text !== "") {
@@ -35,7 +36,7 @@ function addEntry() {
     });
 
     saveEntry(thisEntry);
-    $(this).val("");
+    thisEntry.val("");
   }
 } // function addEntry
 
@@ -71,7 +72,7 @@ function saveTitle(el) {
     }
   };
 
-  saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
+  ajaxByPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
     notify("success", "Saved");
   });
 } // function saveTitle
@@ -99,11 +100,12 @@ function saveEntry(el) {
       }
     };
 
-    saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
+    ajaxByPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
       if(result > 0) {
-        notify("success", "Saved");
         $(".entry:last").data("id", result);
       }
+
+      notify("success", "Saved");
     });
   } // end else
 } // function saveEntry
@@ -121,7 +123,7 @@ function deleteEntry(target) {
     }
   };
 
-  saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
+  ajaxByPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
     notify("success", "Saved");
   });
 
@@ -174,7 +176,7 @@ function stopJob(logID) {
     }
   };
 
-  saveDataPost('db/ajax/data-save.php', values, function(data, status) {
+  ajaxByPost('db/ajax/data-save.php', values, function(data, status) {
     notify("success", "Saved");
     redirect('time-keeper.php');
   });

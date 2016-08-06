@@ -198,13 +198,12 @@ function getTimeNow() {
 // *******************************************************************
 
  /**
-  * This function saves data via AJAX POST
-  * Mainly used to Create / Delete / Update
+  * This function sends an ajax by post
   * @param {String} url - url for ajax call
   * @param {Object} values - data to send
   * @param {function} callback - function to call on success
   */
-function saveDataPost(url, values, callback) {
+function ajaxByPost(url, values, callback) {
   $.ajax(
     {
       url: url,
@@ -214,11 +213,14 @@ function saveDataPost(url, values, callback) {
         callback(data, textStatus, jqXHR);
       },
       error: function(data, textStatus, jqXHR) {
-        notify('failure', 'Something went wrong!');
+        notify('failure', 'Something went wrong!', function() {
+          // Possible that session ended
+          window.location.href="logout.php";
+        });
       }
     }
   );
-} // function saveDataPost
+} // function ajaxByPost
 
 /**
  * This function gets data via ajax post
@@ -249,15 +251,15 @@ function getData(tableName, wantedColumns, targetValue, order, callback ) {
 } // function getData
 
 /**
- * This function create, update, and deletes using saveDataPost
- * While saveDataPost is sufficient, this provides more of a guide
+ * This function create, update, and deletes using ajaxByPost
+ * While ajaxByPost is sufficient, this provides more of a guide
  * on the values that are required
  * @param {String} tableName - name of table to alter
  * @param {String} action - insert / delete / update
  * @param {Object} values - columns to change in 'key': 'value' format
  * @param {Object} where - identifier for rows for update / delete in 'key': 'value' format
  * @param {Object} options - options for the jquery call itself like options.async = true
- * @param {function} callback - function to call once the call to saveDataPost is done
+ * @param {function} callback - function to call once the call to ajaxByPost is done
  */
 function simpleQuery(tableName, action, values, where, options, callback) {
   var data = {};
@@ -268,7 +270,7 @@ function simpleQuery(tableName, action, values, where, options, callback) {
   if (where != undefined) {
     data.where = where;
   }
-  saveDataPost('db/ajax/data-save.php', data, function(result, textStatus, jqXHR) {
+  ajaxByPost('db/ajax/data-save.php', data, function(result, textStatus, jqXHR) {
     if(typeof callback == 'function')
       callback(result, textStatus, jqXHR);
       notify('success', 'Saved');
@@ -289,57 +291,51 @@ function simpleQuery(tableName, action, values, where, options, callback) {
    addTooltipHTML('<div class="job-header"><span class="job-title">Work</span><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div>');
    showLoading(".tooltip-text");
 
-   $.ajax({
-     url: "db/ajax/get-job.php",
-     success: function(result) {
-       hideLoading();
-       var html = "";
-       var res = JSON.parse(result);
-       var startButton = '<button class="btn btn-primary" onclick="startJob(' + user_id + ');">Start</button>';
-       if (res.status == "false") {
-         var url = "time-progress.php?log_id=" + res.log_id;
-         startButton = '<button class="btn btn-primary" onclick="redirect(\'' + url + '\');">In Progress</button>';
-       }
-
-       // List Jobs
-       html = '<div id="job"><div id="job-form"><div class="select-multiple">';
-       delete res.status;
-
-       for(var i in res) {
-         if(typeof res[i] == 'object')
-           html += insertJob(res[i].id, res[i].title);
-       }
-
-       // Option to add a job
-       html += '<input type="text" class="job-input" placeholder="Add a job">';
-
-       // Start button
-       html += '</div>' + startButton + '</div></div>';
-       addTooltipHTML(html);
-
-       // Add jobs on enter
-       $(".job-input").keyup(function(e) {
-         var obj = $(this);
-         if (e.keyCode == 13 && obj.val() != "") {
-           values = {
-             'tableName': "Jobs",
-             'action': "insert",
-             'values': {
-               'user_id': user_id,
-               'title': obj.val()
-             }
-           };
-           saveDataPost("db/ajax/data-save.php", values, function(result) {
-             notify('success', 'Saved');
-             $(insertJob(result, obj.val())).insertBefore($(".job-input"));
-             obj.val("");
-           });
-         }
-       });
-     },
-     error: function(result, status) {
-       notify('failure', "Error Code: " + status);
+   ajaxByPost("db/ajax/get-job.php", {}, function(result) {
+     hideLoading();
+     var html = "";
+     var res = JSON.parse(result);
+     var startButton = '<button class="btn btn-primary" onclick="startJob(' + user_id + ');">Start</button>';
+     if (res.status == "false") {
+       var url = "time-progress.php?log_id=" + res.log_id;
+       startButton = '<button class="btn btn-primary" onclick="redirect(\'' + url + '\');">In Progress</button>';
      }
+
+     // List Jobs
+     html = '<div id="job"><div id="job-form"><div class="select-multiple">';
+     delete res.status;
+
+     for(var i in res) {
+       if(typeof res[i] == 'object')
+         html += insertJob(res[i].id, res[i].title);
+     }
+
+     // Option to add a job
+     html += '<input type="text" class="job-input" placeholder="Add a job">';
+
+     // Start button
+     html += '</div>' + startButton + '</div></div>';
+     addTooltipHTML(html);
+
+     // Add jobs on enter
+     $(".job-input").keyup(function(e) {
+       var obj = $(this);
+       if (e.keyCode == 13 && obj.val() != "") {
+         values = {
+           'tableName': "Jobs",
+           'action': "insert",
+           'values': {
+             'user_id': user_id,
+             'title': obj.val()
+           }
+         };
+         ajaxByPost("db/ajax/data-save.php", values, function(result) {
+           notify('success', 'Saved');
+           $(insertJob(result, obj.val())).insertBefore($(".job-input"));
+           obj.val("");
+         });
+       }
+     });
    });
  } // function showWork
 

@@ -111,7 +111,7 @@ function startJob(user_id) {
         'start_time': timeNow
       }
     };
-    saveDataPost("db/ajax/data-save.php", values, function(data) {
+    ajaxByPost("db/ajax/data-save.php", values, function(data) {
       var url = "time-progress.php?log_id=" + data;
       window.location.href = url;
     });
@@ -135,7 +135,7 @@ function saveJob(input) {
     }
   };
 
-  saveDataPost("db/ajax/data-save.php", values, function(data) {
+  ajaxByPost("db/ajax/data-save.php", values, function(data) {
     container.removeClass("job-on-edit");
     textInputToSpan($(input));
     $(".job-action").show();
