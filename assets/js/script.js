@@ -212,7 +212,6 @@ function saveDataPost(url, values, callback) {
       data: values,
       success: function(data, textStatus, jqXHR) {
         callback(data, textStatus, jqXHR);
-        notify('success', 'Saved');
       },
       error: function(data, textStatus, jqXHR) {
         notify('failure', 'Something went wrong!');
@@ -272,6 +271,7 @@ function simpleQuery(tableName, action, values, where, options, callback) {
   saveDataPost('db/ajax/data-save.php', data, function(result, textStatus, jqXHR) {
     if(typeof callback == 'function')
       callback(result, textStatus, jqXHR);
+      notify('success', 'Saved');
   });
 } // function simpleQuery
 
@@ -330,6 +330,7 @@ function simpleQuery(tableName, action, values, where, options, callback) {
              }
            };
            saveDataPost("db/ajax/data-save.php", values, function(result) {
+             notify('success', 'Saved');
              $(insertJob(result, obj.val())).insertBefore($(".job-input"));
              obj.val("");
            });

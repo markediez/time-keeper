@@ -63,7 +63,7 @@ function saveTitle(el) {
   };
 
   saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
-
+    notify("success", "Saved");
   });
 } // function saveTitle
 
@@ -92,6 +92,7 @@ function saveEntry(el) {
 
     saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
       if(result > 0) {
+        notify("success", "Saved");
         $(".entry:last").data("id", result);
       }
     });
@@ -112,6 +113,7 @@ function deleteEntry(target) {
   };
 
   saveDataPost('db/ajax/data-save.php', values, function(result, textStatus, jqXHR) {
+    notify("success", "Saved");
   });
 
   $(target).parent().remove();
@@ -164,6 +166,7 @@ function stopJob(logID) {
   };
 
   saveDataPost('db/ajax/data-save.php', values, function(data, status) {
+    notify("success", "Saved");
     redirect('time-keeper.php');
   });
 } // function stopJob
