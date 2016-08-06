@@ -2,24 +2,8 @@ $(document).ready(function() {
   setEntryListener();
 
   $("#new-entry").keyup(function(e) {
-    var thisEntry = $(this);
-    var text = thisEntry.val();
-    if (e.keyCode == 13 && text !== "") {
-      var number = $("#entries").children().length + 1;
-
-      // Append entry
-      var newEntry = $('<div class="col-md-12 saved-entry flex no-padding"><span class="col-md-half flex flex-vertical-center flex-end no-padding entry-num">' + number + '.</span><input id="entry-' + number + '" type="text" name="entry" class="col-md-10 entry" value="' +   text + '" onblur="toggleEntry(\'#entry-' + number + '\')" disabled><span class="col-md-1 flex flex-vertical-center flex-space-around no-padding"><a onclick="toggleEntry(\'#entry-' + number + '\')"><i class="fa fa-pencil" aria-hidden="true"></i></a><a onclick="deleteEntry(\'#entry-' + number + '\')"><i class="fa fa-trash" aria-hidden="true"></i></a></span></div>')
-      .appendTo($("#entries"));
-
-      $(newEntry).keyup(function(e) {
-        if (e.keyCode == 13) {
-          saveEntry($(this));
-          setEntryListener();
-        }
-      });
-
-      saveEntry(thisEntry);
-      $(this).val("");
+    if (e.keyCode == 13) {
+      addEntry();
     }
   }); // #new-entry
 
@@ -29,6 +13,31 @@ $(document).ready(function() {
     }
   });
 }); // function onready
+
+/**
+ * This function adds an entry to the WorkLog
+ */
+function addEntry() {
+  var thisEntry = $("#new-entry");
+  var text = thisEntry.val();
+  if (text !== "") {
+    var number = $("#entries").children().length + 1;
+
+    // Append entry
+    var newEntry = $('<div class="col-md-12 saved-entry flex no-padding"><span class="col-md-half flex flex-vertical-center flex-end no-padding entry-num">' + number + '.</span><input id="entry-' + number + '" type="text" name="entry" class="col-md-10 entry" value="' +   text + '" onblur="toggleEntry(\'#entry-' + number + '\')" disabled><span class="col-md-1 flex flex-vertical-center flex-space-around no-padding"><a onclick="toggleEntry(\'#entry-' + number + '\')"><i class="fa fa-pencil" aria-hidden="true"></i></a><a onclick="deleteEntry(\'#entry-' + number + '\')"><i class="fa fa-trash" aria-hidden="true"></i></a></span></div>')
+    .appendTo($("#entries"));
+
+    $(newEntry).keyup(function(e) {
+      if (e.keyCode == 13) {
+        saveEntry($(this));
+        setEntryListener();
+      }
+    });
+
+    saveEntry(thisEntry);
+    $(this).val("");
+  }
+} // function addEntry
 
 /**
  * This function sets the listenter to save entries on enter
