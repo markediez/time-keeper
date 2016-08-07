@@ -602,6 +602,7 @@ tr.clickable-row.active {
   background-color: #7C6296;
   border-color: #877599;
 }
+
 /* ========= End Calendar ========= */
 
 /* ========= Work Log Description ========= */
@@ -643,6 +644,7 @@ tr.clickable-row.active {
   border-radius: 5px;
   border: none;
   color: white;
+  -webkit-text-fill-color: white;
 }
 
 .saved-entry span {
