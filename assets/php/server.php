@@ -32,6 +32,7 @@ function addScripts() {
 }
 
 function setSession($post, $id = null) {
+
   $index = 0;
   $_SESSION[$index++] = $post['user_id'];
   $_SESSION[$index++] = $post['username'];
@@ -132,67 +133,4 @@ function verifyCaptcha($response) {
   return $result->success;
 }
 
-function initialStart($databaseConnection) {
-  // Store each query
-  $statement = array();
-  $index = 0;
-
-  // Roles Table
-  $statement[$index++] = $databaseConnection->prepare('CREATE TABLE Roles (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    role VARCHAR(10) NOT NULL UNIQUE,
-    created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL
-  );');
-
-  // Entries Table
-  $statement[$index++] = $databaseConnection->prepare('CREATE TABLE Entries (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    log_id INT NOT NULL,
-    entry TEXT,
-    created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL
-  );');
-
-  // User Table
-  $statement[$index++] = $databaseConnection->prepare('CREATE TABLE Users (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    role_id INT NOT NULL,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password TEXT NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL
-  );');
-
-  // Job Table
-  $statement[$index++] = $databaseConnection->prepare('CREATE TABLE Jobs (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    title TEXT NOT NULL,
-    created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL
-  );');
-
-  // Time Log Table
-  $statement[$index++] = $databaseConnection->prepare('CREATE TABLE WorkLog (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    job_id INT NOT NULL,
-    title TEXT NOT NULL,
-    start_time DATETIME NOT NULL,
-    end_time DATETIME,
-    created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL
-  );');
-
-  // Run Queries
-  for($i = 0; $i < $index; $i++) {
-    try {
-      $statement[$i]->execute();
-    } catch(PDOException $e) {
-      echo $e;
-    }
-  }
-}
 ?>
