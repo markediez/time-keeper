@@ -167,12 +167,13 @@ function showEventDetails(el, toggle) {
     url: "db/ajax/get-event.php",
     data: values,
     success: function(result) {
+      var htmlFragment = "";
       hideLoading();
       console.log(result);
       var currShift = undefined;
       var prevShift = undefined;
       var eventIndex = 1;
-      var entries = '<div class="event-task-list">';
+      var entries = '<div class="shift-task-list">';
       var inProgress = false;
       for(var i = 0; i < result.length; i++) {
         currShift = result[i]['work_start'];
@@ -181,8 +182,8 @@ function showEventDetails(el, toggle) {
           if (prevShift !== undefined) {
               entries += '</div>'; // end previous shift
               entries = entries.replaceAll("\\", "");
-              addTooltipHTML(entries);
-              entries = '<div class="event-task-list">';
+              htmlFragment += entries;
+              entries = '<div class="shift-task-list">';
               inProgress = false;
           }
           prevShift = currShift;
@@ -200,26 +201,26 @@ function showEventDetails(el, toggle) {
           }
 
           newShiftTitle = newShiftTitle.replaceAll("\\", "");
-          addTooltipHTML('<div class="event-header"><span class="event-title">' + newShiftTitle + '</span><span class="event-time">' + shiftStart + ' - ' + shiftEnd + '</span></div>');
+          htmlFragment += '<div class="shift-container"><div class="shift-header"><span class="shift-title">' + newShiftTitle + '</span><span class="shift-time">' + shiftStart + ' - ' + shiftEnd + '</span></div>';
           eventIndex = 1;
         } // end if
 
         // Add entries of shift
         if (result[i]['entry'] != null) {
-          entries = entries + '<span class="event-task"><span class="event-task-num">' + eventIndex + '.</span>' + result[i]['entry'] + '</span>';
+          entries = entries + '<span class="shift-task"><span class="shift-task-num">' + eventIndex + '.</span>' + result[i]['entry'] + '</span>';
         }
 
         eventIndex++;
       } // end for
 
       if (inProgress) {
-        entries = entries + '<span class="event-task event-progress animate-load">In Progress</span>';
+        entries = entries + '<span class="shift-task shift-progress animate-load">In Progress</span>';
       }
       entries = entries.replaceAll("\\", "");
-      addTooltipHTML(entries); // addFinal Tasks
+      htmlFragment += entries; // addFinal Tasks
+      htmlFragment += '</div>'; // close shift-container
 
-
-
+      addTooltipHTML(htmlFragment);
     },
     error: function(result) {
       alert("Something went wrong");
