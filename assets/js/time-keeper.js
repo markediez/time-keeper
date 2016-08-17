@@ -183,6 +183,7 @@ function showEventDetails(el, toggle) {
               entries += '</div>'; // end previous shift
               entries = entries.replaceAll("\\", "");
               htmlFragment += entries;
+              htmlFragment += '</div>'; // close shift-container
               entries = '<div class="shift-task-list">';
               inProgress = false;
           }
