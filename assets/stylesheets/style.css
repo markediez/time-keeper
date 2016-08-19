@@ -852,10 +852,21 @@ tr.clickable-row.active {
   font-size: 10px;
   padding-left: 15px;
   padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+.shift-container a {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .shift-container:hover {
   background-color: #eeeeee;
+}
+
+.shift-container:hover a {
+  opacity: 1;
+  pointer-events: all;
 }
 
 .shift-task-list {
