@@ -217,12 +217,14 @@ function showEventDetails(el, toggle) {
 
       if (inProgress) {
         entries = entries + '<span class="shift-task shift-progress animate-load">In Progress</span>';
-      } else {
-        htmlFragment += '<div class="shift-action"><a>Edit</a><a>Delete</a></div>'
       }
+
       entries = entries.replaceAll("\\", "");
       htmlFragment += entries; // addFinal Tasks
       htmlFragment += '</div>'; // close shift-container
+      if (!inProgress) {
+        htmlFragment += '<div class="shift-action"><a>Edit</a><a>Delete</a></div>'
+      }
 
       addTooltipHTML(htmlFragment);
     },
