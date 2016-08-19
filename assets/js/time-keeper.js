@@ -183,6 +183,7 @@ function showEventDetails(el, toggle) {
               entries += '</div>'; // end previous shift
               entries = entries.replaceAll("\\", "");
               htmlFragment += entries;
+              htmlFragment += '<div class="shift-action"><a>Edit</a><a>Delete</a></div>'
               htmlFragment += '</div>'; // close shift-container
               entries = '<div class="shift-task-list">';
               inProgress = false;
@@ -216,6 +217,8 @@ function showEventDetails(el, toggle) {
 
       if (inProgress) {
         entries = entries + '<span class="shift-task shift-progress animate-load">In Progress</span>';
+      } else {
+        htmlFragment += '<div class="shift-action"><a>Edit</a><a>Delete</a></div>'
       }
       entries = entries.replaceAll("\\", "");
       htmlFragment += entries; // addFinal Tasks

@@ -791,6 +791,7 @@ tr.clickable-row.active {
   display:flex;
   justify-content: space-between;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .job-title {
@@ -824,24 +825,22 @@ tr.clickable-row.active {
   color: #4d487e;
 }
 
-.event-action {
+.shift-action {
   display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  text-align: right;
-  margin-left: 15px;
-  margin-right: 15px;
+  width: 20%;
+  align-self: flex-end;
+  justify-content: space-between;
+  margin-right: 10px;
 }
 
-.event-action a {
+.shift-action a {
   display: block;
-  width: 8.3333%;
   text-align: center;
   font-size: 10px;
   color: #58487E;
 }
 
-.event-action a:hover {
+.shift-action a:hover {
   color: #000000;
   text-decoration: none;
 }
@@ -851,8 +850,12 @@ tr.clickable-row.active {
   flex-direction: column;
   width: 100%;
   font-size: 10px;
-  margin-left: 15px;
-  margin-top: 15px;
+  padding-left: 15px;
+  padding-bottom: 5px;
+}
+
+.shift-container:hover {
+  background-color: #eeeeee;
 }
 
 .shift-task-list {
