@@ -27,7 +27,7 @@ $end->setTime(23,59,59);
 $start = $start->format("Y-m-d H:i:s");
 $end = $end->format("Y-m-d H:i:s");
 
-$query = "SELECT Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time as work_start, WorkLog.end_time as work_end, Entries.entry FROM Jobs
+$query = "SELECT Jobs.title as job_title, WorkLog.title as work_title, WorkLog.start_time as work_start, WorkLog.end_time as work_end, WorkLog.id as work_id, Entries.entry FROM Jobs
           LEFT JOIN WorkLog ON Jobs.id = WorkLog.job_id
           LEFT JOIN Entries ON WorkLog.id = Entries.log_id
           WHERE Jobs.id = $jid AND WorkLog.start_time BETWEEN :start AND :end";
