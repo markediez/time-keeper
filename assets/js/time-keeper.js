@@ -185,7 +185,7 @@ function showEventDetails(el, toggle) {
               entries += '</div>'; // end previous shift
               entries = entries.replaceAll("\\", "");
               htmlFragment += entries;
-              htmlFragment += '<div class="shift-action"><a onClick="editShift(' + shiftId + ')">Edit</a><a onClick="deleteShift(' + shiftId + ')">Delete</a></div>';
+              htmlFragment += '<div class="shift-action"><a onClick="editShift(' + shiftId + ')">Edit</a><a onClick="deleteShift(this,' + shiftId + ')">Delete</a></div>';
               htmlFragment += '</div>'; // close shift-container
               entries = '<div class="shift-task-list">';
               inProgress = false;
@@ -227,7 +227,7 @@ function showEventDetails(el, toggle) {
       htmlFragment += entries; // addFinal Tasks
       htmlFragment += '</div>'; // close shift-container
       if (!inProgress) {
-        htmlFragment += '<div class="shift-action"><a onClick="editShift(' + shiftId + ')">Edit</a><a onClick="deleteShift(' + shiftId + ')">Delete</a></div>';
+        htmlFragment += '<div class="shift-action"><a onClick="editShift(' + shiftId + ')">Edit</a><a onClick="deleteShift(this,' + shiftId + ')">Delete</a></div>';
       }
 
       addTooltipHTML(htmlFragment);
@@ -238,8 +238,17 @@ function showEventDetails(el, toggle) {
   });
 } // function showEventDetails
 
-function deleteShift(shiftId) {
-  console.log("Deleting " + shiftId);
+function deleteShift(el, shiftId) {
+  if (confirm("Are you sure you want to delete this log?") == true) {
+    // delete WorkLog
+    simpleQuery("WorkLog", "delete", {}, {'id': shiftId}, {async:true}, function(result, status, xhr) {
+      notify("success", "Successfully deleted the log", null);
+      $(el).parent().parent().remove();
+    });
+
+    // delete the log's entries
+    simpleQuery("Entries", "delete", {}, {'log_id': shiftId}, {async:true}, null);
+  }
 }
 
 function editShift(shiftId) {
