@@ -175,6 +175,8 @@ function showEventDetails(el, toggle) {
       var eventIndex = 1;
       var entries = '<div class="shift-task-list">';
       var inProgress = false;
+
+      var shiftId = -1;
       for(var i = 0; i < result.length; i++) {
         currShift = result[i]['work_start'];
         // if a new shift occurs, set up the shift section;
@@ -183,7 +185,7 @@ function showEventDetails(el, toggle) {
               entries += '</div>'; // end previous shift
               entries = entries.replaceAll("\\", "");
               htmlFragment += entries;
-              htmlFragment += '<div class="shift-action"><a>Edit</a><a>Delete</a></div>'
+              htmlFragment += '<div class="shift-action"><a onClick="editShift(' + shiftId + ')">Edit</a><a onClick="deleteShift(' + shiftId + ')">Delete</a></div>';
               htmlFragment += '</div>'; // close shift-container
               entries = '<div class="shift-task-list">';
               inProgress = false;
@@ -192,6 +194,8 @@ function showEventDetails(el, toggle) {
           var newShiftTitle = result[i]['work_title'];
           var shiftStart = result[i]['work_start'];
           var shiftEnd = result[i]['work_end'];
+          shiftId = result[i]['work_id'];
+
           var pos = shiftStart.indexOf(" ");
           shiftStart = shiftStart.substring(pos + 1, pos + 6);
           if (shiftEnd != null) {
@@ -223,7 +227,7 @@ function showEventDetails(el, toggle) {
       htmlFragment += entries; // addFinal Tasks
       htmlFragment += '</div>'; // close shift-container
       if (!inProgress) {
-        htmlFragment += '<div class="shift-action"><a>Edit</a><a>Delete</a></div>'
+        htmlFragment += '<div class="shift-action"><a onClick="editShift(' + shiftId + ')">Edit</a><a onClick="deleteShift(' + shiftId + ')">Delete</a></div>';
       }
 
       addTooltipHTML(htmlFragment);
@@ -233,6 +237,14 @@ function showEventDetails(el, toggle) {
     }
   });
 } // function showEventDetails
+
+function deleteShift(shiftId) {
+  console.log("Deleting " + shiftId);
+}
+
+function editShift(shiftId) {
+  console.log("Editing " + shiftId);
+}
 
 function toggleCollapse(id) {
   var openBoard = '#' + $('[data-collapse="false"]').attr("id");
