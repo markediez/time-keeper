@@ -169,7 +169,6 @@ function showEventDetails(el, toggle) {
     success: function(result) {
       var htmlFragment = "";
       hideLoading();
-      console.log(result);
       var currShift = undefined;
       var prevShift = undefined;
       var eventIndex = 1;
@@ -177,8 +176,10 @@ function showEventDetails(el, toggle) {
       var inProgress = false;
 
       var shiftId = -1;
+
       for(var i = 0; i < result.length; i++) {
         currShift = result[i]['work_start'];
+
         // if a new shift occurs, set up the shift section;
         if (currShift.indexOf(prevShift) === -1) {
           if (prevShift !== undefined) {
@@ -251,8 +252,47 @@ function deleteShift(el, shiftId) {
   }
 }
 
+/**
+ * Creates a view to edit a work log
+ * @param  {int} shiftId - WorkLog id
+ * @return {void}         Persists changes on save
+ */
 function editShift(shiftId) {
-  console.log("Editing " + shiftId);
+  var editFragment = new DocumentFragment();
+  var loaded = 0;
+
+  getData("WorkLog", {}, {'id': shiftId}, {}, function(result, status, xhr) {
+    var data = JSON.parse(result);
+    data = data[0];
+    $(editFragment).prepend('<div class="job-header"><span class="job-title">' + data.title + '</span><div><a onclick="saveShift();"><i class="fa fa-check fa-lg event-close"></i></a><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div></div>');
+    loaded++;
+    renderShift(loaded, editFragment);
+  });
+
+  getData("Entries", {}, {'log_id': shiftId}, { 'orderCol': 'created_at', 'orderBy': 'DESC'}, function(result, status, xhr) {
+    var data = JSON.parse(result);
+    var html = "<ol>";
+    for (var i = 0; i < data.length; i++) {
+      html += "<li><span>" + data[i].entry + "</span></li>"
+    }
+    html += "</ol>";
+
+    $(editFragment).append(html);
+    loaded++;
+    renderShift(loaded, editFragment);
+  });
+}
+
+function saveShift() {
+  console.log($(".tooltip-text"));
+  notify("success", "Saved", null);
+  removeToolTip();
+}
+
+function renderShift(loaded, fragment) {
+  if (loaded == 2) {
+    replaceTooltipHTML(fragment);
+  }
 }
 
 function toggleCollapse(id) {
