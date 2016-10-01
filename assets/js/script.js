@@ -168,6 +168,10 @@ function addTooltipHTML(html) {
   $(html).appendTo($(".tooltip-text"));
 } // function addTooltipHTML
 
+function replaceTooltipHTML(html) {
+  $(".tooltip-text").html(html);
+}
+
 /**
  * This function removes all tootips on the page
  */
@@ -304,7 +308,7 @@ function simpleQuery(tableName, action, values, where, options, callback) {
      // List Jobs
      html = '<div id="job"><div id="job-form"><div class="select-multiple">';
      delete res.status;
-     
+
      for(var i = 0; i < Object.keys(res).length; i++) {
        console.log(i);
        if(typeof res[i] == 'object')
