@@ -72,7 +72,7 @@ function addPanel() {?>
   </div>
   <div id="links" class="row">
     <a onclick="showWork(<?=$_SESSION['user_id']?>);" class="col-md-12 btn btn-panel">Work</a>
-    <a href="time-keeper.php" class="col-md-12 btn btn-panel">Log</a>
+    <a href="time-keeper.php" class="col-md-12 btn btn-panel">Calendar</a>
     <a href="logout.php" class="col-md-12 btn btn-panel">Logout</a>
   </div>
 <?php }
