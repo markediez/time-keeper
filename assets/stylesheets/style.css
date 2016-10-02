@@ -770,6 +770,20 @@ tr.clickable-row.active {
 .edit-date span {
   align-self: center;
 }
+
+.edit-entry {
+  border: 1px solid #d1d1d1;
+  outline: none;
+  resize: none;
+  margin: 10px;
+  width: 100%;
+}
+
+.edit-title {
+  margin-left: 10px;
+  padding: 0;
+  font-size: 20px;
+}
 /* ========= Edit Event End ========= */
 
 /* ========= Tooltip Start ========= */

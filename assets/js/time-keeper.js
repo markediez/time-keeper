@@ -266,7 +266,7 @@ function editShift(shiftId) {
     data = data[0];
 
     // Title
-    $(editFragment).prepend('<div class="job-header" data-id="' + shiftId + '"><input type="text" class="job-title" value="' + data.title + '"><div><a onclick="saveShift();"><i class="fa fa-check fa-lg event-close"></i></a><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div></div>');
+    $(editFragment).prepend('<div class="job-header" data-id="' + shiftId + '"><input type="text" class="edit-title" value="' + data.title + '"><div><a onclick="saveShift();"><i class="fa fa-check fa-lg event-close"></i></a><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div></div>');
 
     // DateTime
     $(editFragment).append('<div class="edit-date"><span>Start</span><input type="text" value="' + data.start_time + '"></span></div>');
@@ -279,7 +279,7 @@ function editShift(shiftId) {
     var data = JSON.parse(result);
     var html = "";
     for (var i = 0; i < data.length; i++) {
-      html += "<textarea data-id='" + data[i].id + "'>" + data[i].entry + "</textarea></li>"
+      html += "<textarea class='edit-entry' rows='3' data-id='" + data[i].id + "'>" + data[i].entry + "</textarea></li>"
     }
 
     $(editFragment).append(html);
