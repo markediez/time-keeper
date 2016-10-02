@@ -758,6 +758,20 @@ tr.clickable-row.active {
 }
 /* ========= Loading End ========= */
 
+/* ========= Edit Event Start ========= */
+.edit-date {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.edit-date span {
+  align-self: center;
+}
+/* ========= Edit Event End ========= */
+
 /* ========= Tooltip Start ========= */
 .tooltip-container {
   position: relative;
