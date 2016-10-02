@@ -112,6 +112,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <?php
       addScripts();
       echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js/time-progress.js"></script>';
+      echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js/time-keeper.js"></script>';
     ?>
   </body>
 </html>
