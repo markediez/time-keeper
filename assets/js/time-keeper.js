@@ -264,18 +264,23 @@ function editShift(shiftId) {
   getData("WorkLog", {}, {'id': shiftId}, {}, function(result, status, xhr) {
     var data = JSON.parse(result);
     data = data[0];
-    $(editFragment).prepend('<div class="job-header"><span class="job-title">' + data.title + '</span><div><a onclick="saveShift();"><i class="fa fa-check fa-lg event-close"></i></a><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div></div>');
+
+    // Title
+    $(editFragment).prepend('<div class="job-header" data-id="' + shiftId + '"><input type="text" class="job-title" value="' + data.title + '"><div><a onclick="saveShift();"><i class="fa fa-check fa-lg event-close"></i></a><a onclick="removeToolTip();"><i class="fa fa-close fa-lg event-close"></i></a></div></div>');
+
+    // DateTime
+    $(editFragment).append('<div><span>Start</span><input type="text" value="' + data.start_time + '"></span></div>');
+    $(editFragment).append('<div><span>End</span><input type="text" value="' + data.end_time + '"></span></div>');
     loaded++;
     renderShift(loaded, editFragment);
   });
 
   getData("Entries", {}, {'log_id': shiftId}, { 'orderCol': 'created_at', 'orderBy': 'DESC'}, function(result, status, xhr) {
     var data = JSON.parse(result);
-    var html = "<ol>";
+    var html = "";
     for (var i = 0; i < data.length; i++) {
-      html += "<li><span>" + data[i].entry + "</span></li>"
+      html += "<textarea data-id='" + data[i].id + "'>" + data[i].entry + "</textarea></li>"
     }
-    html += "</ol>";
 
     $(editFragment).append(html);
     loaded++;
@@ -284,7 +289,21 @@ function editShift(shiftId) {
 }
 
 function saveShift() {
-  console.log($(".tooltip-text"));
+  // Save title and datetime
+  var workLogId = $(".tooltip-text").children()[0].getAttribute("data-id");
+  var title = $("input", ".tooltip-text")[0].value;
+  var st = $("input", ".tooltip-text")[1].value;
+  var et = $("input", ".tooltip-text")[2].value;
+  simpleQuery("WorkLog", "update", {"title": title, "start_time": st, "end_time": et}, {"id": workLogId}, {asyn:true}, null);
+
+  // Save entries
+  $("textarea", ".tooltip-text").each(function(x) {
+    var el = $(this);
+    var entryId = $(el).data("id");
+    var entryText = $(el).html();
+    simpleQuery("Entries", "update", {"entry": entryText}, {"id": entryId}, {asyn:true}, null);
+  });
+
   notify("success", "Saved", null);
   removeToolTip();
 }
