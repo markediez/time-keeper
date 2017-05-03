@@ -21,13 +21,13 @@ function addHeaders($title) {
   echo '<meta charset="utf-8">';
   echo "<link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>";
   echo "<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>";
-  echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/vendor/bootstrap-3.3.6-dist/css/bootstrap.min.css">';
-  echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/vendor/font-awesome-4.6.3/css/font-awesome.min.css">';
+  echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/vendor/stylesheets/bootstrap.min.css">';
+  echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/vendor/stylesheets/font-awesome.min.css">';
   echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/assets/stylesheets/style.css">';
 }
 
 function addScripts() {
-  echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/vendor/jquery/jquery.js"></script>';
+  echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/vendor/js/jquery.js"></script>';
   echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js/script.js"></script>';
 }
 
