@@ -21,9 +21,15 @@ function addHeaders($title) {
   echo '<meta charset="utf-8">';
   echo "<link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>";
   echo "<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>";
-  echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/vendor/stylesheets/bootstrap.min.css">';
-  echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/vendor/stylesheets/font-awesome.min.css">';
-  echo '<link rel="stylesheet" href="http://' . $_SERVER['HTTP_HOST'] . '/assets/stylesheets/style.css">';
+  echo '<link rel="stylesheet" href="' . getProtocol() . $_SERVER['HTTP_HOST'] . '/vendor/stylesheets/bootstrap.min.css">';
+  echo '<link rel="stylesheet" href="' . getProtocol() . $_SERVER['HTTP_HOST'] . '/vendor/stylesheets/font-awesome.min.css">';
+  echo '<link rel="stylesheet" href="' . getProtocol() . $_SERVER['HTTP_HOST'] . '/assets/stylesheets/style.css">';
+}
+
+// http://stackoverflow.com/questions/4503135/php-get-site-url-protocol-http-vs-https
+function getProtocol() {
+	return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $domainName = $_SERVER['HTTP_HOST'].'/';
 }
 
 function addScripts() {
