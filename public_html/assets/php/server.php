@@ -10,17 +10,22 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-ob_start();
-session_start();
+
+if (session_status() == PHP_SESSION_NONE) {
+	session_start();
+} else if (session_status() == PHP_SESSION_DISABLED) {
+	echo "SESSIONS ARE DISABLED.\n";
+}
+
 date_default_timezone_set("America/Los_Angeles");
-include(realpath(dirname(__FILE__)) . "/../../../config/config.php");
-include(realpath(dirname(__FILE__)) . "/../../db/development/database.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/../config/config.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/db/development/database.php");
 
 // http://stackoverflow.com/questions/4503135/php-get-site-url-protocol-http-vs-https
 function getBaseURL() {
 	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
     $domainName = $_SERVER['HTTP_HOST'].'/';
-    
+
 	return $protocol.$domainName;
 }
 
@@ -29,14 +34,14 @@ function addHeaders($title) {
   echo '<meta charset="utf-8">';
   echo "<link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>";
   echo "<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>";
-  echo '<link rel="stylesheet" href="' . getBaseURL() . '/vendor/stylesheets/bootstrap.min.css">';
-  echo '<link rel="stylesheet" href="' . getBaseURL() . '/vendor/stylesheets/font-awesome.min.css">';
-  echo '<link rel="stylesheet" href="' . getBaseURL() . '/assets/stylesheets/style.css">';
+  echo '<link rel="stylesheet" href="' . getBaseURL() . 'vendor/stylesheets/bootstrap.min.css">';
+  echo '<link rel="stylesheet" href="' . getBaseURL() . 'vendor/stylesheets/font-awesome.min.css">';
+  echo '<link rel="stylesheet" href="' . getBaseURL() . 'assets/stylesheets/style.css">';
 }
 
 function addScripts() {
-  echo '<script type="text/javascript" src="' . getBaseURL() . '/vendor/js/jquery.js"></script>';
-  echo '<script type="text/javascript" src="' . getBaseURL() . '/assets/js/script.js"></script>';
+  echo '<script type="text/javascript" src="' . getBaseURL() . 'vendor/js/jquery.js"></script>';
+  echo '<script type="text/javascript" src="' . getBaseURL() . 'assets/js/script.js"></script>';
 }
 
 function setSession($post, $id = null) {
@@ -56,7 +61,7 @@ function setSession($post, $id = null) {
 
 function checkSession($redirect = true) {
   // var_dump($_SESSION);
-  if ($_SESSION['valid']) {
+  if (array_key_exists('valid', $_SESSION) && $_SESSION['valid']) {
     return true;
   } else {
     if ($redirect) {

@@ -10,58 +10,60 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-  ob_start();
-  session_start();
-  include('assets/php/server.php');
-  // If user is already logged in, redirect to time-keeper
-  if(checkSession(false)) {
+ob_start();
+include('assets/php/server.php');
+// If user is already logged in, redirect to time-keeper
+if(checkSession(false)) {
     redirect('time-keeper.php');
-  }
+}
 
-  // If user attempted to log in, check credentials
-  if (isset($_POST) && sizeof($_POST) > 0) {
+// If user attempted to log in, check credentials
+if (isset($_POST) && sizeof($_POST) > 0) {
     $error = false;
     $id = login($_POST['username'], $_POST['password']);
     if (!$id) {
-      $error = true;
+        $error = true;
     } else {
-      $error = false;
-      setSession($_POST, $id);
-      header("Refresh:0");
+        $error = false;
+        setSession($_POST, $id);
+        header("Refresh:0");
     }
-  }
+} else {
+    $error = false;
+}
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <?php
-      addHeaders("Time Keeper");
+    addHeaders("Time Keeper");
     ?>
-  </head>
-  <body>
+</head>
+<body>
     <div id="index" class="container-fluid">
-      <div id="login">
-        <div class="head">
-          <img src="svg/logo.svg" class="head-logo">
-          <span class="head-title">Time Keeper</span>
+        <div id="login">
+            <div class="head">
+                <img src="svg/logo.svg" class="head-logo">
+                <span class="head-title">Time Keeper</span>
+            </div>
+            <?php if ($error) {?>
+                <p class="error">Invalid credentials</p>
+                <?php } ?>
+                <form id="login-form" method="POST">
+                    <div>
+                        <input class="form-control" type="text" placeholder="username" name="username" required>
+                        <input class="form-control form-item" type="password" placeholder="password" name="password" required>
+                    </div>
+                    <button id="login-button" class="btn btn-primary form-item">Login</button>
+                    <a id="register-alter" href="register.php">
+                        <span class="small">Don't have an account? Register</span>
+                    </a>
+                </form>
+            </div>
         </div>
-        <?php if ($error) {?>
-        <p class="error">Invalid credentials</p>
-        <?php } ?>
-        <form id="login-form" method="POST">
-          <div>
-            <input class="form-control" type="text" placeholder="username" name="username" required>
-            <input class="form-control form-item" type="password" placeholder="password" name="password" required>
-          </div>
-          <button id="login-button" class="btn btn-primary form-item">Login</button>
-          <a id="register-alter" href="register.php">
-            <span class="small">Don't have an account? Register</span>
-          </a>
-        </form>
-      </div>
-    </div>
-    <?php
-      addScripts();
-    ?>
-  </body>
-</html>
+        <?php
+        addScripts();
+        ?>
+    </body>
+    </html>
+<?php ob_flush(); ?>
