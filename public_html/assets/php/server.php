@@ -16,25 +16,27 @@ date_default_timezone_set("America/Los_Angeles");
 include(realpath(dirname(__FILE__)) . "/../../../config/config.php");
 include(realpath(dirname(__FILE__)) . "/../../db/development/database.php");
 
+// http://stackoverflow.com/questions/4503135/php-get-site-url-protocol-http-vs-https
+function getBaseURL() {
+	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $domainName = $_SERVER['HTTP_HOST'].'/';
+    
+	return $protocol.$domainName;
+}
+
 function addHeaders($title) {
   echo "<title>$title</title>";
   echo '<meta charset="utf-8">';
   echo "<link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>";
   echo "<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>";
-  echo '<link rel="stylesheet" href="' . getProtocol() . $_SERVER['HTTP_HOST'] . '/vendor/stylesheets/bootstrap.min.css">';
-  echo '<link rel="stylesheet" href="' . getProtocol() . $_SERVER['HTTP_HOST'] . '/vendor/stylesheets/font-awesome.min.css">';
-  echo '<link rel="stylesheet" href="' . getProtocol() . $_SERVER['HTTP_HOST'] . '/assets/stylesheets/style.css">';
-}
-
-// http://stackoverflow.com/questions/4503135/php-get-site-url-protocol-http-vs-https
-function getProtocol() {
-	return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-    $domainName = $_SERVER['HTTP_HOST'].'/';
+  echo '<link rel="stylesheet" href="' . getBaseURL() . '/vendor/stylesheets/bootstrap.min.css">';
+  echo '<link rel="stylesheet" href="' . getBaseURL() . '/vendor/stylesheets/font-awesome.min.css">';
+  echo '<link rel="stylesheet" href="' . getBaseURL() . '/assets/stylesheets/style.css">';
 }
 
 function addScripts() {
-  echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/vendor/js/jquery.js"></script>';
-  echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js/script.js"></script>';
+  echo '<script type="text/javascript" src="' . getBaseURL() . '/vendor/js/jquery.js"></script>';
+  echo '<script type="text/javascript" src="' . getBaseURL() . '/assets/js/script.js"></script>';
 }
 
 function setSession($post, $id = null) {
