@@ -45,7 +45,7 @@ checkSession();
   </div> <!-- End container-fluid -->
   <?php
   addScripts();
-  echo '<script type="text/javascript" src="http://' . $_SERVER['HTTP_HOST'] . '/assets/js/time-keeper.js"></script>';
+  echo '<script type="text/javascript" src="' . getBaseURL() . '/assets/js/time-keeper.js"></script>';
   ?>
 </body>
 </html>
