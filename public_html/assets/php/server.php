@@ -13,7 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ob_start();
 session_start();
 date_default_timezone_set("America/Los_Angeles");
-include(realpath(dirname(__FILE__)) . "/../../config/config.php");
+include(realpath(dirname(__FILE__)) . "/../../../config/config.php");
 include(realpath(dirname(__FILE__)) . "/../../db/development/database.php");
 
 function addHeaders($title) {
