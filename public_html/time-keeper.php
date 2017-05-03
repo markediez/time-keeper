@@ -30,7 +30,7 @@ checkSession();
   <div class="container-fluid">
     <div class="row">
       <div id="panel" class="col-md-2">
-        <?
+        <?php
           addPanel();
         ?>
       </div>
