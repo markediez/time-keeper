@@ -21,6 +21,10 @@ date_default_timezone_set("America/Los_Angeles");
 include($_SERVER['DOCUMENT_ROOT'] . "/../config/config.php");
 include($_SERVER['DOCUMENT_ROOT'] . "/db/development/database.php");
 
+$config = $_SERVER['DOCUMENT_ROOT'] . "/../config/config.php";
+$data = $_SERVER['DOCUMENT_ROOT'] . "/db/development/database.php"
+echo "<p style='color:white;'> $config </br> $data </p>";
+
 // http://stackoverflow.com/questions/4503135/php-get-site-url-protocol-http-vs-https
 function getBaseURL() {
 	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
