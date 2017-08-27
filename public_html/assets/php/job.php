@@ -20,10 +20,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     function __construct($title, $id) {
       $this->title = $title;
       $this->id = $id;
-      $shifts = array();
+      $this->shifts = array();
 
       for ($i = 0; $i <= 31; $i++) {
-        $shifts[$i] = array();
+        $this->shifts[$i] = array();
       }
     }
 
@@ -76,15 +76,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       $newShift->start_time = $start_time;
       $newShift->end_time = $end_time;
       $newShift->duration = $interval / 3600;
-      // if ($interval->days > 0) {
-      //   $newShift->duration += 24 * $interval->days;
-      // }
 
       $day = date('j', strtotime($start_time));
-      if (!is_array($this->shifts[$day])) {
-        $this->shifts[$day] = array();
-      }
-
       array_push($this->shifts[$day], $newShift);
     }
 
