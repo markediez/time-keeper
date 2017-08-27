@@ -21,6 +21,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       $this->title = $title;
       $this->id = $id;
       $shifts = array();
+
+      for ($i = 0; $i <= 31; $i++) {
+        $shifts[$i] = array();
+      }
     }
 
     function getTotalHours($date = null) {
