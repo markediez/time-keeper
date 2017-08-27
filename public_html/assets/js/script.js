@@ -298,6 +298,7 @@ function simpleQuery(tableName, action, values, where, options, callback) {
    ajaxByPost("db/ajax/get-job.php", {}, function(result) {
      hideLoading();
      var html = "";
+     result = result.substr(result.indexOf("{"));
      var res = JSON.parse(result);
      var startButton = '<button class="btn btn-primary" onclick="startJob(' + user_id + ');">Start</button>';
      if (res.status == "false") {

@@ -18,8 +18,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * @param orderCol -- "" if empty
  * @param orderBy -- "" if empty
  */
-ob_start();
-session_start();
 include(realpath(dirname(__FILE__)) . '/../../assets/php/server.php');
 checkSession();
 $db = new DBSql();
